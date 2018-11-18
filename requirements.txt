@@ -1,0 +1,5 @@
+big-phoney==1.0.1
+ftfy==4.4.3
+# pandas==0.23.4
+spacy==2.0.12
+twython==3.7.0

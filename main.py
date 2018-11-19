@@ -373,8 +373,11 @@ class MyStreamer(TwythonStreamer):
                     # haiku
 
                     # If enough time has passed
-                    if (time.monotonic() - twitter.last_post_time) > twitter.EVERY_N_SECONDS:
-                        logging.debug(f'Previous post time: {twitter.last_post_time}')
+                    current_time = time.monotonic()
+                    logging.info(f'Current time: {current_time}')
+                    logging.info(f'Previous post time: {twitter.last_post_time}')
+                    logging.info(f'Difference: {current_time - twitter.last_post_time}')
+                    if (current_time - twitter.last_post_time) > twitter.EVERY_N_SECONDS:
                         if post_haiku:
                             if POST_AS_REPLY:
                                 logging.info('Posting haiku as reply')
@@ -395,8 +398,7 @@ class MyStreamer(TwythonStreamer):
                         else:
                             logging.debug('Found haiku but did not post')
                         # Update the time
-                        twitter.last_post_time = time.monotonic()
-                        logging.debug(f'Newest post time: {twitter.last_post_time}')
+                        twitter.last_post_time = current_time
                     else:
                         logging.info('Not posting haiku due to rate limit')
 

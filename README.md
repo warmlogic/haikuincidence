@@ -27,3 +27,8 @@ Hey, that's a haiku! ✌️
     $ conda activate haiku
     $ pip install -r requirements.txt
     ```
+
+1. sudo cp haikuincidence.service /etc/systemd/system/haikuincidence.service
+1. sudo systemctl daemon-reload
+1. sudo systemctl enable haikuincidence
+1. sudo systemctl start haikuincidence

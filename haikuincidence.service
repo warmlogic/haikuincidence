@@ -1,0 +1,13 @@
+[Unit]
+Description=Look for coincidental haikus
+After=network.target
+
+[Service]
+Type=simple
+User=matt
+WorkingDirectory=/home/matt
+ExecStart=/home/matt/miniconda3/bin/python /home/matt/github/warmlogic/haikuincidence/main.py
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

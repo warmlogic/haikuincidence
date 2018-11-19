@@ -42,8 +42,8 @@ else:
     # EVERY_N_SECONDS = 1800  # 30 minutes
     EVERY_N_SECONDS = 3600  # 1 hour
 
-# ignore tweets that contain words in this list
-ignore_list = []
+# ignore tweets that contain any of these words
+ignore_list = ['porn']
 # ensure lowercase
 ignore_list = set(x.lower() for x in ignore_list)
 
@@ -140,6 +140,7 @@ syllable_dict = {
     'wtff': 5,  # W T F
     'wtfff': 5,  # W T F
     'wtffff': 5,  # W T F
+    'www': 9,  # W W W
     'ymmv': 6,  # your mileage may vary
     'yolo': 2,  # yolo
 }
@@ -213,7 +214,7 @@ def any_token_in_ignore_list(text):
     '''Return True if any token is in the ignore_list
     '''
     return any((re.sub(r"[^\w']", '', token).lower() in ignore_list)
-                 for token in text.split())
+               for token in text.split())
 
 
 def all_tokens_are_real(text):

@@ -42,6 +42,8 @@ else:
     # EVERY_N_SECONDS = 1800  # 30 minutes
     EVERY_N_SECONDS = 3600  # 1 hour
 
+INITIAL_TIME = int(time.monotonic()) - (EVERY_N_SECONDS // 2)
+
 # ignore tweets that contain any of these words
 ignore_list = ['porn']
 # ensure lowercase
@@ -57,7 +59,7 @@ syllable_dict = {
     'atm': 4,  # at the moment
     'awol': 2,  # a-wol
     'bbl': 3,  # B B L / be back later
-    'bc': 3,  # B C / because
+    'bc': 2,  # B C / because
     'bdrm': 2,  # bedroom
     'bf': 2,  # B F / boyfriend
     'bff': 3,  # B F F
@@ -117,6 +119,7 @@ syllable_dict = {
     # 'ot': 3,  # off topic
     'ppl': 2,  # people
     'rofl': 2,  # rofl
+    'rn': 2,  # right now
     # 'smdh': 4,  # S M D H
     'smdh': 5,  # shaking my damn head
     # 'smh': 3,  # S M H
@@ -168,7 +171,7 @@ class MyTwitterClient:
     '''
     def __init__(self, twitter, EVERY_N_SECONDS):
         self.twitter = twitter
-        self.last_post_time = 0
+        self.last_post_time = INITIAL_TIME
         self.EVERY_N_SECONDS = EVERY_N_SECONDS
 
 
@@ -373,7 +376,7 @@ class MyStreamer(TwythonStreamer):
                     # haiku
 
                     # If enough time has passed
-                    current_time = time.monotonic()
+                    current_time = int(time.monotonic())
                     logging.info(f'Current time: {current_time}')
                     logging.info(f'Previous post time: {twitter.last_post_time}')
                     logging.info(f'Difference: {current_time - twitter.last_post_time}')

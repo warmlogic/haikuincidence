@@ -377,6 +377,7 @@ class MyStreamer(TwythonStreamer):
                         logging.debug(f'Previous post time: {twitter.last_post_time}')
                         if post_haiku:
                             if POST_AS_REPLY:
+                                logging.info('Posting haiku as reply')
                                 # Post a tweet, sending as a reply to the coincidental haiku
                                 twitter.update_status(
                                     status=haiku_attributed,
@@ -384,6 +385,7 @@ class MyStreamer(TwythonStreamer):
                                     attachment_url=tweet_url,
                                 )
                             else:
+                                logging.info('Posting haiku, but not as reply')
                                 # Post a tweet, but not as a reply to the coincidental haiku
                                 # The user will not get a notification
                                 twitter.update_status(
@@ -391,10 +393,12 @@ class MyStreamer(TwythonStreamer):
                                     attachment_url=tweet_url,
                                 )
                         else:
-                            logging.debug('Would have posted')
+                            logging.debug('Found haiku but did not post')
                         # Update the time
                         twitter.last_post_time = time.monotonic()
                         logging.debug(f'Newest post time: {twitter.last_post_time}')
+                    else:
+                        logging.info('Not posting haiku due to rate limit')
 
     def on_error(self, status_code, status):
         logging.error(f'{status_code}, {status}')

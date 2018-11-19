@@ -6,8 +6,8 @@ import time
 from big_phoney import BigPhoney
 from ftfy import fix_text
 import spacy
-from twython import TwythonStreamer
 from twython import Twython
+from twython import TwythonStreamer
 
 import logging
 
@@ -22,7 +22,7 @@ import logging
 # Twython: https://github.com/ryanmcgrath/twython
 # Twython streaming: https://twython.readthedocs.io/en/latest/usage/streaming_api.html
 
-DEBUG = True
+DEBUG = False
 
 # Whether to post as a reply (will get notification) or not
 POST_AS_REPLY = True

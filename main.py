@@ -1,5 +1,5 @@
 import configparser
-from pprint import pprint
+from pprint import pformat
 import re
 import time
 
@@ -24,7 +24,7 @@ import logging
 
 DEBUG = False
 
-# Whether to post as a reply (will get notification) or not
+# Whether to post as a reply (user gets notification) or not (no notification)
 POST_AS_REPLY = True
 
 if DEBUG:
@@ -33,16 +33,18 @@ if DEBUG:
 else:
     logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
     post_haiku = True
+logger = logging.getLogger(__name__)
 
 # Minimum amount of time between haiku posts
 if DEBUG:
     EVERY_N_SECONDS = 1  # 1 second
+    INITIAL_TIME = 0
 else:
     # EVERY_N_SECONDS = 600  # 10 minutes
     # EVERY_N_SECONDS = 1800  # 30 minutes
     EVERY_N_SECONDS = 3600  # 1 hour
-
-INITIAL_TIME = int(time.monotonic()) - (EVERY_N_SECONDS // 2)
+    # Wait half the rate limit time before making first post
+    INITIAL_TIME = int(time.monotonic()) - (EVERY_N_SECONDS // 2)
 
 # ignore tweets that contain any of these words
 ignore_list = ['porn']
@@ -153,29 +155,46 @@ syllable_dict = {k.lower(): v for k, v in syllable_dict.items()}
 # Regex to look for URLs https://gist.github.com/gruber/8891611
 url_re = re.compile(r'(?i)\b((?:https?:(?:/{1,3}|[a-z0-9%])|[a-z0-9.\-]+[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)/)(?:[^\s()<>{}\[\]]+|\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\))+(?:\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’])|(?:(?<!@)[a-z0-9]+(?:[.\-][a-z0-9]+)*[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)\b/?(?!@)))')
 
-logging.info('Initializing dependencies...')
+logger.info('Initializing dependencies...')
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-twitter = Twython(
+
+class MyTwitterClient(Twython):
+    '''Wrapper around the Twython Twitter client.
+    Limits status update rate.
+    '''
+    def __init__(self, every_n_seconds=3600, initial_time=None, *args, **kwargs):
+        super(MyTwitterClient, self).__init__(*args, **kwargs)
+        if initial_time is None:
+            # Wait half the rate limit time before making first post
+            initial_time = int(time.monotonic()) - (every_n_seconds // 2)
+        # self.twitter = twitter
+        self.every_n_seconds = every_n_seconds
+        self.last_post_time = initial_time
+
+    def update_status_check_rate(self, *args, **kwargs):
+        current_time = int(time.monotonic())
+        logger.info(f'Current time: {current_time}')
+        logger.info(f'Previous post time: {self.last_post_time}')
+        logger.info(f'Difference: {current_time - self.last_post_time}')
+        if (current_time - self.last_post_time) > self.every_n_seconds:
+            self.update_status(*args, **kwargs)
+            self.last_post_time = current_time
+            logger.info('Success')
+        else:
+            logger.info('Not posting haiku due to rate limit')
+
+
+twitter = MyTwitterClient(
+    every_n_seconds=EVERY_N_SECONDS,
+    initial_time=INITIAL_TIME,
     app_key=config['twitter']['api_key'],
     app_secret=config['twitter']['api_secret'],
     oauth_token=config['twitter']['access_token'],
     oauth_token_secret=config['twitter']['access_token_secret'],
 )
-
-
-class MyTwitterClient:
-    '''Wrapper around the Twython Twitter client, limit status update rate
-    '''
-    def __init__(self, twitter, EVERY_N_SECONDS):
-        self.twitter = twitter
-        self.last_post_time = INITIAL_TIME
-        self.EVERY_N_SECONDS = EVERY_N_SECONDS
-
-
-twitter = MyTwitterClient(twitter, EVERY_N_SECONDS)
 
 nlp = spacy.load('en')
 phoney = BigPhoney()
@@ -360,12 +379,13 @@ class MyStreamer(TwythonStreamer):
 
                     tweet_url = f"https://twitter.com/{status['user']['screen_name']}/status/{status['id_str']}"
 
-                    logging.info('=' * 30)
-                    logging.debug(pprint(status))
-                    logging.debug(tweet_url)
-                    logging.debug(f"Original: {status['text']}")
-                    logging.debug(f"Cleaned: {text}")
-                    logging.info(f"Haiku:\n{haiku_attributed}")
+                    logger.info('=' * 50)
+                    if logger.isEnabledFor(logging.DEBUG):
+                        logger.debug(pformat(status))
+                        logger.debug(tweet_url)
+                        logger.debug(f"Original: {status['text']}")
+                        logger.debug(f"Cleaned: {text}")
+                    logger.info(f"Haiku:\n{haiku_attributed}")
 
                     # # things to save
                     # status['id_str']
@@ -375,42 +395,33 @@ class MyStreamer(TwythonStreamer):
                     # text # cleaned
                     # haiku
 
-                    # If enough time has passed
-                    current_time = int(time.monotonic())
-                    logging.info(f'Current time: {current_time}')
-                    logging.info(f'Previous post time: {twitter.last_post_time}')
-                    logging.info(f'Difference: {current_time - twitter.last_post_time}')
-                    if (current_time - twitter.last_post_time) > twitter.EVERY_N_SECONDS:
-                        if post_haiku:
-                            if POST_AS_REPLY:
-                                logging.info('Posting haiku as reply')
-                                # Post a tweet, sending as a reply to the coincidental haiku
-                                twitter.update_status(
-                                    status=haiku_attributed,
-                                    in_reply_to_status_id=status['id_str'],
-                                    attachment_url=tweet_url,
-                                )
-                            else:
-                                logging.info('Posting haiku, but not as reply')
-                                # Post a tweet, but not as a reply to the coincidental haiku
-                                # The user will not get a notification
-                                twitter.update_status(
-                                    status=haiku_attributed,
-                                    attachment_url=tweet_url,
-                                )
+                    # Try to post haiku (client checks rate limit time internally)
+                    if post_haiku:
+                        if POST_AS_REPLY:
+                            logger.info('Attempting to post haiku as reply...')
+                            # Post a tweet, sending as a reply to the coincidental haiku
+                            twitter.update_status_check_rate(
+                                status=haiku_attributed,
+                                in_reply_to_status_id=status['id_str'],
+                                attachment_url=tweet_url,
+                            )
                         else:
-                            logging.debug('Found haiku but did not post')
-                        # Update the time
-                        twitter.last_post_time = current_time
+                            logger.info('Attempting to post haiku, but not as reply...')
+                            # Post a tweet, but not as a reply to the coincidental haiku
+                            # The user will not get a notification
+                            twitter.update_status_check_rate(
+                                status=haiku_attributed,
+                                attachment_url=tweet_url,
+                            )
                     else:
-                        logging.info('Not posting haiku due to rate limit')
+                        logger.debug('Found haiku but did not post')
 
     def on_error(self, status_code, status):
-        logging.error(f'{status_code}, {status}')
+        logger.error(f'{status_code}, {status}')
 
 
 if __name__ == '__main__':
-    logging.info('Initializing tweet streamer...')
+    logger.info('Initializing tweet streamer...')
     stream = MyStreamer(
         app_key=config['twitter']['api_key'],
         app_secret=config['twitter']['api_secret'],
@@ -418,7 +429,7 @@ if __name__ == '__main__':
         oauth_token_secret=config['twitter']['access_token_secret'],
     )
 
-    logging.info('Looking for haikus...')
+    logger.info('Looking for haikus...')
     while True:
         # Use try/except to avoid ChunkedEncodingError
         # https://github.com/ryanmcgrath/twython/issues/288
@@ -428,5 +439,5 @@ if __name__ == '__main__':
             # # search specific key words
             # stream.statuses.filter(track='twitter, tweet, python -filter:retweets -filter:replies')
         except Exception as e:
-            logging.warning(f'{e}')
+            logger.warning(f'{e}')
             continue

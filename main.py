@@ -6,9 +6,12 @@ from big_phoney import BigPhoney
 from ftfy import fix_text
 import spacy
 from twython import TwythonStreamer
+from twython import Twython
 
 import logging
 logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
+
+# I'm a poet and I didn't even know it. Hey, that's a haiku!
 
 # https://stackabuse.com/accessing-the-twitter-api-with-python/
 
@@ -23,6 +26,12 @@ logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.
 # https://gist.github.com/gruber/8891611
 url_re = re.compile(r'(?i)\b((?:https?:(?:/{1,3}|[a-z0-9%])|[a-z0-9.\-]+[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)/)(?:[^\s()<>{}\[\]]+|\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\))+(?:\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’])|(?:(?<!@)[a-z0-9]+(?:[.\-][a-z0-9]+)*[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)\b/?(?!@)))')
 
+# ignore tweets that contain words in this list
+ignore_list = []
+# ensure lowercase
+ignore_list = set(x.lower() for x in ignore_list)
+
+# Specify syllables for certain acronyms or abbreviations
 syllable_dict = {
     'abt': 2,  # about
     'afaik': 5,  # as far as I know
@@ -56,6 +65,7 @@ syllable_dict = {
     'heh': 1,
     'hehe': 2,
     'hehehe': 3,
+    'hrs': 2,  # hours
     'ianal': 6,  # I am not a lawyer
     'idk': 3,  # I D K / I don't know
     'imho': 7,  # in my humble opinion
@@ -91,7 +101,9 @@ syllable_dict = {
     # 'ot': 3,  # off topic
     'ppl': 2,  # people
     'rofl': 2,  # rofl
+    # 'smdh': 4,  # S M D H
     'smdh': 5,  # shaking my damn head
+    # 'smh': 3,  # S M H
     'smh': 4,  # shaking my head
     'sry': 2,  # sorry
     'stfu': 4,  # shut the f up
@@ -115,9 +127,20 @@ syllable_dict = {
     'ymmv': 6,  # your mileage may vary
     'yolo': 2,  # yolo
 }
+# ensure lowercase
+syllable_dict = {k.lower(): v for k, v in syllable_dict.items()}
+
+logging.info('Initializing dependencies...')
 
 config = configparser.ConfigParser()
 config.read('config.ini')
+
+twitter = Twython(
+    app_key=config['twitter']['api_key'],
+    app_secret=config['twitter']['api_secret'],
+    oauth_token=config['twitter']['access_token'],
+    oauth_token_secret=config['twitter']['access_token_secret'],
+)
 
 nlp = spacy.load('en')
 phoney = BigPhoney()
@@ -153,6 +176,13 @@ def text_is_all_uppercase(text):
 #     Excludes punctuation and spaces.
 #     '''
 #     return all([char.isalpha() for char in re.sub(r'[^\w]', '', text)])
+
+
+def any_token_in_ignore_list(text):
+    '''Return True if any token is in the ignore_list
+    '''
+    return any((re.sub(r"[^\w']", '', token).lower() in ignore_list)
+                 for token in text.split())
 
 
 def all_tokens_are_real(text):
@@ -205,6 +235,7 @@ def check_tweet(status):
     '''
     return (
         (not text_contains_url(status['text'])) and
+        (not any_token_in_ignore_list(status['text'])) and
         (not text_has_chars_digits_together(status['text'])) and
         (not text_is_all_uppercase(status['text'])) and
         # (all_tokens_are_real(status['text'])) and
@@ -213,7 +244,7 @@ def check_tweet(status):
         (not status['entities']['user_mentions']) and
         (not status['entities']['symbols']) and
         (not status['truncated']) and
-        # (not status['is_quote_status']) and
+        (not status['is_quote_status']) and
         # (status['user']['verified']) and
         # '(media' not in status['entities']) and
         (status['lang'] == 'en') and
@@ -301,26 +332,46 @@ class MyStreamer(TwythonStreamer):
                     # text # cleaned
                     # haiku
 
+                    tweet_url = f"https://twitter.com/{status['user']['screen_name']}/status/{status['id_str']}"
+
+                    # Format the haiku with attribution
+                    haiku_attributed = f"{haiku}\n\nA haiku by @{status['user']['screen_name']}"
+
+                    # # Post a tweet, sending as a reply to the coincidental haiku
+                    # twitter.update_status(
+                    #     status=haiku_attributed,
+                    #     in_reply_to_status_id=status['id_str'],
+                    #     attachment_url=tweet_url,
+                    # )
+
+                    # # Post a tweet, but not as a reply to the coincidental haiku
+                    # # The user will not get a notification
+                    # twitter.update_status(
+                    #     status=haiku_attributed,
+                    #     attachment_url=tweet_url,
+                    # )
+
     def on_error(self, status_code, status):
         logging.error(f'{status_code}, {status}')
 
 
-# status = ""
-# text = clean_text(status)
-# print(text)
-# get_haiku(text)
-
 if __name__ == '__main__':
-    stream = MyStreamer(config['twitter']['consumer_key'], config['twitter']['consumer_secret'],
-                        config['twitter']['access_token_key'], config['twitter']['access_token_secret'])
+    logging.info('Initializing tweet streamer...')
+    stream = MyStreamer(
+        app_key=config['twitter']['api_key'],
+        app_secret=config['twitter']['api_secret'],
+        oauth_token=config['twitter']['access_token'],
+        oauth_token_secret=config['twitter']['access_token_secret'],
+    )
 
+    logging.info('Looking for haikus...')
     while True:
         # Use try/except to avoid ChunkedEncodingError
         # https://github.com/ryanmcgrath/twython/issues/288
         try:
             stream.statuses.sample()
             # # search a specific key word
-            # stream.statuses.filter(track='twitter')
+            # stream.statuses.filter(track=['twitter', 'python', 'pandas', 'data science', '-filter:retweets', '-filter:replies'])
         except Exception as e:
             logging.warning(f'{e}')
             continue

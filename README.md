@@ -28,7 +28,12 @@ Hey, that's a haiku! ✌️
     $ pip install -r requirements.txt
     ```
 
-1. sudo cp haikuincidence.service /etc/systemd/system/haikuincidence.service
-1. sudo systemctl daemon-reload
-1. sudo systemctl enable haikuincidence
-1. sudo systemctl start haikuincidence
+1. `sudo cp haikuincidence.service /etc/systemd/system/haikuincidence.service`
+1. `sudo systemctl daemon-reload`
+1. `sudo systemctl enable haikuincidence`
+1. `sudo systemctl start haikuincidence`
+
+### Logs
+
+- To read systemd's logs (includes log messages from Python): `sudo journalctl -u haikuincidence`
+- To follow systemd's logs (includes log messages from Python): `sudo journalctl -f -u haikuincidence`

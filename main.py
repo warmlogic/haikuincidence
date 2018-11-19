@@ -1,6 +1,7 @@
 import configparser
 from pprint import pprint
 import re
+import time
 
 from big_phoney import BigPhoney
 from ftfy import fix_text
@@ -9,7 +10,6 @@ from twython import TwythonStreamer
 from twython import Twython
 
 import logging
-logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
 
 # I'm a poet and I didn't even know it. Hey, that's a haiku!
 
@@ -22,9 +22,25 @@ logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.
 # Twython: https://github.com/ryanmcgrath/twython
 # Twython streaming: https://twython.readthedocs.io/en/latest/usage/streaming_api.html
 
-# Regex to look for URLs
-# https://gist.github.com/gruber/8891611
-url_re = re.compile(r'(?i)\b((?:https?:(?:/{1,3}|[a-z0-9%])|[a-z0-9.\-]+[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)/)(?:[^\s()<>{}\[\]]+|\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\))+(?:\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’])|(?:(?<!@)[a-z0-9]+(?:[.\-][a-z0-9]+)*[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)\b/?(?!@)))')
+DEBUG = True
+
+# Whether to post as a reply (will get notification) or not
+POST_AS_REPLY = True
+
+if DEBUG:
+    logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.DEBUG, style='{')
+    post_haiku = False
+else:
+    logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
+    post_haiku = True
+
+# Minimum amount of time between haiku posts
+if DEBUG:
+    EVERY_N_SECONDS = 1  # 1 second
+else:
+    # EVERY_N_SECONDS = 600  # 10 minutes
+    # EVERY_N_SECONDS = 1800  # 30 minutes
+    EVERY_N_SECONDS = 3600  # 1 hour
 
 # ignore tweets that contain words in this list
 ignore_list = []
@@ -130,6 +146,9 @@ syllable_dict = {
 # ensure lowercase
 syllable_dict = {k.lower(): v for k, v in syllable_dict.items()}
 
+# Regex to look for URLs https://gist.github.com/gruber/8891611
+url_re = re.compile(r'(?i)\b((?:https?:(?:/{1,3}|[a-z0-9%])|[a-z0-9.\-]+[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)/)(?:[^\s()<>{}\[\]]+|\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\))+(?:\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’])|(?:(?<!@)[a-z0-9]+(?:[.\-][a-z0-9]+)*[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)\b/?(?!@)))')
+
 logging.info('Initializing dependencies...')
 
 config = configparser.ConfigParser()
@@ -141,6 +160,18 @@ twitter = Twython(
     oauth_token=config['twitter']['access_token'],
     oauth_token_secret=config['twitter']['access_token_secret'],
 )
+
+
+class MyTwitterClient:
+    '''Wrapper around the Twython Twitter client, limit status update rate
+    '''
+    def __init__(self, twitter, EVERY_N_SECONDS):
+        self.twitter = twitter
+        self.last_post_time = 0
+        self.EVERY_N_SECONDS = EVERY_N_SECONDS
+
+
+twitter = MyTwitterClient(twitter, EVERY_N_SECONDS)
 
 nlp = spacy.load('en')
 phoney = BigPhoney()
@@ -239,15 +270,17 @@ def check_tweet(status):
         (not text_has_chars_digits_together(status['text'])) and
         (not text_is_all_uppercase(status['text'])) and
         # (all_tokens_are_real(status['text'])) and
+        (status['lang'] == 'en') and
         (not status['entities']['hashtags']) and
         (not status['entities']['urls']) and
         (not status['entities']['user_mentions']) and
         (not status['entities']['symbols']) and
         (not status['truncated']) and
         (not status['is_quote_status']) and
+        (not status['in_reply_to_status_id_str']) and
+        (not status['retweeted']) and
         # (status['user']['verified']) and
         # '(media' not in status['entities']) and
-        (status['lang'] == 'en') and
         (len(status['text']) >= 17)
     )
 
@@ -318,11 +351,17 @@ class MyStreamer(TwythonStreamer):
             if text:
                 haiku = get_haiku(text)
                 if haiku:
+                    # Format the haiku with attribution
+                    haiku_attributed = f"{haiku}\n\nA haiku by @{status['user']['screen_name']}"
+
+                    tweet_url = f"https://twitter.com/{status['user']['screen_name']}/status/{status['id_str']}"
+
                     logging.info('=' * 30)
-                    logging.info(pprint(status))
-                    logging.info(f"Original: {status['text']}")
-                    logging.info(f"Cleaned: {text}")
-                    logging.info(f"Haiku:\n{haiku}")
+                    logging.debug(pprint(status))
+                    logging.debug(tweet_url)
+                    logging.debug(f"Original: {status['text']}")
+                    logging.debug(f"Cleaned: {text}")
+                    logging.info(f"Haiku:\n{haiku_attributed}")
 
                     # # things to save
                     # status['id_str']
@@ -332,24 +371,29 @@ class MyStreamer(TwythonStreamer):
                     # text # cleaned
                     # haiku
 
-                    tweet_url = f"https://twitter.com/{status['user']['screen_name']}/status/{status['id_str']}"
-
-                    # Format the haiku with attribution
-                    haiku_attributed = f"{haiku}\n\nA haiku by @{status['user']['screen_name']}"
-
-                    # # Post a tweet, sending as a reply to the coincidental haiku
-                    # twitter.update_status(
-                    #     status=haiku_attributed,
-                    #     in_reply_to_status_id=status['id_str'],
-                    #     attachment_url=tweet_url,
-                    # )
-
-                    # # Post a tweet, but not as a reply to the coincidental haiku
-                    # # The user will not get a notification
-                    # twitter.update_status(
-                    #     status=haiku_attributed,
-                    #     attachment_url=tweet_url,
-                    # )
+                    # If enough time has passed
+                    if (time.monotonic() - twitter.last_post_time) > twitter.EVERY_N_SECONDS:
+                        logging.debug(f'Previous post time: {twitter.last_post_time}')
+                        if post_haiku:
+                            if POST_AS_REPLY:
+                                # Post a tweet, sending as a reply to the coincidental haiku
+                                twitter.update_status(
+                                    status=haiku_attributed,
+                                    in_reply_to_status_id=status['id_str'],
+                                    attachment_url=tweet_url,
+                                )
+                            else:
+                                # Post a tweet, but not as a reply to the coincidental haiku
+                                # The user will not get a notification
+                                twitter.update_status(
+                                    status=haiku_attributed,
+                                    attachment_url=tweet_url,
+                                )
+                        else:
+                            logging.debug('Would have posted')
+                        # Update the time
+                        twitter.last_post_time = time.monotonic()
+                        logging.debug(f'Newest post time: {twitter.last_post_time}')
 
     def on_error(self, status_code, status):
         logging.error(f'{status_code}, {status}')
@@ -369,9 +413,10 @@ if __name__ == '__main__':
         # Use try/except to avoid ChunkedEncodingError
         # https://github.com/ryanmcgrath/twython/issues/288
         try:
+            # get samples from stream
             stream.statuses.sample()
-            # # search a specific key word
-            # stream.statuses.filter(track=['twitter', 'python', 'pandas', 'data science', '-filter:retweets', '-filter:replies'])
+            # # search specific key words
+            # stream.statuses.filter(track='twitter, tweet, python -filter:retweets -filter:replies')
         except Exception as e:
             logging.warning(f'{e}')
             continue

@@ -37,3 +37,14 @@ Hey, that's a haiku! ✌️
 
 - To read systemd's logs (includes log messages from Python): `sudo journalctl -u haikuincidence`
 - To follow systemd's logs (includes log messages from Python): `sudo journalctl -f -u haikuincidence`
+
+## TODO
+
+- [ ] Retweet with comment, rather than as reply
+    - Not sure Twitter's API supports this
+- [ ] Lower memory requirement method for checking if word is in a dictionary (currently using `spaCy`; maybe try `nltk`?)
+    - Reason: Can't install `spaCy` on a GCP `f1-micro` instance
+    - [Possible solution](https://stackoverflow.com/questions/3788870/how-to-check-if-a-word-is-an-english-word-with-python)
+- [ ] Lower memory requirement method for counting syllables (currently using `big-phoney`; maybe a heuristics-based function that counts vowels?)
+    - Reason: Can't initialize `big-phoney` on a GCP `f1-micro` instance
+    - [Possible solution](https://stackoverflow.com/questions/5513391/code-for-counting-the-number-of-syllables-in-the-words-in-a-file)

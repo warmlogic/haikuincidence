@@ -1,6 +1,6 @@
 # Haikuincidence
 
-Find tweets that contain coincidental haikus.
+Find tweets that contain coincidental haikus, and [tweet these beautiful poems](https://twitter.com/haikuincidence).
 
 ```text
 You're a poet and

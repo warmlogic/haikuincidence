@@ -1,4 +1,6 @@
 import configparser
+import json
+from pathlib import Path
 from pprint import pformat
 import re
 import time
@@ -47,108 +49,14 @@ else:
     INITIAL_TIME = int(time.monotonic()) - (EVERY_N_SECONDS // 2)
 
 # ignore tweets that contain any of these words
-ignore_list = ['porn']
+with open(Path('data') / 'ignore.txt') as fp:
+    ignore_list = fp.read().splitlines()
 # ensure lowercase
 ignore_list = set(x.lower() for x in ignore_list)
 
 # Specify syllables for certain acronyms or abbreviations
-syllable_dict = {
-    'abt': 2,  # about
-    'afaik': 5,  # as far as I know
-    'afk': 3,  # A F K
-    'aka': 3,  # A K A
-    'asap': 4,  # A S A P
-    'atm': 4,  # at the moment
-    'awol': 2,  # a-wol
-    'bbl': 3,  # B B L / be back later
-    'bc': 2,  # B C / because
-    'bdrm': 2,  # bedroom
-    'bf': 2,  # B F / boyfriend
-    'bff': 3,  # B F F
-    'bffl': 4,  # B F F L
-    'brb': 3,  # B R B / be right back
-    # 'btw': 3,  # by the way
-    # 'btw': 4,  # B T dubs
-    'btw': 5,  # B T W
-    'dgaf': 2,  # dee-gaf
-    'faq': 3,  # F A Q
-    'fomo': 2,  # fomo
-    'fml': 3,  # F M L
-    'ftw': 3,  # for the win
-    'fwiw': 4,  # for what it's worth
-    'fyi': 3,  # F Y I
-    'gf': 2,  # G F / girlfriend
-    'glbt': 4,  # G L B T
-    'ha': 1,
-    'haha': 2,
-    'hahaha': 3,
-    'heh': 1,
-    'hehe': 2,
-    'hehehe': 3,
-    'hrs': 2,  # hours
-    'ianal': 6,  # I am not a lawyer
-    'idk': 3,  # I D K / I don't know
-    'imho': 7,  # in my humble opinion
-    'imo': 5,  # in my opinion
-    'irl': 3,  # I R L
-    'jaja': 2,
-    'jajaja': 3,
-    'jeje': 2,
-    'jejeje': 3,
-    'jk': 2,  # J K
-    'kthnxbye': 3,
-    'kthxbye': 3,
-    'ktnxbye': 3,
-    'lgbt': 4,  # L G B T
-    'lgbti': 5,  # L G B T I
-    'lgbtq': 5,  # L G B T Q
-    'lmao': 4,  # L M A O
-    'lmaoo': 4,  # L M A O
-    'lmaooo': 4,  # L M A O
-    'lmaoooo': 4,  # L M A O
-    'lmfao': 5,  # L M F A O
-    'lmfaoo': 5,  # L M F A O
-    'lmfaooo': 5,  # L M F A O
-    'lmfaoooo': 5,  # L M F A O
-    # 'lol': 1,  # lol
-    'lol': 3,  # L O L
-    'ny': 2,  # N Y / New York
-    'nyc': 3,  # N Y C
-    'omfg': 4,  # O M F G
-    # 'omfg': 5,  # oh my f'ing god
-    'omg': 3,  # O M G / oh my god
-    # 'op': 2,  # O P
-    # 'ot': 3,  # off topic
-    'ppl': 2,  # people
-    'rofl': 2,  # rofl
-    'rn': 2,  # right now
-    # 'smdh': 4,  # S M D H
-    'smdh': 5,  # shaking my damn head
-    # 'smh': 3,  # S M H
-    'smh': 4,  # shaking my head
-    'sry': 2,  # sorry
-    'stfu': 4,  # shut the f up
-    'tba': 3,  # T B A
-    'tbd': 3,  # T B D
-    'thnx': 1,  # thanks
-    'thx': 1,  # thanks
-    'tmrw': 3,  # tomorrow
-    'tnx': 1,  # thanks
-    'ttyl': 5,  # talk to you later
-    'tweet': 1,
-    'twitter': 2,
-    'w': 1,  # with
-    'wfh': 3,  # work from home
-    'wfm': 3,  # works for me
-    # 'wtf': 3,  # what the f
-    'wtf': 5,  # W T F
-    'wtff': 5,  # W T F
-    'wtfff': 5,  # W T F
-    'wtffff': 5,  # W T F
-    'www': 9,  # W W W
-    'ymmv': 6,  # your mileage may vary
-    'yolo': 2,  # yolo
-}
+with open(Path('data') / 'syllables.json', 'r') as fp:
+    syllable_dict = json.loads(fp.read())
 # ensure lowercase
 syllable_dict = {k.lower(): v for k, v in syllable_dict.items()}
 
@@ -341,7 +249,7 @@ def get_haiku(text: str) -> str:
         # Count number of syllables for this token
         token_clean = re.sub(r"[^\w']", '', token).lower()
         if token_clean in syllable_dict:
-            syllable_count += syllable_dict[token_clean]
+            syllable_count += syllable_dict[token_clean]['syllables']
         else:
             syllable_count += phoney.count_syllables(token)
 

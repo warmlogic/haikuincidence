@@ -3,7 +3,6 @@
 *.pyc
 .ipynb_checkpoints
 __pycache__
-/data
 .env
 config.ini
 .vscode

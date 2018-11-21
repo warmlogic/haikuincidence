@@ -1,0 +1,470 @@
+{
+    "abt": {
+        "alt": [],
+        "pronunciation": "about",
+        "syllables": 2
+    },
+    "af": {
+        "alt": [],
+        "pronunciation": "as fuck",
+        "syllables": 2
+    },
+    "afaik": {
+        "alt": [],
+        "pronunciation": "as far as I know",
+        "syllables": 5
+    },
+    "afk": {
+        "alt": [],
+        "pronunciation": "A F K",
+        "syllables": 3
+    },
+    "aka": {
+        "alt": [],
+        "pronunciation": "A K A",
+        "syllables": 3
+    },
+    "asap": {
+        "alt": [],
+        "pronunciation": "A S A P",
+        "syllables": 4
+    },
+    "atm": {
+        "alt": [],
+        "pronunciation": "at the moment",
+        "syllables": 4
+    },
+    "awol": {
+        "alt": [],
+        "pronunciation": "A WOL",
+        "syllables": 2
+    },
+    "bbl": {
+        "alt": [],
+        "pronunciation": "be back later",
+        "syllables": 3
+    },
+    "bc": {
+        "alt": [],
+        "pronunciation": "because",
+        "syllables": 2
+    },
+    "bdrm": {
+        "alt": [],
+        "pronunciation": "bedroom",
+        "syllables": 2
+    },
+    "bf": {
+        "alt": [],
+        "pronunciation": "boyfriend",
+        "syllables": 2
+    },
+    "bff": {
+        "alt": [
+            {
+                "pronunciation": "best friends forever",
+                "syllables": 5
+            }
+        ],
+        "pronunciation": "B F F",
+        "syllables": 3
+    },
+    "bffl": {
+        "alt": [],
+        "pronunciation": "best friends for life",
+        "syllables": 4
+    },
+    "bffs": {
+        "alt": [
+            {
+                "pronunciation": "best friends forever",
+                "syllables": 5
+            }
+        ],
+        "pronunciation": "B F Fs",
+        "syllables": 3
+    },
+    "brb": {
+        "alt": [],
+        "pronunciation": "be right back",
+        "syllables": 3
+    },
+    "btw": {
+        "alt": [
+            {
+                "pronunciation": "B T dubs",
+                "syllables": 4
+            },
+            {
+                "pronunciation": "B T W",
+                "syllables": 5
+            }
+        ],
+        "pronunciation": "by the way",
+        "syllables": 3
+    },
+    "dgaf": {
+        "alt": [
+            {
+                "pronunciation": "DGAF",
+                "syllables": 2
+            },
+            {
+                "pronunciation": "D G A F",
+                "syllables": 4
+            }
+        ],
+        "pronunciation": "don't give a fuck",
+        "syllables": 4
+    },
+    "faq": {
+        "alt": [],
+        "pronunciation": "F A Q",
+        "syllables": 3
+    },
+    "fml": {
+        "alt": [],
+        "pronunciation": "fuck my life",
+        "syllables": 3
+    },
+    "fomo": {
+        "alt": [],
+        "pronunciation": "fomo",
+        "syllables": 2
+    },
+    "ftw": {
+        "alt": [],
+        "pronunciation": "for the win",
+        "syllables": 3
+    },
+    "fwiw": {
+        "alt": [],
+        "pronunciation": "for what it's worth",
+        "syllables": 4
+    },
+    "fyi": {
+        "alt": [],
+        "pronunciation": "F Y I",
+        "syllables": 3
+    },
+    "gf": {
+        "alt": [],
+        "pronunciation": "girlfriend",
+        "syllables": 2
+    },
+    "glbt": {
+        "alt": [],
+        "pronunciation": "G L B T",
+        "syllables": 4
+    },
+    "hehehe": {
+        "alt": [],
+        "pronunciation": "hehehe",
+        "syllables": 3
+    },
+    "hrs": {
+        "alt": [],
+        "pronunciation": "hours",
+        "syllables": 2
+    },
+    "ianal": {
+        "alt": [],
+        "pronunciation": "I am not a lawyer",
+        "syllables": 6
+    },
+    "idk": {
+        "alt": [],
+        "pronunciation": "I don't know",
+        "syllables": 3
+    },
+    "imho": {
+        "alt": [],
+        "pronunciation": "in my humble opinion",
+        "syllables": 7
+    },
+    "imo": {
+        "alt": [],
+        "pronunciation": "in my opinion",
+        "syllables": 5
+    },
+    "irl": {
+        "alt": [],
+        "pronunciation": "in real life",
+        "syllables": 3
+    },
+    "jeje": {
+        "alt": [],
+        "pronunciation": "jeje",
+        "syllables": 2
+    },
+    "jejeje": {
+        "alt": [],
+        "pronunciation": "jejeje",
+        "syllables": 3
+    },
+    "jk": {
+        "alt": [],
+        "pronunciation": "J K",
+        "syllables": 2
+    },
+    "kthnxbye": {
+        "alt": [],
+        "pronunciation": "kthnxbye",
+        "syllables": 3
+    },
+    "kthxbye": {
+        "alt": [],
+        "pronunciation": "kthxbye",
+        "syllables": 3
+    },
+    "ktnxbye": {
+        "alt": [],
+        "pronunciation": "ktnxbye",
+        "syllables": 3
+    },
+    "lgbt": {
+        "alt": [],
+        "pronunciation": "L G B T",
+        "syllables": 4
+    },
+    "lgbti": {
+        "alt": [],
+        "pronunciation": "L G B T I",
+        "syllables": 5
+    },
+    "lgbtq": {
+        "alt": [],
+        "pronunciation": "L G B T Q",
+        "syllables": 5
+    },
+    "lmao": {
+        "alt": [],
+        "pronunciation": "L M A O",
+        "syllables": 4
+    },
+    "lmaoo": {
+        "alt": [],
+        "pronunciation": "L M A O",
+        "syllables": 4
+    },
+    "lmaooo": {
+        "alt": [],
+        "pronunciation": "L M A O",
+        "syllables": 4
+    },
+    "lmaoooo": {
+        "alt": [],
+        "pronunciation": "L M A O",
+        "syllables": 4
+    },
+    "lmfao": {
+        "alt": [],
+        "pronunciation": "L M F A O",
+        "syllables": 5
+    },
+    "lmfaoo": {
+        "alt": [],
+        "pronunciation": "L M F A O",
+        "syllables": 5
+    },
+    "lmfaooo": {
+        "alt": [],
+        "pronunciation": "L M F A O",
+        "syllables": 5
+    },
+    "lmfaoooo": {
+        "alt": [],
+        "pronunciation": "L M F A O",
+        "syllables": 5
+    },
+    "lol": {
+        "alt": [
+            {
+                "pronunciation": "lol",
+                "syllables": 1
+            }
+        ],
+        "pronunciation": "L O L",
+        "syllables": 3
+    },
+    "ny": {
+        "alt": [],
+        "pronunciation": "New York",
+        "syllables": 2
+    },
+    "nyc": {
+        "alt": [],
+        "pronunciation": "N Y C",
+        "syllables": 3
+    },
+    "omfg": {
+        "alt": [
+            {
+                "pronunciation": "oh my fucking god",
+                "syllables": 5
+            }
+        ],
+        "pronunciation": "O M F G",
+        "syllables": 4
+    },
+    "omg": {
+        "alt": [],
+        "pronunciation": "oh my god",
+        "syllables": 3
+    },
+    "ppl": {
+        "alt": [],
+        "pronunciation": "people",
+        "syllables": 2
+    },
+    "rn": {
+        "alt": [],
+        "pronunciation": "right now",
+        "syllables": 2
+    },
+    "rofl": {
+        "alt": [],
+        "pronunciation": "rofl",
+        "syllables": 2
+    },
+    "smdh": {
+        "alt": [
+            {
+                "pronunciation": "S M D H",
+                "syllables": 4
+            }
+        ],
+        "pronunciation": "shaking my damn head",
+        "syllables": 5
+    },
+    "smh": {
+        "alt": [
+            {
+                "pronunciation": "S M H",
+                "syllables": 3
+            }
+        ],
+        "pronunciation": "shaking my head",
+        "syllables": 4
+    },
+    "sry": {
+        "alt": [],
+        "pronunciation": "sorry",
+        "syllables": 2
+    },
+    "stfu": {
+        "alt": [],
+        "pronunciation": "shut the fuck up",
+        "syllables": 4
+    },
+    "tba": {
+        "alt": [],
+        "pronunciation": "T B A",
+        "syllables": 3
+    },
+    "tbd": {
+        "alt": [],
+        "pronunciation": "T B D",
+        "syllables": 3
+    },
+    "tf": {
+        "alt": [],
+        "pronunciation": "T F",
+        "syllables": 2
+    },
+    "thnx": {
+        "alt": [],
+        "pronunciation": "thanks",
+        "syllables": 1
+    },
+    "thx": {
+        "alt": [],
+        "pronunciation": "thanks",
+        "syllables": 1
+    },
+    "tmrw": {
+        "alt": [],
+        "pronunciation": "tomorrow",
+        "syllables": 3
+    },
+    "tnx": {
+        "alt": [],
+        "pronunciation": "thanks",
+        "syllables": 1
+    },
+    "ttyl": {
+        "alt": [],
+        "pronunciation": "talk to you later",
+        "syllables": 5
+    },
+    "tweet": {
+        "alt": [],
+        "pronunciation": "tweet",
+        "syllables": 1
+    },
+    "twitter": {
+        "alt": [],
+        "pronunciation": "twitter",
+        "syllables": 2
+    },
+    "w": {
+        "alt": [],
+        "pronunciation": "with",
+        "syllables": 1
+    },
+    "wfh": {
+        "alt": [],
+        "pronunciation": "work from home",
+        "syllables": 3
+    },
+    "wfm": {
+        "alt": [],
+        "pronunciation": "works for me",
+        "syllables": 3
+    },
+    "wi": {
+        "alt": [],
+        "pronunciation": "what is",
+        "syllables": 2
+    },
+    "wtf": {
+        "alt": [
+            {
+                "pronunciation": "what the fuck",
+                "syllables": 3
+            }
+        ],
+        "pronunciation": "W T F",
+        "syllables": 5
+    },
+    "wtff": {
+        "alt": [],
+        "pronunciation": "W T F",
+        "syllables": 5
+    },
+    "wtfff": {
+        "alt": [],
+        "pronunciation": "W T F",
+        "syllables": 5
+    },
+    "wtffff": {
+        "alt": [],
+        "pronunciation": "W T F",
+        "syllables": 5
+    },
+    "www": {
+        "alt": [],
+        "pronunciation": "W W W",
+        "syllables": 9
+    },
+    "ymmv": {
+        "alt": [],
+        "pronunciation": "your mileage may vary",
+        "syllables": 6
+    },
+    "yolo": {
+        "alt": [],
+        "pronunciation": "yolo",
+        "syllables": 2
+    }
+}

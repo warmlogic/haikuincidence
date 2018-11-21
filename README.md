@@ -47,4 +47,4 @@ Hey, that's a haiku! ✌️
     - [Possible solution](https://stackoverflow.com/questions/3788870/how-to-check-if-a-word-is-an-english-word-with-python)
 - [ ] Lower memory requirement method for counting syllables (currently using `big-phoney`; maybe a heuristics-based function that counts vowels?)
     - Reason: Can't initialize `big-phoney` on a GCP `f1-micro` instance
-    - [Possible solution](https://stackoverflow.com/questions/5513391/code-for-counting-the-number-of-syllables-in-the-words-in-a-file)
+    - [Possible solution](https://stackoverflow.com/questions/5513391/code-for-counting-the-number-of-syllables-in-the-words-in-a-file), but won't work if word is not in the dictionary. Also need to count pronounced punctuation (e.g., "slash").

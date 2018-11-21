@@ -7,6 +7,7 @@ import time
 
 from big_phoney import BigPhoney
 from ftfy import fix_text
+# from nltk.corpus import cmudict
 import spacy
 from twython import Twython
 from twython import TwythonStreamer
@@ -152,10 +153,14 @@ def all_tokens_are_real(text):
     in syllable dictionary
     '''
     # Keep characters and apostrphes
-    return all(((re.sub(r"[^\w']", '', token) in nlp.vocab) or
-                (re.sub(r"[^\w']", '', token).lower() in nlp.vocab) or
-                (re.sub(r"[^\w']", '', token).lower() in syllable_dict)
-                ) for token in text.split())
+    return all(
+        (
+            (re.sub(r"[^\w']", '', token) in nlp.vocab) or
+            (re.sub(r"[^\w']", '', token).lower() in nlp.vocab) or
+            # (re.sub(r"[^\w']", '', token).lower() in cmudict.dict()) or
+            (re.sub(r"[^\w']", '', token).lower() in syllable_dict)
+        ) for token in text.split()
+    )
 
 
 def clean_text(text):
@@ -230,6 +235,19 @@ def get_haiku(text: str) -> str:
     #     '''
     #     return text
 
+    def count_syllables(token):
+        # def guess_syllables(token):
+        #     pass
+
+        # Count syllables for any token
+        return phoney.count_syllables(token)
+
+        # # Alternative, but only works if word is in dictionary
+        # if token.lower() in cmudict.dict():
+        #     return max([len([y for y in x if y[-1].isdigit()]) for x in cmudict.dict()[token.lower()]])
+        # else:
+        #     return guess_syllables(token)
+
     haiku_form = [5, 12, 17]
     haiku = [[] for _ in range(len(haiku_form))]
     syllable_count = 0
@@ -239,7 +257,7 @@ def get_haiku(text: str) -> str:
     # Add tokens to create potential haiku
     for i, token in enumerate(text_split):
         # Add punctuation (with no syllables) to the end of the previous line
-        if ((haiku_line > 0) and (phoney.count_syllables(token) == 0)):
+        if ((haiku_line > 0) and (count_syllables(token) == 0)):
             haiku[haiku_line - 1].append(token)
             continue
         else:
@@ -251,7 +269,7 @@ def get_haiku(text: str) -> str:
         if token_clean in syllable_dict:
             syllable_count += syllable_dict[token_clean]['syllables']
         else:
-            syllable_count += phoney.count_syllables(token)
+            syllable_count += count_syllables(token)
 
         if syllable_count == haiku_form[haiku_line]:
             # Reached the number of syllables for this line, go to next line
@@ -278,7 +296,6 @@ class MyStreamer(TwythonStreamer):
         if 'text' in status and check_tweet(status):
             # print(status['text'])
             text = clean_text(status['text'])
-            # if text and phoney.count_syllables(text) == 17:
             if text:
                 haiku = get_haiku(text)
                 if haiku:

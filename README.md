@@ -42,9 +42,11 @@ Hey, that's a haiku! ✌️
 
 - [ ] Retweet with comment, rather than as reply
     - Not sure Twitter's API supports this
-- [ ] Lower memory requirement method for checking if word is in a dictionary (currently using `spaCy`; maybe try `nltk`?)
+- [x] Lower memory requirement method for checking if word is in a dictionary (currently using `spaCy`; maybe try `nltk`?)
     - Reason: Can't install `spaCy` on a GCP `f1-micro` instance
     - [Possible solution](https://stackoverflow.com/questions/3788870/how-to-check-if-a-word-is-an-english-word-with-python)
-- [ ] Lower memory requirement method for counting syllables (currently using `big-phoney`; maybe a heuristics-based function that counts vowels?)
+- [x] Lower memory requirement method for counting syllables (currently using `big-phoney`; maybe a heuristics-based function that counts vowels?)
     - Reason: Can't initialize `big-phoney` on a GCP `f1-micro` instance
-    - [Possible solution](https://stackoverflow.com/questions/5513391/code-for-counting-the-number-of-syllables-in-the-words-in-a-file), but won't work if word is not in the dictionary. Also need to count pronounced punctuation (e.g., "slash").
+    - [Possible solution](https://stackoverflow.com/questions/5513391/code-for-counting-the-number-of-syllables-in-the-words-in-a-file), but won't work if word is not in the dictionary.
+- [ ] Decide whether to count pronounced punctuation (e.g., "slash"). Currently not counting.
+- [ ] Set up database [like in this example](https://auth0.com/blog/sqlalchemy-orm-tutorial-for-python-developers/)

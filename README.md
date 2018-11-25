@@ -26,7 +26,10 @@ Hey, that's a haiku! ✌️
     $ conda create -q --name haiku python=3 -y
     $ conda activate haiku
     $ pip install -r requirements.txt
+    $ python -c "import nltk; nltk.download('cmudict')"
     ```
+
+### Additional setup
 
 1. Add phrases to `data/ignore.txt` to ignore tweets that contain these exact strings, one string per line
 1. Add phrases to `data/track.txt` to only search for tweets that contain any of the exact strings, one string per line (see [the documentation about `track`](https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters) for more info)

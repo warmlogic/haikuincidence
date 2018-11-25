@@ -1,0 +1,8 @@
+ignore
+tweets
+with
+any
+of
+these
+words
+or phrases

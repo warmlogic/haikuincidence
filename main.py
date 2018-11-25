@@ -5,10 +5,11 @@ from pprint import pformat
 import re
 import time
 
-from big_phoney import BigPhoney
+# from big_phoney import BigPhoney
 from ftfy import fix_text
-# from nltk.corpus import cmudict
-import spacy
+import inflect
+from nltk.corpus import cmudict
+# import spacy
 from twython import Twython
 from twython import TwythonStreamer
 
@@ -105,8 +106,13 @@ twitter = MyTwitterClient(
     oauth_token_secret=config['twitter']['access_token_secret'],
 )
 
-nlp = spacy.load('en')
-phoney = BigPhoney()
+# Use inflect to change numbers to words
+inflect_p = inflect.engine()
+# Use the CMU dictionary to count syllables
+pronounce_dict = cmudict.dict()
+
+# nlp = spacy.load('en')
+# phoney = BigPhoney()
 
 
 def text_contains_url(text):
@@ -155,18 +161,16 @@ def all_tokens_are_real(text):
     # Keep characters and apostrphes
     return all(
         (
-            (re.sub(r"[^\w']", '', token) in nlp.vocab) or
-            (re.sub(r"[^\w']", '', token).lower() in nlp.vocab) or
-            # (re.sub(r"[^\w']", '', token).lower() in cmudict.dict()) or
+            # (re.sub(r"[^\w']", '', token) in nlp.vocab) or
+            # (re.sub(r"[^\w']", '', token).lower() in nlp.vocab) or
+            (re.sub(r"[^\w']", '', token).lower() in pronounce_dict) or
             (re.sub(r"[^\w']", '', token).lower() in syllable_dict)
         ) for token in text.split()
     )
 
 
 def clean_text(text):
-    '''Process text
-
-    Maybe TODO: deal with typos like 'lmaooooo'
+    '''Process text so it's ready for syllable counting
     '''
     def split_acronym(token):
         '''Split short acronyms, only if all caps.
@@ -194,7 +198,20 @@ def clean_text(text):
             text_final.append(token)
         else:
             text_final.extend(split_acronym(token))
-    return ' '.join(text_final)
+
+    text_final = ' '.join(text_final)
+
+    # remove space before some punctuation ("hello ,how are you ? doing")
+    text_final = re.sub(r'\s([.,;!?](?=\s|$)?)', r'\1', text_final)
+
+    # put space after some punctuation if followed by a letter or number
+    text_final = re.sub(r'(?<=[.,;!?])(?=[\w])', r' ', text_final)
+
+    # remove spaces around apostrophe if letter-space-apostrophe-space-letter
+    text_final = re.sub(r"(\w)\s[']\s(\w)", r"\1'\2", text_final)
+
+    text_final = ' '.join(text_final.split())
+    return text_final
 
 
 def check_tweet(status):
@@ -239,14 +256,94 @@ def get_haiku(text: str) -> str:
         # def guess_syllables(token):
         #     pass
 
-        # Count syllables for any token
-        return phoney.count_syllables(token)
+        # add space around slash and hyphen if letters on either side
+        token = re.sub(r'([\w])([/-](?=[\w]|$))', r'\1 \2 ', token)
 
-        # # Alternative, but only works if word is in dictionary
-        # if token.lower() in cmudict.dict():
-        #     return max([len([y for y in x if y[-1].isdigit()]) for x in cmudict.dict()[token.lower()]])
-        # else:
-        #     return guess_syllables(token)
+        token_clean = re.sub(r"[^\w']", ' ', token).lower()
+
+        subsyllable_count = 0
+        for subtoken in token_clean.split():
+            # if logger.isEnabledFor(logging.DEBUG):
+            #     logger.debug(f'    Subtoken: {subtoken}')
+            if subtoken.isdigit():
+                subtoken = inflect_p.number_to_words(subtoken)
+            if subtoken in syllable_dict:
+                # if logger.isEnabledFor(logging.DEBUG):
+                #     logger.debug(f"    Dict: {subtoken}: {syllable_dict[subtoken]['syllables']}")
+                # Predefined syllable counts must only have letters/numbers and apostrophes
+                subsyllable_count += syllable_dict[subtoken]['syllables']
+            elif subtoken in pronounce_dict:
+                # if logger.isEnabledFor(logging.DEBUG):
+                #     logger.debug(f"    CMU: {subtoken}: {max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])}")
+                subsyllable_count += max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])
+            else:
+                if re.findall(r"[^\w']", subtoken):
+                    subsyllable_count += count_syllables(subtoken)
+                else:
+                    # subsyllable_count += phoney.count_syllables(subtoken)
+                    # if logger.isEnabledFor(logging.DEBUG):
+                    #     logger.debug(f"    Guess: {subtoken}: {guess_syllables(subtoken)[1]}")
+                    subsyllable_count += guess_syllables(subtoken)[1]
+
+        return subsyllable_count
+
+    def guess_syllables(word, verbose=False):
+        '''Borrowed from https://github.com/akkana/scripts/blob/master/countsyl
+        '''
+        vowels = ['a', 'e', 'i', 'o', 'u']
+
+        on_vowel = False
+        in_diphthong = False
+        minsyl = 0
+        maxsyl = 0
+        lastchar = None
+
+        word = word.lower()
+        for c in word:
+            is_vowel = c in vowels
+
+            if on_vowel is None:
+                on_vowel = is_vowel
+
+            # y is a special case
+            if c == 'y':
+                is_vowel = not on_vowel
+
+            if is_vowel:
+                if verbose:
+                    print(f"{c} is a vowel")
+                if not on_vowel:
+                    # We weren't on a vowel before.
+                    # Seeing a new vowel bumps the syllable count.
+                    if verbose:
+                        print("new syllable")
+                    minsyl += 1
+                    maxsyl += 1
+                elif on_vowel and not in_diphthong and c != lastchar:
+                    # We were already in a vowel.
+                    # Don't increment anything except the max count,
+                    # and only do that once per diphthong.
+                    if verbose:
+                        print(f"{c} is a diphthong")
+                    in_diphthong = True
+                    maxsyl += 1
+            elif verbose:
+                print("[consonant]")
+
+            on_vowel = is_vowel
+            lastchar = c
+
+        # Some special cases:
+        if word[-1] == 'e':
+            minsyl -= 1
+        # if it ended with a consonant followed by y, count that as a syllable.
+        if word[-1] == 'y' and not on_vowel:
+            maxsyl += 1
+
+        if not minsyl:
+            minsyl = 1
+
+        return minsyl, maxsyl
 
     haiku_form = [5, 12, 17]
     haiku = [[] for _ in range(len(haiku_form))]
@@ -256,8 +353,10 @@ def get_haiku(text: str) -> str:
     text_split = text.split()
     # Add tokens to create potential haiku
     for i, token in enumerate(text_split):
+        # if logger.isEnabledFor(logging.DEBUG):
+        #     logger.debug(f'Token: {token}')
         # Add punctuation (with no syllables) to the end of the previous line
-        if ((haiku_line > 0) and (count_syllables(token) == 0)):
+        if ((haiku_line > 0) and re.findall(r"[^\w']", token) and (count_syllables(token) == 0)):
             haiku[haiku_line - 1].append(token)
             continue
         else:
@@ -265,18 +364,18 @@ def get_haiku(text: str) -> str:
             haiku[haiku_line].append(token)
 
         # Count number of syllables for this token
-        token_clean = re.sub(r"[^\w']", '', token).lower()
-        if token_clean in syllable_dict:
-            syllable_count += syllable_dict[token_clean]['syllables']
-        else:
-            syllable_count += count_syllables(token)
+        syllable_count += count_syllables(token)
+        # if logger.isEnabledFor(logging.DEBUG):
+        #     logger.debug(f'{syllable_count} syllables counted')
 
         if syllable_count == haiku_form[haiku_line]:
             # Reached the number of syllables for this line, go to next line
             haiku_line += 1
-        if i < len(text_split) - 1 and haiku_line >= len(haiku_form):
-            # There are more tokens to check, but have reached the number of lines in a haiku.
+        if i < len(text_split) - 1 and haiku_line >= len(haiku_form) and (count_syllables(' '.join(text_split[i + 1:])) > 0):
+            # There are syllables in the remaining tokens to check, but have reached the number of lines in a haiku.
             # Therefore not a haiku coincidence!
+            # if logger.isEnabledFor(logging.DEBUG):
+            #     logger.debug(f"Not a haiku because are more lines to check: {' '.join(text_split[i + 1:])}")
             return ''
     if haiku_line == len(haiku_form):
         # Reached the end, and found the right number of lines. Haiku coincidence!

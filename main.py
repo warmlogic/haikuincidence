@@ -1,5 +1,6 @@
 import configparser
 import json
+import logging
 from pathlib import Path
 from pprint import pformat
 import re
@@ -12,8 +13,6 @@ from nltk.corpus import cmudict
 # import spacy
 from twython import Twython
 from twython import TwythonStreamer
-
-import logging
 
 # I'm a poet and I didn't even know it. Hey, that's a haiku!
 
@@ -236,6 +235,8 @@ def check_tweet(status):
         (not status['is_quote_status']) and
         (not status['in_reply_to_status_id_str']) and
         (not status['retweeted']) and
+        (status['user']['friends_count'] > 10) and  # following
+        (status['user']['followers_count'] > 100) and  # followers
         # (status['user']['verified']) and
         # '(media' not in status['entities']) and
         (len(status['text']) >= 17)

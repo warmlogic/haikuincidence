@@ -16,15 +16,6 @@ from twython import TwythonStreamer
 
 # I'm a poet and I didn't even know it. Hey, that's a haiku!
 
-# https://stackabuse.com/accessing-the-twitter-api-with-python/
-
-# Twitter streaming API:
-# https://developer.twitter.com/en/docs/tweets/sample-realtime/api-reference/get-statuses-sample
-# https://developer.twitter.com/en/docs/tweets/filter-realtime/api-reference/post-statuses-filter
-
-# Twython: https://github.com/ryanmcgrath/twython
-# Twython streaming: https://twython.readthedocs.io/en/latest/usage/streaming_api.html
-
 DEBUG = False
 
 # Whether to post as a reply (user gets notification) or not (no notification)

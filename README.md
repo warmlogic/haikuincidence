@@ -28,6 +28,8 @@ Hey, that's a haiku! ✌️
     $ pip install -r requirements.txt
     ```
 
+1. Add phrases to `data/ignore.txt` to ignore tweets that contain these exact strings, one string per line
+1. Add phrases to `data/track.txt` to only search for tweets that contain any of the exact strings, one string per line (see [the documentation about `track`](https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters) for more info)
 1. `sudo cp haikuincidence.service /etc/systemd/system/haikuincidence.service`
 1. `sudo systemctl daemon-reload`
 1. `sudo systemctl enable haikuincidence`
@@ -49,4 +51,4 @@ Hey, that's a haiku! ✌️
     - Reason: Can't initialize `big-phoney` on a GCP `f1-micro` instance
     - [Possible solution](https://stackoverflow.com/questions/5513391/code-for-counting-the-number-of-syllables-in-the-words-in-a-file), but won't work if word is not in the dictionary.
 - [ ] Decide whether to count pronounced punctuation (e.g., "slash"). Currently not counting.
-- [ ] Set up database [like in this example](https://auth0.com/blog/sqlalchemy-orm-tutorial-for-python-developers/)
+- [ ] Store haiku tweets in a database, set up [like in this example](https://auth0.com/blog/sqlalchemy-orm-tutorial-for-python-developers/)

@@ -50,6 +50,10 @@ else:
     # Wait half the rate limit time before making first post
     INITIAL_TIME = int(time.monotonic()) - (EVERY_N_SECONDS // 2)
 
+# track tweets that contain any of these words
+with open(Path('data') / 'track.txt') as fp:
+    track_str = ','.join(fp.read().splitlines())
+
 # ignore tweets that contain any of these words
 with open(Path('data') / 'ignore.txt') as fp:
     ignore_list = fp.read().splitlines()
@@ -408,7 +412,7 @@ class MyStreamer(TwythonStreamer):
                         logger.debug(pformat(status))
                         logger.debug(tweet_url)
                         logger.debug(f"Original: {status['text']}")
-                        logger.debug(f"Cleaned: {text}")
+                        logger.debug(f"Cleaned:  {text}")
                     logger.info(f"Haiku:\n{haiku_attributed}")
 
                     # # things to save
@@ -458,10 +462,13 @@ if __name__ == '__main__':
         # Use try/except to avoid ChunkedEncodingError
         # https://github.com/ryanmcgrath/twython/issues/288
         try:
-            # get samples from stream
-            stream.statuses.sample()
-            # # search specific key words
-            # stream.statuses.filter(track='twitter, tweet, python -filter:retweets -filter:replies')
+            if track_str:
+                # search specific keywords
+                stream.statuses.filter(track=track_str)
+            else:
+                # get samples from stream
+                stream.statuses.sample()
+
         except Exception as e:
             logger.warning(f'{e}')
             continue

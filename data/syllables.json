@@ -177,6 +177,11 @@
         "pronunciation": "I don't know",
         "syllables": 3
     },
+    "ik": {
+        "alt": [],
+        "pronunciation": "I know",
+        "syllables": 2
+    },
     "imho": {
         "alt": [],
         "pronunciation": "in my humble opinion",
@@ -312,6 +317,16 @@
         "pronunciation": "oh my god",
         "syllables": 3
     },
+    "pls": {
+        "alt": [],
+        "pronunciation": "please",
+        "syllables": 1
+    },
+    "plz": {
+        "alt": [],
+        "pronunciation": "please",
+        "syllables": 1
+    },
     "ppl": {
         "alt": [],
         "pronunciation": "people",
@@ -406,11 +421,6 @@
         "alt": [],
         "pronunciation": "twitter",
         "syllables": 2
-    },
-    "w": {
-        "alt": [],
-        "pronunciation": "with",
-        "syllables": 1
     },
     "wfh": {
         "alt": [],

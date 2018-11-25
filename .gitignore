@@ -6,3 +6,5 @@ __pycache__
 .env
 config.ini
 .vscode
+data/ignore.txt
+data/track.txt

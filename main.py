@@ -109,19 +109,16 @@ class MyTwitterClient(Twython):
 twitter = MyTwitterClient(
     every_n_seconds=EVERY_N_SECONDS,
     initial_time=INITIAL_TIME,
-    app_key=config['twitter']['api_key'],
-    app_secret=config['twitter']['api_secret'],
-    oauth_token=config['twitter']['access_token'],
-    oauth_token_secret=config['twitter']['access_token_secret'],
+    app_key=config['twitter'].get('api_key', ''),
+    app_secret=config['twitter'].get('api_secret', ''),
+    oauth_token=config['twitter'].get('access_token', ''),
+    oauth_token_secret=config['twitter'].get('access_token_secret', ''),
 )
 
-# Use inflect to change numbers to words
+# Use inflect to change digits to their English word equivalent
 inflect_p = inflect.engine()
 # Use the CMU dictionary to count syllables
 pronounce_dict = cmudict.dict()
-
-# nlp = spacy.load('en')
-# phoney = BigPhoney()
 
 
 def text_contains_url(text):
@@ -476,7 +473,7 @@ def get_haiku_to_post(h, this_status):
 
 
 def get_best_haiku(haikus):
-    '''Attempt to get the haiku with the most favorites or retweets.
+    '''Attempt to get the haiku from a verified user, or with the most favorites or retweets.
     Otherwise get the most recent one.
     '''
     # initialize
@@ -484,10 +481,13 @@ def get_best_haiku(haikus):
     # find the best haiku
     for h in haikus:
         this_status = twitter.show_status(id=h.status_id_str)
-        if this_status['favorite_count'] > haiku_to_post['favorite_count']:
+        if this_status['user']['verified']:
             haiku_to_post = get_haiku_to_post(h, this_status)
-        elif this_status['retweet_count'] > haiku_to_post['retweet_count']:
-            haiku_to_post = get_haiku_to_post(h, this_status)
+        else:
+            if this_status['favorite_count'] > haiku_to_post['favorite_count']:
+                haiku_to_post = get_haiku_to_post(h, this_status)
+            elif this_status['retweet_count'] > haiku_to_post['retweet_count']:
+                haiku_to_post = get_haiku_to_post(h, this_status)
     if haiku_to_post['status_id_str'] == '':
         # # if no tweet was better than another, pick a random one
         # h = random.choice(haikus)

@@ -4,12 +4,12 @@ from data_base import Base
 
 
 class Haiku(Base):
-    '''To drop it, run Haiku.metadata.drop_all(engine)
+    '''To drop this table, run Haiku.metadata.drop_all(engine)
     '''
     __tablename__ = 'haikus'
 
     id = Column(Integer, primary_key=True)
-    tweet_id_str = Column(String)
+    status_id_str = Column(String)
     user_screen_name = Column(String)
     user_id_str = Column(String)
     user_verified = Column(Boolean)
@@ -17,10 +17,11 @@ class Haiku(Base):
     text_original = Column(String)
     text_clean = Column(String)
     haiku = Column(String)
+    posted = Column(Boolean)
 
     def __init__(
         self,
-        tweet_id_str,
+        status_id_str,
         user_screen_name,
         user_id_str,
         user_verified,
@@ -28,8 +29,9 @@ class Haiku(Base):
         text_original,
         text_clean,
         haiku,
+        posted,
     ):
-        self.tweet_id_str = tweet_id_str
+        self.status_id_str = status_id_str
         self.user_screen_name = user_screen_name
         self.user_id_str = user_id_str
         self.user_verified = user_verified
@@ -37,3 +39,4 @@ class Haiku(Base):
         self.text_original = text_original
         self.text_clean = text_clean
         self.haiku = haiku
+        self.posted = posted

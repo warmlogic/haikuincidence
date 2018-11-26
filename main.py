@@ -22,7 +22,7 @@ from data_tweets_haiku import Haiku
 
 # I'm a poet and I didn't even know it. Hey, that's a haiku!
 
-DEBUG = True
+DEBUG = False
 
 # Whether to post as a reply (user gets notification) or not (no notification)
 POST_AS_REPLY = True
@@ -102,8 +102,10 @@ class MyTwitterClient(Twython):
             self.update_status(*args, **kwargs)
             self.last_post_time = current_time
             logger.info('Success')
+            return True
         else:
             logger.info('Not posting haiku due to rate limit')
+            return False
 
 
 twitter = MyTwitterClient(
@@ -402,6 +404,8 @@ def get_haiku(text: str) -> str:
 
 
 def add_haiku(tweet_haiku):
+    '''Add haiku record to the database
+    '''
     session = session_factory()
     session.add(tweet_haiku)
     session.commit()
@@ -409,25 +413,61 @@ def add_haiku(tweet_haiku):
 
 
 def get_haikus_all():
+    '''Get all records
+    '''
     session = session_factory()
     haiku_query = session.query(Haiku)
     session.close()
     return haiku_query.all()
 
 
-def get_haikus_timedelta(td_seconds=None):
-    if td_seconds is None:
-        td_seconds = EVERY_N_SECONDS
+def get_haikus_unposted():
+    '''Get all unposted records
+    '''
     session = session_factory()
-    filter_td = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=td_seconds)
-    haiku_query = session.query(Haiku).filter(Haiku.created_at > filter_td)
+    haiku_query = session.query(Haiku).filter(Haiku.posted == 'false')
     session.close()
     return haiku_query.all()
 
 
-def update_status_to_post(h, this_status):
+def get_haikus_unposted_timedelta(td_seconds=None):
+    '''Get all unposted records from the last N seconds
+    '''
+    if td_seconds is None:
+        td_seconds = EVERY_N_SECONDS
+    session = session_factory()
+    filter_td = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=td_seconds)
+    haiku_query = session.query(Haiku).filter(
+        Haiku.created_at > filter_td).filter(Haiku.posted == 'false')
+    session.close()
+    return haiku_query.all()
+
+
+def update_haiku_posted(status_id_str):
+    '''Mark haiku as posted
+    '''
+    session = session_factory()
+    session.query(Haiku).filter(
+        Haiku.status_id_str == status_id_str).update(
+            {'posted': True})
+    session.commit()
+    session.close()
+
+
+def update_haiku_unposted(status_id_str):
+    '''Mark haiku as unposted
+    '''
+    session = session_factory()
+    session.query(Haiku).filter(
+        Haiku.status_id_str == status_id_str).update(
+            {'posted': False})
+    session.commit()
+    session.close()
+
+
+def get_haiku_to_post(h, this_status):
     return {
-        'id': h.id_str,
+        'status_id_str': h.status_id_str,
         'user_screen_name': h.user_screen_name,
         'favorite_count': this_status['favorite_count'],
         'retweet_count': this_status['retweet_count'],
@@ -435,6 +475,29 @@ def update_status_to_post(h, this_status):
         'text_clean': h.text_clean,
         'haiku': h.haiku,
     }
+
+
+def get_best_haiku(haikus):
+    '''Attempt to get the haiku with the most favorites or retweets.
+    Otherwise get the most recent one.
+    '''
+    # initialize
+    haiku_to_post = {'status_id_str': '', 'favorite_count': 0, 'retweet_count': 0}
+    # find the best haiku
+    for h in haikus:
+        this_status = twitter.show_status(id=h.status_id_str)
+        if this_status['favorite_count'] > haiku_to_post['favorite_count']:
+            haiku_to_post = get_haiku_to_post(h, this_status)
+        elif this_status['retweet_count'] > haiku_to_post['retweet_count']:
+            haiku_to_post = get_haiku_to_post(h, this_status)
+    if haiku_to_post['status_id_str'] == '':
+        # # if no tweet was better than another, pick a random one
+        # h = random.choice(haikus)
+        # if no tweet was better than another, pick the most recent tweet
+        h = haikus[-1]
+        this_status = twitter.show_status(id=h.status_id_str)
+        haiku_to_post = get_haiku_to_post(h, this_status)
+    return haiku_to_post
 
 
 class MyStreamer(TwythonStreamer):
@@ -457,65 +520,55 @@ class MyStreamer(TwythonStreamer):
                         status['text'],
                         text,
                         haiku,
+                        False,
                     )
                     add_haiku(tweet_haiku)
 
                     # Get haikus from the last hour
-                    haikus = get_haikus_timedelta(td_seconds=EVERY_N_SECONDS)
-                    logger.debug('\n### Haikus from last hour:')
-                    for h in haikus:
-                        logger.debug(f'{h.original_txt}, by {h.user_screen_name} at {h.created_at}\n')
+                    haikus = get_haikus_unposted_timedelta(td_seconds=EVERY_N_SECONDS)
+                    # haikus = get_haikus_unposted()
+                    if len(haikus) > 0:
+                        # Get the haiku to post
+                        haiku_to_post = get_best_haiku(haikus)
+                        status = twitter.show_status(id=haiku_to_post['status_id_str'])
 
-                    # initialize
-                    status_to_post = {'id': '', 'favorite_count': 0, 'retweet_count': 0}
-                    # find the best haiku
-                    for h in haikus:
-                        this_status = twitter.show_status(id=h.id_str)
-                        if this_status['favorite_count'] > status_to_post['favorite_count']:
-                            status_to_post = update_status_to_post(h, this_status)
-                        elif this_status['retweet_count'] > status_to_post['retweet_count']:
-                            status_to_post = update_status_to_post(h, this_status)
-                    if status_to_post['id'] == '':
-                        # # if no tweet was better than another, pick a random one
-                        # h = random.choice(haikus)
-                        # if no tweet was better than another, pick the most recent tweet
-                        h = haikus[-1]
-                        this_status = twitter.show_status(id=h.id_str)
-                        status_to_post = update_status_to_post(h, this_status)
+                        # Format the haiku with attribution
+                        haiku_attributed = f"{haiku_to_post['haiku']}\n\nA haiku by @{status['user']['screen_name']}"
 
-                    # Format the haiku with attribution
-                    haiku_attributed = f"{haiku}\n\nA haiku by @{status['user']['screen_name']}"
+                        tweet_url = f"https://twitter.com/{status['user']['screen_name']}/status/{status['id_str']}"
 
-                    tweet_url = f"https://twitter.com/{status['user']['screen_name']}/status/{status['id_str']}"
+                        logger.info('=' * 50)
+                        if logger.isEnabledFor(logging.DEBUG):
+                            logger.debug(pformat(status))
+                            logger.debug(tweet_url)
+                            logger.debug(f"Original: {haiku_to_post['text_original']}")
+                            logger.debug(f"Cleaned:  {haiku_to_post['text_clean']}")
+                        logger.info(f"Haiku:\n{haiku_attributed}")
 
-                    logger.info('=' * 50)
-                    if logger.isEnabledFor(logging.DEBUG):
-                        logger.debug(pformat(status))
-                        logger.debug(tweet_url)
-                        logger.debug(f"Original: {status['text']}")
-                        logger.debug(f"Cleaned:  {text}")
-                    logger.info(f"Haiku:\n{haiku_attributed}")
-
-                    # Try to post haiku (client checks rate limit time internally)
-                    if post_haiku:
-                        if POST_AS_REPLY:
-                            logger.info('Attempting to post haiku as reply...')
-                            # Post a tweet, sending as a reply to the coincidental haiku
-                            twitter.update_status_check_rate(
-                                status=haiku_attributed,
-                                in_reply_to_status_id=status['id_str'],
-                                attachment_url=tweet_url,
-                            )
+                        # Try to post haiku (client checks rate limit time internally)
+                        if post_haiku:
+                            if POST_AS_REPLY:
+                                logger.info('Attempting to post haiku as reply...')
+                                # Post a tweet, sending as a reply to the coincidental haiku
+                                posted_status = twitter.update_status_check_rate(
+                                    status=haiku_attributed,
+                                    in_reply_to_status_id=status['id_str'],
+                                    attachment_url=tweet_url,
+                                )
+                            else:
+                                logger.info('Attempting to post haiku, but not as reply...')
+                                # Post a tweet, but not as a reply to the coincidental haiku
+                                # The user will not get a notification
+                                posted_status = twitter.update_status_check_rate(
+                                    status=haiku_attributed,
+                                    attachment_url=tweet_url,
+                                )
+                            if posted_status:
+                                update_haiku_posted(haiku_to_post['status_id_str'])
                         else:
-                            logger.info('Attempting to post haiku, but not as reply...')
-                            # Post a tweet, but not as a reply to the coincidental haiku
-                            # The user will not get a notification
-                            twitter.update_status_check_rate(
-                                status=haiku_attributed,
-                                attachment_url=tweet_url,
-                            )
+                            logger.debug('Found haiku but did not post')
                     else:
-                        logger.debug('Found haiku but did not post')
+                        logger.debug('No haikus to choose from')
 
     def on_error(self, status_code, status):
         logger.error(f'{status_code}, {status}')

@@ -265,14 +265,28 @@ def get_haiku(text: str) -> str:
         # add space around slash and hyphen if letters on either side
         token = re.sub(r'([\w])([/-](?=[\w]|$))', r'\1 \2 ', token)
 
+        # keep letters and apostrophes
         token_clean = re.sub(r"[^\w']", ' ', token).lower()
+
+        # remove starting or ending apostrophes
+        if token_clean[0] == "'":
+            token_clean = token_clean[1:]
+        elif token_clean[-1] == "'":
+            token_clean = token_clean[:-1]
 
         subsyllable_count = 0
         for subtoken in token_clean.split():
             # if logger.isEnabledFor(logging.DEBUG):
             #     logger.debug(f'    Subtoken: {subtoken}')
             if subtoken.isdigit():
-                subtoken = inflect_p.number_to_words(subtoken)
+                # split a string that looks like a year
+                if len(subtoken) == 4:
+                    if (subtoken[:2] == '18') or (subtoken[:2] == '19'):
+                        subtoken = f'{subtoken[:2]} {subtoken[2:]}'
+                    else:
+                        subtoken = inflect_p.number_to_words(subtoken, andword='')
+                else:
+                    subtoken = inflect_p.number_to_words(subtoken, andword='')
             if subtoken in syllable_dict:
                 # if logger.isEnabledFor(logging.DEBUG):
                 #     logger.debug(f"    Dict: {subtoken}: {syllable_dict[subtoken]['syllables']}")

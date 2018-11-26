@@ -9,11 +9,9 @@ import pytz
 import re
 import time
 
-# from big_phoney import BigPhoney
 from ftfy import fix_text
 import inflect
 from nltk.corpus import cmudict
-# import spacy
 from twython import Twython
 from twython import TwythonStreamer
 

@@ -6,6 +6,7 @@ dependencies:
   - ftfy
   - inflect
   - nltk
+  - psycopg2-binary
+  - pytz
   - twython
   - sqlalchemy
-  - psycopg2-binary

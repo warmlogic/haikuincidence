@@ -33,28 +33,13 @@ fi
 # install
 bash $MC_DL_PATH -b -p $MC_DIR_PATH
 
-# Add to and source .bashrc
-export PATH="$MC_DIR_PATH/bin:$PATH"
-# Clears history
-hash -r
+# conda update -q conda -y
 
-# -q for quiet
-conda update -q conda -y
-
-conda install -n base _license -y
-
-conda upgrade --all -y
+# conda upgrade --all -y
 
 # enable usage of conda command
-. $HOME/$MC_DIR/etc/profile.d/conda.sh
-
-conda activate base
-
-# Install dependencies
-conda env update -f environment.yml
-
-# Install the CMU dictionary
-python -c "import nltk; nltk.download('cmudict')"
+echo 'Enabling conda command'
+source $HOME/$MC_DIR/etc/profile.d/conda.sh
 
 # add "conda activate" to ~/.bash_profile, enable using it for other envs
 echo '' >> ~/.bash_profile
@@ -62,3 +47,25 @@ echo '# enable conda activate' >> ~/.bash_profile
 echo '. $HOME/'$MC_DIR'/etc/profile.d/conda.sh' >> ~/.bash_profile
 echo '# activate the base environment' >> ~/.bash_profile
 echo 'conda activate' >> ~/.bash_profile
+
+echo 'Sourcing ~/.bashrc'
+source ~/.bashrc
+
+echo 'Running conda activate for base environment'
+conda activate
+
+# Install dependencies
+echo 'Installing dependencies...'
+# conda env update -f environment.yml
+
+pip install -U pip
+pip install -U ipython
+pip install -U ftfy
+pip install -U inflect
+pip install -U nltk
+pip install -U sqlalchemy psycopg2-binary
+pip install -U pytz
+pip install -U twython
+
+# Install the CMU dictionary
+python -c "import nltk; nltk.download('cmudict')"

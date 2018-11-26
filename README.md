@@ -16,11 +16,9 @@ Hey, that's a haiku! ✌️
 
 ### Install required packages
 
-1. Install Anaconda or Miniconda (Python 3)
+1. Install Miniconda (Python 3), create a conda environment, and install the requirements.
 
 - https://conda.io/miniconda.html
-
-1. Create conda environment and install the requirements.
 
     ```bash
     $ ./python_env_setup.sh
@@ -54,4 +52,4 @@ Hey, that's a haiku! ✌️
     - Reason: Can't initialize `big-phoney` on a GCP `f1-micro` instance
     - [Possible solution](https://stackoverflow.com/questions/5513391/code-for-counting-the-number-of-syllables-in-the-words-in-a-file), but won't work if word is not in the dictionary.
 - [ ] Decide whether to count pronounced punctuation (e.g., "slash"). Currently not counting.
-- [ ] Store haiku tweets in a database, set up [like in this example](https://auth0.com/blog/sqlalchemy-orm-tutorial-for-python-developers/)
+- [x] Store haiku tweets in a database, set up [like in this example](https://auth0.com/blog/sqlalchemy-orm-tutorial-for-python-developers/)

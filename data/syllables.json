@@ -103,6 +103,11 @@
         "pronunciation": "by the way",
         "syllables": 3
     },
+    "dae": {
+        "alt": [],
+        "pronunciation": "does anyone else",
+        "syllables": 5
+    },
     "dgaf": {
         "alt": [
             {
@@ -116,6 +121,11 @@
         ],
         "pronunciation": "don't give a fuck",
         "syllables": 4
+    },
+    "dm": {
+        "alt": [],
+        "pronunciation": "D M",
+        "syllables": 2
     },
     "faq": {
         "alt": [],
@@ -131,6 +141,11 @@
         "alt": [],
         "pronunciation": "fomo",
         "syllables": 2
+    },
+    "ftfy": {
+        "alt": [],
+        "pronunciation": "fixed that for you",
+        "syllables": 4
     },
     "ftw": {
         "alt": [],
@@ -171,6 +186,16 @@
         "alt": [],
         "pronunciation": "I am not a lawyer",
         "syllables": 6
+    },
+    "icymi": {
+        "alt": [],
+        "pronunciation": "in case you missed it",
+        "syllables": 5
+    },
+    "idgaf": {
+        "alt": [],
+        "pronunciation": "i don't give a fuck",
+        "syllables": 5
     },
     "idk": {
         "alt": [],
@@ -292,6 +317,31 @@
         "pronunciation": "L O L",
         "syllables": 3
     },
+    "lolz": {
+        "alt": [],
+        "pronunciation": "lols",
+        "syllables": 1
+    },
+    "luls": {
+        "alt": [],
+        "pronunciation": "luls",
+        "syllables": 1
+    },
+    "lulz": {
+        "alt": [],
+        "pronunciation": "luls",
+        "syllables": 1
+    },
+    "mfw": {
+        "alt": [],
+        "pronunciation": "my face when",
+        "syllables": 4
+    },
+    "nsfw": {
+        "alt": [],
+        "pronunciation": "not safe for work",
+        "syllables": 4
+    },
     "ny": {
         "alt": [],
         "pronunciation": "New York",
@@ -387,6 +437,11 @@
         "pronunciation": "T F",
         "syllables": 2
     },
+    "tfw": {
+        "alt": [],
+        "pronunciation": "that feeling when",
+        "syllables": 4
+    },
     "thnx": {
         "alt": [],
         "pronunciation": "thanks",
@@ -396,6 +451,16 @@
         "alt": [],
         "pronunciation": "thanks",
         "syllables": 1
+    },
+    "til": {
+        "alt": [],
+        "pronunciation": "today I learned",
+        "syllables": 4
+    },
+    "tldr": {
+        "alt": [],
+        "pronunciation": "too long didn't read",
+        "syllables": 5
     },
     "tmrw": {
         "alt": [],
@@ -448,17 +513,32 @@
         "syllables": 5
     },
     "wtff": {
-        "alt": [],
+        "alt": [
+            {
+                "pronunciation": "what the fuck",
+                "syllables": 3
+            }
+        ],
         "pronunciation": "W T F",
         "syllables": 5
     },
     "wtfff": {
-        "alt": [],
+        "alt": [
+            {
+                "pronunciation": "what the fuck",
+                "syllables": 3
+            }
+        ],
         "pronunciation": "W T F",
         "syllables": 5
     },
     "wtffff": {
-        "alt": [],
+        "alt": [
+            {
+                "pronunciation": "what the fuck",
+                "syllables": 3
+            }
+        ],
         "pronunciation": "W T F",
         "syllables": 5
     },

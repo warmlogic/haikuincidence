@@ -1,0 +1,9 @@
+name: base
+dependencies:
+- ftfy
+- inflect
+- nltk
+- pip
+- psycopg2-binary
+- twython
+- sqlalchemy

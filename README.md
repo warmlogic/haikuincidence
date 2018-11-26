@@ -23,10 +23,7 @@ Hey, that's a haiku! ✌️
 1. Create conda environment and install the requirements.
 
     ```bash
-    $ conda create -q --name haiku python=3 -y
-    $ conda activate haiku
-    $ pip install -r requirements.txt
-    $ python -c "import nltk; nltk.download('cmudict')"
+    $ ./python_env_setup.sh
     ```
 
 ### Additional setup

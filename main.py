@@ -1,8 +1,11 @@
 import configparser
+from datetime import datetime, timedelta
 import json
 import logging
 from pathlib import Path
 from pprint import pformat
+import pytz
+# import random
 import re
 import time
 
@@ -14,9 +17,12 @@ from nltk.corpus import cmudict
 from twython import Twython
 from twython import TwythonStreamer
 
+from data_base import session_factory
+from data_tweets_haiku import Haiku
+
 # I'm a poet and I didn't even know it. Hey, that's a haiku!
 
-DEBUG = False
+DEBUG = True
 
 # Whether to post as a reply (user gets notification) or not (no notification)
 POST_AS_REPLY = True
@@ -395,6 +401,42 @@ def get_haiku(text: str) -> str:
         return ''
 
 
+def add_haiku(tweet_haiku):
+    session = session_factory()
+    session.add(tweet_haiku)
+    session.commit()
+    session.close()
+
+
+def get_haikus_all():
+    session = session_factory()
+    haiku_query = session.query(Haiku)
+    session.close()
+    return haiku_query.all()
+
+
+def get_haikus_timedelta(td_seconds=None):
+    if td_seconds is None:
+        td_seconds = EVERY_N_SECONDS
+    session = session_factory()
+    filter_td = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=td_seconds)
+    haiku_query = session.query(Haiku).filter(Haiku.created_at > filter_td)
+    session.close()
+    return haiku_query.all()
+
+
+def update_status_to_post(h, this_status):
+    return {
+        'id': h.id_str,
+        'user_screen_name': h.user_screen_name,
+        'favorite_count': this_status['favorite_count'],
+        'retweet_count': this_status['retweet_count'],
+        'text_original': h.text_original,
+        'text_clean': h.text_clean,
+        'haiku': h.haiku,
+    }
+
+
 class MyStreamer(TwythonStreamer):
     def on_success(self, status):
         if 'text' in status and check_tweet(status):
@@ -403,6 +445,44 @@ class MyStreamer(TwythonStreamer):
             if text:
                 haiku = get_haiku(text)
                 if haiku:
+                    # add tweet to database
+                    tweet_haiku = Haiku(
+                        status['id_str'],
+                        status['user']['screen_name'],
+                        status['user']['id_str'],
+                        status['user']['verified'],
+                        datetime.strptime(
+                            status['created_at'],
+                            '%a %b %d %H:%M:%S +0000 %Y').replace(tzinfo=pytz.UTC),
+                        status['text'],
+                        text,
+                        haiku,
+                    )
+                    add_haiku(tweet_haiku)
+
+                    # Get haikus from the last hour
+                    haikus = get_haikus_timedelta(td_seconds=EVERY_N_SECONDS)
+                    logger.debug('\n### Haikus from last hour:')
+                    for h in haikus:
+                        logger.debug(f'{h.original_txt}, by {h.user_screen_name} at {h.created_at}\n')
+
+                    # initialize
+                    status_to_post = {'id': '', 'favorite_count': 0, 'retweet_count': 0}
+                    # find the best haiku
+                    for h in haikus:
+                        this_status = twitter.show_status(id=h.id_str)
+                        if this_status['favorite_count'] > status_to_post['favorite_count']:
+                            status_to_post = update_status_to_post(h, this_status)
+                        elif this_status['retweet_count'] > status_to_post['retweet_count']:
+                            status_to_post = update_status_to_post(h, this_status)
+                    if status_to_post['id'] == '':
+                        # # if no tweet was better than another, pick a random one
+                        # h = random.choice(haikus)
+                        # if no tweet was better than another, pick the most recent tweet
+                        h = haikus[-1]
+                        this_status = twitter.show_status(id=h.id_str)
+                        status_to_post = update_status_to_post(h, this_status)
+
                     # Format the haiku with attribution
                     haiku_attributed = f"{haiku}\n\nA haiku by @{status['user']['screen_name']}"
 
@@ -415,14 +495,6 @@ class MyStreamer(TwythonStreamer):
                         logger.debug(f"Original: {status['text']}")
                         logger.debug(f"Cleaned:  {text}")
                     logger.info(f"Haiku:\n{haiku_attributed}")
-
-                    # # things to save
-                    # status['id_str']
-                    # status['user']['screen_name']
-                    # status['created_at']
-                    # status['text'] # original
-                    # text # cleaned
-                    # haiku
 
                     # Try to post haiku (client checks rate limit time internally)
                     if post_haiku:

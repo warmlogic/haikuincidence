@@ -237,6 +237,11 @@
         "pronunciation": "J K",
         "syllables": 2
     },
+    "kk": {
+        "alt": [],
+        "pronunciation": "K K",
+        "syllables": 2
+    },
     "kthnxbye": {
         "alt": [],
         "pronunciation": "kthnxbye",
@@ -287,6 +292,11 @@
         "pronunciation": "L M A O",
         "syllables": 4
     },
+    "lmaooooo": {
+        "alt": [],
+        "pronunciation": "L M A O",
+        "syllables": 4
+    },
     "lmfao": {
         "alt": [],
         "pronunciation": "L M F A O",
@@ -303,6 +313,11 @@
         "syllables": 5
     },
     "lmfaoooo": {
+        "alt": [],
+        "pronunciation": "L M F A O",
+        "syllables": 5
+    },
+    "lmfaooooo": {
         "alt": [],
         "pronunciation": "L M F A O",
         "syllables": 5
@@ -413,6 +428,11 @@
         "syllables": 4
     },
     "sry": {
+        "alt": [],
+        "pronunciation": "sorry",
+        "syllables": 2
+    },
+    "srry": {
         "alt": [],
         "pronunciation": "sorry",
         "syllables": 2
@@ -533,6 +553,16 @@
         "syllables": 5
     },
     "wtffff": {
+        "alt": [
+            {
+                "pronunciation": "what the fuck",
+                "syllables": 3
+            }
+        ],
+        "pronunciation": "W T F",
+        "syllables": 5
+    },
+    "wtfffff": {
         "alt": [
             {
                 "pronunciation": "what the fuck",

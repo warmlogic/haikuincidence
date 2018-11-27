@@ -259,23 +259,33 @@ def get_haiku(text: str) -> str:
     #     return text
 
     def count_syllables(token):
-        # def guess_syllables(token):
-        #     pass
+        # add space around some punctuation if letters on both sides
+        token = re.sub(r'([\w])([%=+&/\-](?=[\w]|$))', r'\1 \2 ', token)
 
-        # add space around slash and hyphen if letters on either side
-        token = re.sub(r'([\w])([/-](?=[\w]|$))', r'\1 \2 ', token)
+        # put a space after some punctuation that precedes a letter
+        token = re.sub(r'([%=+&/])((?=[\w]|$))', r'\1 \2', token)
+
+        # put a space before a some punctuation that follows a letter
+        token = re.sub(r'([\w])?([%=+&/])', r'\1 \2', token)
+
+        # replace some punctuation with words
+        token = token.replace('%', 'percent')
+        token = token.replace('=', 'equals')
+        token = token.replace('+', 'plus')
+        token = token.replace('&', 'and')
+        # token = token.replace('/', 'slash')
 
         # keep letters and apostrophes
         token_clean = re.sub(r"[^\w']", ' ', token).lower()
 
-        # remove starting or ending apostrophes
-        if token_clean[0] == "'":
-            token_clean = token_clean[1:]
-        elif token_clean[-1] == "'":
-            token_clean = token_clean[:-1]
-
         subsyllable_count = 0
         for subtoken in token_clean.split():
+            # remove starting or ending apostrophes
+            if subtoken[0] == "'":
+                subtoken = subtoken[1:]
+            elif subtoken[-1] == "'":
+                subtoken = subtoken[:-1]
+
             # if logger.isEnabledFor(logging.DEBUG):
             #     logger.debug(f'    Subtoken: {subtoken}')
             if subtoken.isdigit():

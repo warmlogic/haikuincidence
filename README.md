@@ -51,5 +51,5 @@ Hey, that's a haiku! ✌️
 - [x] Lower memory requirement method for counting syllables (currently using `big-phoney`; maybe a heuristics-based function that counts vowels?)
     - Reason: Can't initialize `big-phoney` on a GCP `f1-micro` instance
     - [Possible solution](https://stackoverflow.com/questions/5513391/code-for-counting-the-number-of-syllables-in-the-words-in-a-file), but won't work if word is not in the dictionary.
-- [ ] Decide whether to count pronounced punctuation (e.g., "slash"). Currently not counting.
+- [x] Decide whether to count pronounced punctuation (e.g., "slash"). Currently counting some.
 - [x] Store haiku tweets in a database, set up [like in this example](https://auth0.com/blog/sqlalchemy-orm-tutorial-for-python-developers/)

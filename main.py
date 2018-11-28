@@ -431,7 +431,7 @@ def add_haiku(tweet_haiku):
         session.add(tweet_haiku)
         session.commit()
     except Exception as e:
-        logger.info(e)
+        logger.info(f'Exception when adding haiku: {e}')
         session.rollback()
 
 
@@ -469,7 +469,7 @@ def update_haiku_posted(status_id_str):
                 {'posted': True})
         session.commit()
     except Exception as e:
-        logger.info(e)
+        logger.info(f'Exception when updating haiku as posted: {e}')
         session.rollback()
 
 
@@ -482,7 +482,7 @@ def update_haiku_unposted(status_id_str):
                 {'posted': False})
         session.commit()
     except Exception as e:
-        logger.info(e)
+        logger.info(f'Exception when updating haiku as unposted: {e}')
         session.rollback()
 
 
@@ -516,7 +516,8 @@ def get_best_haiku(haikus):
         logging.debug(f'Haiku: {h.haiku}')
         try:
             this_status = twitter.show_status(id=h.status_id_str)
-        except:
+        except Exception as e:
+            logger.info(f'Exception when getting best status (1): {e}')
             # Tweet no longer exists
             this_status = {}
             logging.debug(f'Does not exist: {h.user_screen_name}/{h.status_id_str}')
@@ -537,7 +538,8 @@ def get_best_haiku(haikus):
         for h in haikus[::-1]:
             try:
                 this_status = twitter.show_status(id=h.status_id_str)
-            except:
+            except Exception as e:
+                logger.info(f'Exception when getting best status (2): {e}')
                 # Tweet no longer exists
                 this_status = {}
                 logging.debug(f'Does not exist: {h.user_screen_name}/{h.status_id_str}')
@@ -642,7 +644,6 @@ if __name__ == '__main__':
             else:
                 # get samples from stream
                 stream.statuses.sample()
-
         except Exception as e:
-            logger.warning(f'{e}')
+            logger.warning(f'Exception when streaming tweets: {e}')
             continue

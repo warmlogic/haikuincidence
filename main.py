@@ -488,6 +488,7 @@ def get_haiku_to_post(h, this_status):
         'user_screen_name': h.user_screen_name,
         'favorite_count': this_status['favorite_count'],
         'retweet_count': this_status['retweet_count'],
+        'followers_count': this_status['user']['followers_count'],
         'text_original': h.text_original,
         'text_clean': h.text_clean,
         'haiku': h.haiku,
@@ -495,11 +496,17 @@ def get_haiku_to_post(h, this_status):
 
 
 def get_best_haiku(haikus):
-    '''Attempt to get the haiku from a verified user, or with the most favorites or retweets.
-    Otherwise get the most recent one.
+    '''Attempt to get the haiku by assessing verified user,
+    or number of favorites, retweets, or followers.
+    High probability that followers will yield a tweet. Otherwise get the most recent one.
     '''
     # initialize
-    haiku_to_post = {'status_id_str': '', 'favorite_count': 0, 'retweet_count': 0}
+    haiku_to_post = {
+        'status_id_str': '',
+        'favorite_count': 0,
+        'retweet_count': 0,
+        'followers_count': 0,
+    }
     # find the best haiku
     for h in haikus:
         logging.debug(f'Haiku: {h.haiku}')
@@ -516,6 +523,8 @@ def get_best_haiku(haikus):
                 if this_status['favorite_count'] > haiku_to_post['favorite_count']:
                     haiku_to_post = get_haiku_to_post(h, this_status)
                 elif this_status['retweet_count'] > haiku_to_post['retweet_count']:
+                    haiku_to_post = get_haiku_to_post(h, this_status)
+                elif this_status['user']['followers_count'] > haiku_to_post['followers_count']:
                     haiku_to_post = get_haiku_to_post(h, this_status)
     if haiku_to_post['status_id_str'] == '':
         # # if no tweet was better than another, pick a random one

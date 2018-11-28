@@ -106,6 +106,7 @@ class MyTwitterClient(Twython):
             return False
 
 
+# Establish connection to Twitter
 twitter = MyTwitterClient(
     every_n_seconds=EVERY_N_SECONDS,
     initial_time=INITIAL_TIME,
@@ -114,6 +115,9 @@ twitter = MyTwitterClient(
     oauth_token=config['twitter'].get('access_token', ''),
     oauth_token_secret=config['twitter'].get('access_token_secret', ''),
 )
+
+# Establish connection to database
+session = session_factory()
 
 # Use inflect to change digits to their English word equivalent
 inflect_p = inflect.engine()
@@ -423,27 +427,25 @@ def get_haiku(text: str) -> str:
 def add_haiku(tweet_haiku):
     '''Add haiku record to the database
     '''
-    session = session_factory()
-    session.add(tweet_haiku)
-    session.commit()
-    session.close()
+    try:
+        session.add(tweet_haiku)
+        session.commit()
+    except Exception as e:
+        logger.info(e)
+        session.rollback()
 
 
 def get_haikus_all():
     '''Get all records
     '''
-    session = session_factory()
     haiku_query = session.query(Haiku)
-    session.close()
     return haiku_query.all()
 
 
 def get_haikus_unposted():
     '''Get all unposted records
     '''
-    session = session_factory()
     haiku_query = session.query(Haiku).filter(Haiku.posted == 'false')
-    session.close()
     return haiku_query.all()
 
 
@@ -452,34 +454,36 @@ def get_haikus_unposted_timedelta(td_seconds=None):
     '''
     if td_seconds is None:
         td_seconds = EVERY_N_SECONDS
-    session = session_factory()
     filter_td = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=td_seconds)
     haiku_query = session.query(Haiku).filter(
         Haiku.created_at > filter_td).filter(Haiku.posted == 'false')
-    session.close()
     return haiku_query.all()
 
 
 def update_haiku_posted(status_id_str):
     '''Mark haiku as posted
     '''
-    session = session_factory()
-    session.query(Haiku).filter(
-        Haiku.status_id_str == status_id_str).update(
-            {'posted': True})
-    session.commit()
-    session.close()
+    try:
+        session.query(Haiku).filter(
+            Haiku.status_id_str == status_id_str).update(
+                {'posted': True})
+        session.commit()
+    except Exception as e:
+        logger.info(e)
+        session.rollback()
 
 
 def update_haiku_unposted(status_id_str):
     '''Mark haiku as unposted
     '''
-    session = session_factory()
-    session.query(Haiku).filter(
-        Haiku.status_id_str == status_id_str).update(
-            {'posted': False})
-    session.commit()
-    session.close()
+    try:
+        session.query(Haiku).filter(
+            Haiku.status_id_str == status_id_str).update(
+                {'posted': False})
+        session.commit()
+    except Exception as e:
+        logger.info(e)
+        session.rollback()
 
 
 def get_haiku_to_post(h, this_status):

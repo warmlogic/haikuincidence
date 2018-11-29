@@ -202,6 +202,11 @@
         "pronunciation": "I don't know",
         "syllables": 3
     },
+    "ig": {
+        "alt": [],
+        "pronunciation": "instagram",
+        "syllables": 3
+    },
     "ik": {
         "alt": [],
         "pronunciation": "I know",
@@ -405,6 +410,16 @@
     "rofl": {
         "alt": [],
         "pronunciation": "rofl",
+        "syllables": 2
+    },
+    "rt": {
+        "alt": [],
+        "pronunciation": "retweet",
+        "syllables": 2
+    },
+    "rts": {
+        "alt": [],
+        "pronunciation": "retweets",
         "syllables": 2
     },
     "smdh": {

@@ -217,6 +217,11 @@
         "pronunciation": "in case you missed it",
         "syllables": 5
     },
+    "idc": {
+        "alt": [],
+        "pronunciation": "i don't care",
+        "syllables": 3
+    },
     "idgaf": {
         "alt": [],
         "pronunciation": "i don't give a fuck",
@@ -241,6 +246,16 @@
         "alt": [],
         "pronunciation": "I love you",
         "syllables": 3
+    },
+    "ima": {
+        "alt": [],
+        "pronunciation": "ima",
+        "syllables": 2
+    },
+    "imma": {
+        "alt": [],
+        "pronunciation": "imma",
+        "syllables": 2
     },
     "imho": {
         "alt": [],
@@ -382,6 +397,16 @@
         "pronunciation": "luls",
         "syllables": 1
     },
+    "luh": {
+        "alt": [],
+        "pronunciation": "love",
+        "syllables": 1
+    },
+    "luv": {
+        "alt": [],
+        "pronunciation": "love",
+        "syllables": 1
+    },
     "mfw": {
         "alt": [],
         "pronunciation": "my face when",
@@ -427,10 +452,25 @@
         "pronunciation": "please",
         "syllables": 1
     },
+    "pm": {
+        "alt": [],
+        "pronunciation": "P M",
+        "syllables": 2
+    },
     "ppl": {
         "alt": [],
         "pronunciation": "people",
         "syllables": 2
+    },
+    "psa": {
+        "alt": [
+            {
+                "pronunciation": "public service announcement",
+                "syllables": 7
+            }
+        ],
+        "pronunciation": "P S A",
+        "syllables": 3
     },
     "rn": {
         "alt": [],

@@ -554,10 +554,10 @@ def get_best_haiku(haikus):
         try:
             this_status = twitter.show_status(id=h.status_id_str)
         except Exception as e:
-            logger.info(f'Exception when getting best status (1): {e}')
+            logger.info(f'Exception when checking statuses (1): {e}')
             # Tweet no longer exists
             this_status = {}
-            logging.debug(f'Does not exist: {h.user_screen_name}/{h.status_id_str}')
+            logging.info(f'Does not exist: {h.user_screen_name}/{h.status_id_str}')
         if this_status:
             if this_status['user']['verified']:
                 haiku_to_post = get_haiku_to_post(h, this_status)
@@ -579,7 +579,7 @@ def get_best_haiku(haikus):
                 logger.info(f'Exception when getting best status (2): {e}')
                 # Tweet no longer exists
                 this_status = {}
-                logging.debug(f'Does not exist: {h.user_screen_name}/{h.status_id_str}')
+                logging.info(f'Does not exist: {h.user_screen_name}/{h.status_id_str}')
             if this_status:
                 haiku_to_post = get_haiku_to_post(h, this_status)
                 break
@@ -608,10 +608,14 @@ class MyStreamer(TwythonStreamer):
                         haiku,
                         False,
                     )
-                    add_haiku(tweet_haiku)
+                    if not DEBUG:
+                        add_haiku(tweet_haiku)
 
                     # Get haikus from the last hour
-                    haikus = get_haikus_unposted_timedelta(td_seconds=EVERY_N_SECONDS)
+                    if not DEBUG:
+                        haikus = get_haikus_unposted_timedelta(td_seconds=EVERY_N_SECONDS)
+                    else:
+                        haikus = [tweet_haiku]
                     # haikus = get_haikus_unposted()
                     if len(haikus) > 0:
                         # Get the haiku to post

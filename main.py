@@ -132,11 +132,11 @@ def remove_repeat_last_letter(text: str):
         return ''
 
 
-def text_contains_url(text):
+def text_contains_url(text: str):
     return len(url_re.findall(text)) > 0
 
 
-def text_has_chars_digits_together(text):
+def text_has_chars_digits_together(text: str):
     '''It's not easy to count syllables for a token that contains letters and digits (h3llo).
     Return True if we find one of those.
     '''
@@ -150,7 +150,7 @@ def text_has_chars_digits_together(text):
     return num_nums + num_words != len(text_split)
 
 
-def text_is_all_uppercase(text):
+def text_is_all_uppercase(text: str):
     '''Return True if every character is uppercase.
     Excludes punctuation, spaces, and digits.
     '''
@@ -164,14 +164,14 @@ def text_is_all_uppercase(text):
 #     return all([char.isalpha() for char in re.sub(r'[^\w]', '', text)])
 
 
-def any_token_in_ignore_list(text):
+def any_token_in_ignore_list(text: str):
     '''Return True if any token is in the ignore_list
     '''
     return any((re.sub(r"[^\w']", '', token).lower() in ignore_list)
                for token in text.split())
 
 
-def all_tokens_are_real(text):
+def all_tokens_are_real(text: str):
     '''Return True if all tokens are real words (in spaCy English dictionary) or
     in syllable dictionary
     '''
@@ -188,10 +188,10 @@ def all_tokens_are_real(text):
     )
 
 
-def clean_text(text):
+def clean_text(text: str):
     '''Process text so it's ready for syllable counting
     '''
-    def split_acronym(token):
+    def split_acronym(token: str):
         '''Split short acronyms. One option for all caps, one for lowercase.
         Otherwise return the token.
         '''

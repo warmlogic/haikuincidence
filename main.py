@@ -176,7 +176,11 @@ def all_tokens_are_real(text):
     return all(
         (
             (re.sub(r"[^\w']", '', token).lower() in pronounce_dict) or
-            (re.sub(r"[^\w']", '', token).lower() in syllable_dict)
+            (re.sub(r"[^\w']", '', token).lower() in syllable_dict) or
+            (remove_repeat_last_letter(
+                re.sub(r"[^\w']", '', token).lower()) in pronounce_dict) or
+            (remove_repeat_last_letter(
+                re.sub(r"[^\w']", '', token).lower()) in syllable_dict)
         ) for token in text.split()
     )
 

@@ -181,10 +181,12 @@ def clean_text(text):
     '''Process text so it's ready for syllable counting
     '''
     def split_acronym(token):
-        '''Split short acronyms, only if all caps.
+        '''Split short acronyms. One option for all caps, one for lowercase.
         Otherwise return the token.
         '''
         if len(token) <= 5 and re.findall(r'\b[A-Z\.]{2,}s?\b', token):
+            return ' '.join(token).split()
+        elif len(token) <= 2 and re.findall(r'\b[a-z\.]{2,}s?\b', token):
             return ' '.join(token).split()
         else:
             return [token]

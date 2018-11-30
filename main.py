@@ -314,22 +314,34 @@ def get_haiku(text: str) -> str:
                 else:
                     subtoken = inflect_p.number_to_words(subtoken, andword='')
             if subtoken in syllable_dict:
+                subsyllable_count += syllable_dict[subtoken]['syllables']
                 # if logger.isEnabledFor(logging.DEBUG):
                 #     logger.debug(f"    Dict: {subtoken}: {syllable_dict[subtoken]['syllables']}")
-                # Predefined syllable counts must only have letters/numbers and apostrophes
+            elif remove_repeat_last_letter(subtoken) in syllable_dict:
+                subtoken = remove_repeat_last_letter(subtoken)
                 subsyllable_count += syllable_dict[subtoken]['syllables']
+                # if logger.isEnabledFor(logging.DEBUG):
+                #     logger.debug(f"    Dict: {subtoken}: {syllable_dict[subtoken]['syllables']}")
             elif subtoken in pronounce_dict:
+                subsyllable_count += max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])
                 # if logger.isEnabledFor(logging.DEBUG):
                 #     logger.debug(f"    CMU: {subtoken}: {max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])}")
+            elif remove_repeat_last_letter(subtoken) in pronounce_dict:
+                subtoken = remove_repeat_last_letter(subtoken)
                 subsyllable_count += max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])
+                # if logger.isEnabledFor(logging.DEBUG):
+                #     logger.debug(f"    CMU: {subtoken}: {max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])}")
             else:
+                # it's not a "real" word
+                # if there are non-letter characters remaining
                 if re.findall(r"[^\w']", subtoken):
                     subsyllable_count += count_syllables(subtoken)
                 else:
-                    # subsyllable_count += phoney.count_syllables(subtoken)
-                    # if logger.isEnabledFor(logging.DEBUG):
-                    #     logger.debug(f"    Guess: {subtoken}: {guess_syllables(subtoken)[1]}")
-                    subsyllable_count += guess_syllables(subtoken)[1]
+                    # split on apostrophe and count
+                    for subsubtoken in subtoken.split("'"):
+                        subsyllable_count += guess_syllables(subsubtoken)[0]
+                        # if logger.isEnabledFor(logging.DEBUG):
+                        #     logger.debug(f"    Guess: {subsubtoken}: {guess_syllables(subsubtoken)[0]}")
 
         return subsyllable_count
 

@@ -340,11 +340,14 @@ def get_haiku(text: str) -> str:
                 if re.findall(r"[^\w']", subtoken):
                     subsyllable_count += count_syllables(subtoken)
                 else:
-                    # split on apostrophe and count
-                    for subsubtoken in subtoken.split("'"):
-                        subsyllable_count += guess_syllables(subsubtoken)[0]
-                        # if logger.isEnabledFor(logging.DEBUG):
-                        #     logger.debug(f"    Guess: {subsubtoken}: {guess_syllables(subsubtoken)[0]}")
+                    # split on non-possessive apostrophe and guess syllables
+                    if (len(subtoken) > 2 and subtoken[-2:] == "'s"):
+                        subsyllable_count += guess_syllables(subtoken)[0]
+                    else:
+                        for subsubtoken in subtoken.split("'"):
+                            subsyllable_count += guess_syllables(subsubtoken)[0]
+                            # if logger.isEnabledFor(logging.DEBUG):
+                            #     logger.debug(f"    Guess: {subsubtoken}: {guess_syllables(subsubtoken)[0]}")
 
         return subsyllable_count
 
@@ -643,6 +646,8 @@ class MyStreamer(TwythonStreamer):
                     )
                     if not DEBUG:
                         add_haiku(tweet_haiku)
+                    logger.info('=' * 50)
+                    logger.info(f"Found new haiku:\n{tweet_haiku.haiku}")
 
                     # Get haikus from the last hour
                     if not DEBUG:
@@ -667,7 +672,7 @@ class MyStreamer(TwythonStreamer):
                                 logger.debug(tweet_url)
                                 logger.debug(f"Original: {haiku_to_post['text_original']}")
                                 logger.debug(f"Cleaned:  {haiku_to_post['text_clean']}")
-                            logger.info(f"Haiku:\n{haiku_attributed}")
+                            logger.info(f"Haiku to post:\n{haiku_attributed}")
 
                             # Try to post haiku (client checks rate limit time internally)
                             if post_haiku:

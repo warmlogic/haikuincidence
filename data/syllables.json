@@ -24,6 +24,11 @@
         "pronunciation": "A K A",
         "syllables": 3
     },
+    "appt": {
+        "alt": [],
+        "pronunciation": "appointment",
+        "syllables": 3
+    },
     "asap": {
         "alt": [],
         "pronunciation": "A S A P",
@@ -130,6 +135,11 @@
     "endzone": {
         "alt": [],
         "pronunciation": "end zone",
+        "syllables": 2
+    },
+    "facebook": {
+        "alt": [],
+        "pronunciation": "facebook",
         "syllables": 2
     },
     "faq": {

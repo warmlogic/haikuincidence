@@ -127,6 +127,11 @@
         "pronunciation": "D M",
         "syllables": 2
     },
+    "endzone": {
+        "alt": [],
+        "pronunciation": "end zone",
+        "syllables": 2
+    },
     "faq": {
         "alt": [],
         "pronunciation": "F A Q",
@@ -161,6 +166,11 @@
         "alt": [],
         "pronunciation": "F Y I",
         "syllables": 3
+    },
+    "geaux": {
+        "alt": [],
+        "pronunciation": "go",
+        "syllables": 1
     },
     "gf": {
         "alt": [],
@@ -536,6 +546,11 @@
         "alt": [],
         "pronunciation": "what is",
         "syllables": 2
+    },
+    "woah": {
+        "alt": [],
+        "pronunciation": "whoa",
+        "syllables": 1
     },
     "wtf": {
         "alt": [

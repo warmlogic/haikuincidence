@@ -482,7 +482,8 @@ def get_haikus_all():
 def get_haikus_unposted():
     '''Get all unposted records
     '''
-    haiku_query = session.query(Haiku).filter(Haiku.posted == 'false')
+    haiku_query = session.query(Haiku).filter(
+        Haiku.date_posted == None).filter(Haiku.date_deleted == None)
     return haiku_query.all()
 
 
@@ -493,7 +494,8 @@ def get_haikus_unposted_timedelta(td_seconds=None):
         td_seconds = EVERY_N_SECONDS
     filter_td = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=td_seconds)
     haiku_query = session.query(Haiku).filter(
-        Haiku.created_at > filter_td).filter(Haiku.posted == 'false')
+        Haiku.created_at > filter_td).filter(
+            Haiku.date_posted == None).filter(Haiku.date_deleted == None)
     return haiku_query.all()
 
 
@@ -503,7 +505,7 @@ def update_haiku_posted(status_id_str):
     try:
         session.query(Haiku).filter(
             Haiku.status_id_str == status_id_str).update(
-                {'posted': True})
+                {'date_posted': datetime.now().replace(tzinfo=pytz.UTC)})
         session.commit()
     except Exception as e:
         logger.info(f'Exception when updating haiku as posted: {e}')
@@ -516,10 +518,36 @@ def update_haiku_unposted(status_id_str):
     try:
         session.query(Haiku).filter(
             Haiku.status_id_str == status_id_str).update(
-                {'posted': False})
+                {'date_posted': None})
         session.commit()
     except Exception as e:
         logger.info(f'Exception when updating haiku as unposted: {e}')
+        session.rollback()
+
+
+def update_haiku_deleted(status_id_str):
+    '''Mark haiku as deleted
+    '''
+    try:
+        session.query(Haiku).filter(
+            Haiku.status_id_str == status_id_str).update(
+                {'date_deleted': datetime.now().replace(tzinfo=pytz.UTC)})
+        session.commit()
+    except Exception as e:
+        logger.info(f'Exception when updating haiku as deleted: {e}')
+        session.rollback()
+
+
+def update_haiku_undeleted(status_id_str):
+    '''Mark haiku as undeleted
+    '''
+    try:
+        session.query(Haiku).filter(
+            Haiku.status_id_str == status_id_str).update(
+                {'date_deleted': None})
+        session.commit()
+    except Exception as e:
+        logger.info(f'Exception when updating haiku as undeleted: {e}')
         session.rollback()
 
 
@@ -555,9 +583,11 @@ def get_best_haiku(haikus):
             this_status = twitter.show_status(id=h.status_id_str)
         except Exception as e:
             logger.info(f'Exception when checking statuses (1): {e}')
+            logging.info(f'{h.user_screen_name}/status/{h.status_id_str}')
             # Tweet no longer exists
             this_status = {}
-            logging.info(f'Does not exist: {h.user_screen_name}/{h.status_id_str}')
+            # soft delete
+            update_haiku_deleted(h.status_id_str)
         if this_status:
             if this_status['user']['verified']:
                 haiku_to_post = get_haiku_to_post(h, this_status)
@@ -577,9 +607,11 @@ def get_best_haiku(haikus):
                 this_status = twitter.show_status(id=h.status_id_str)
             except Exception as e:
                 logger.info(f'Exception when getting best status (2): {e}')
-                # Tweet no longer exists
+                logging.info(f'{h.user_screen_name}/status/{h.status_id_str}')
+                # Tweet no longer exists, not going to post a haiku this time
                 this_status = {}
-                logging.info(f'Does not exist: {h.user_screen_name}/{h.status_id_str}')
+                # soft delete
+                update_haiku_deleted(h.status_id_str)
             if this_status:
                 haiku_to_post = get_haiku_to_post(h, this_status)
                 break
@@ -606,7 +638,8 @@ class MyStreamer(TwythonStreamer):
                         status['text'],
                         text,
                         haiku,
-                        False,
+                        None,
+                        None,
                     )
                     if not DEBUG:
                         add_haiku(tweet_haiku)
@@ -659,7 +692,7 @@ class MyStreamer(TwythonStreamer):
                             else:
                                 logger.debug('Found haiku but did not post')
                     else:
-                        logger.debug('No haikus to choose from')
+                        logger.info('No haikus to choose from')
 
     def on_error(self, status_code, status):
         logger.error(f'{status_code}, {status}')

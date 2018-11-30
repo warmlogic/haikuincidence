@@ -17,7 +17,8 @@ class Haiku(Base):
     text_original = Column(String)
     text_clean = Column(String)
     haiku = Column(String)
-    posted = Column(Boolean)
+    date_posted = Column(DateTime, nullable=True)
+    date_deleted = Column(DateTime, nullable=True)
 
     def __init__(
         self,
@@ -29,7 +30,8 @@ class Haiku(Base):
         text_original,
         text_clean,
         haiku,
-        posted,
+        date_posted,
+        date_deleted,
     ):
         self.status_id_str = status_id_str
         self.user_screen_name = user_screen_name
@@ -39,4 +41,5 @@ class Haiku(Base):
         self.text_original = text_original
         self.text_clean = text_clean
         self.haiku = haiku
-        self.posted = posted
+        self.date_posted = date_posted
+        self.date_deleted = date_deleted

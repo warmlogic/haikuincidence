@@ -125,8 +125,11 @@ inflect_p = inflect.engine()
 pronounce_dict = cmudict.dict()
 
 
-def remove_repeat_last_letter(text):
-    return re.sub(rf'({text[-1]})\1+$', r'\1', text)
+def remove_repeat_last_letter(text: str):
+    if text:
+        return re.sub(rf'({text[-1]})\1+$', r'\1', text)
+    else:
+        return ''
 
 
 def text_contains_url(text):
@@ -174,14 +177,14 @@ def all_tokens_are_real(text):
     '''
     # Keep characters and apostrphes
     return all(
-        (
-            (re.sub(r"[^\w']", '', token).lower() in pronounce_dict) or
-            (re.sub(r"[^\w']", '', token).lower() in syllable_dict) or
-            (remove_repeat_last_letter(
-                re.sub(r"[^\w']", '', token).lower()) in pronounce_dict) or
-            (remove_repeat_last_letter(
-                re.sub(r"[^\w']", '', token).lower()) in syllable_dict)
-        ) for token in text.split()
+        (re.sub(r"[^\w']", '', token) and
+            ((re.sub(r"[^\w']", '', token).lower() in pronounce_dict) or
+             (re.sub(r"[^\w']", '', token).lower() in syllable_dict) or
+             (remove_repeat_last_letter(
+                 re.sub(r"[^\w']", '', token).lower()) in pronounce_dict) or
+             (remove_repeat_last_letter(
+                 re.sub(r"[^\w']", '', token).lower()) in syllable_dict))
+         ) for token in text.split()
     )
 
 

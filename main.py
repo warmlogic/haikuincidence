@@ -194,7 +194,7 @@ def clean_text(text):
         '''
         if len(token) <= 5 and re.findall(r'\b[A-Z\.]{2,}s?\b', token):
             return ' '.join(token).split()
-        elif len(token) <= 2 and re.findall(r'\b[a-z\.]{2,}s?\b', token):
+        elif len(token) <= 3 and re.findall(r'\b[a-z\.]{2,}s?\b', token):
             return ' '.join(token).split()
         else:
             return [token]

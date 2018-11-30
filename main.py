@@ -346,7 +346,7 @@ def get_haiku(text: str) -> str:
         return subsyllable_count
 
     def guess_syllables(word, verbose=False):
-        '''Borrowed from https://github.com/akkana/scripts/blob/master/countsyl
+        '''Adapted from https://github.com/akkana/scripts/blob/master/countsyl
         '''
         vowels = ['a', 'e', 'i', 'o', 'u']
 
@@ -385,8 +385,13 @@ def get_haiku(text: str) -> str:
                         print(f"{c} is a diphthong")
                     in_diphthong = True
                     maxsyl += 1
-            elif verbose:
-                print("[consonant]")
+            else:
+                if re.findall(r'[\w]', c):
+                    if verbose:
+                        print("[consonant]")
+                else:
+                    if verbose:
+                        print("[other]")
 
             on_vowel = is_vowel
             lastchar = c

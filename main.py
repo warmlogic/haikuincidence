@@ -125,6 +125,10 @@ inflect_p = inflect.engine()
 pronounce_dict = cmudict.dict()
 
 
+def remove_repeat_last_letter(text):
+    return re.sub(rf'({text[-1]})\1+$', r'\1', text)
+
+
 def text_contains_url(text):
     return len(url_re.findall(text)) > 0
 

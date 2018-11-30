@@ -374,8 +374,13 @@ def get_haiku(text: str) -> str:
         if word[-1] == 'y' and not on_vowel:
             maxsyl += 1
 
-        if not minsyl:
-            minsyl = 1
+        # if found no syllables but there's at least one letter,
+        # count as one syllable
+        if re.findall(r'[\w]', word):
+            if not minsyl:
+                minsyl = 1
+            if not maxsyl:
+                maxsyl = 1
 
         return minsyl, maxsyl
 

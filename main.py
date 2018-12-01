@@ -231,8 +231,11 @@ def clean_text(text: str):
     # remove space before some punctuation ("hello ,how are you ? doing")
     text_final = re.sub(r'\s([.,;!?](?=\s|$)?)', r'\1', text_final)
 
-    # put space after some punctuation if followed by a letter or number
-    text_final = re.sub(r'(?<=[.,;!?])(?=[\w])', r' ', text_final)
+    # put space after some punctuation if followed by a letter or number ("cat,dog")
+    text_final = re.sub(r'(?<=[;!?])(?=[\w])', r' ', text_final)
+
+    # put space after period if followed by a letter ("good.What")
+    text_final = re.sub(r'(?<=[.,])(?=[A-Za-z])', r' ', text_final)
 
     # remove spaces around apostrophe if letter-space-apostrophe-space-letter
     text_final = re.sub(r"(\w)\s[']\s(\w)", r"\1'\2", text_final)

@@ -166,9 +166,15 @@ def text_is_all_uppercase(text: str):
 
 def any_token_in_ignore_list(text: str):
     '''Return True if any token is in the ignore_list
+    or anything from the ignore list is in the text
     '''
-    return any((re.sub(r"[^\w']", '', token).lower() in ignore_list)
-               for token in text.split())
+    if any((re.sub(r"[^\w']", '', token).lower() in ignore_list)
+            for token in text.split()):
+            return True
+    elif any([ignore_phrase in text for ignore_phrase in ignore_list]):
+        return True
+    else:
+        return False
 
 
 def all_tokens_are_real(text: str):

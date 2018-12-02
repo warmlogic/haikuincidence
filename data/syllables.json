@@ -427,6 +427,11 @@
         "pronunciation": "N Y C",
         "syllables": 3
     },
+    "ofc": {
+        "alt": [],
+        "pronunciation": "of course",
+        "syllables": 2
+    },
     "omfg": {
         "alt": [
             {
@@ -472,6 +477,11 @@
         "pronunciation": "P S A",
         "syllables": 3
     },
+    "qed": {
+        "alt": [],
+        "pronunciation": "Q E D",
+        "syllables": 3
+    },
     "rn": {
         "alt": [],
         "pronunciation": "right now",
@@ -511,6 +521,11 @@
         ],
         "pronunciation": "shaking my head",
         "syllables": 4
+    },
+    "Spongebob": {
+        "alt": [],
+        "pronunciation": "Sponge bob",
+        "syllables": 2
     },
     "sry": {
         "alt": [],

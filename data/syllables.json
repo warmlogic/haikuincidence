@@ -29,6 +29,11 @@
         "pronunciation": "A K A",
         "syllables": 3
     },
+    "am": {
+        "alt": [],
+        "pronunciation": "am",
+        "syllables": 1
+    },
     "appt": {
         "alt": [],
         "pronunciation": "appointment",
@@ -782,6 +787,11 @@
         "pronunciation": "shut the fuck up",
         "syllables": 4
     },
+    "szn": {
+        "alt": [],
+        "pronunciation": "season",
+        "syllables": 2
+    },
     "tba": {
         "alt": [],
         "pronunciation": "T B A",
@@ -791,6 +801,11 @@
         "alt": [],
         "pronunciation": "T B D",
         "syllables": 3
+    },
+    "tbh": {
+        "alt": [],
+        "pronunciation": "to be honest",
+        "syllables": 4
     },
     "tf": {
         "alt": [],
@@ -866,6 +881,11 @@
         "alt": [],
         "pronunciation": "twitter",
         "syllables": 2
+    },
+    "ur": {
+        "alt": [],
+        "pronunciation": "your",
+        "syllables": 1
     },
     "us": {
         "alt": [],

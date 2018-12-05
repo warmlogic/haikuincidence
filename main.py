@@ -115,6 +115,16 @@ twitter = MyTwitterClient(
     oauth_token_secret=config['twitter'].get('access_token_secret', ''),
 )
 
+
+def date_string_to_datetime(date_string, fmt='%a %b %d %H:%M:%S +0000 %Y', tzinfo=pytz.UTC):
+    return datetime.strptime(date_string, fmt).replace(tzinfo=tzinfo)
+
+
+# if this screen_name has a recent tweet, use that timestamp as the time of the last post
+most_recent_tweet = twitter.get_user_timeline(screen_name='haikuincidence', count=1, trim_user=True)
+if len(most_recent_tweet) > 0:
+    twitter.last_post_time = date_string_to_datetime(most_recent_tweet[0]['created_at'])
+
 # Establish connection to database
 session = session_factory()
 

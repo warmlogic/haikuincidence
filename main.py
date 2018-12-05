@@ -287,21 +287,21 @@ def get_haiku(text: str) -> str:
 
     def count_syllables(token):
         # add space around some punctuation if letters on both sides
-        token = re.sub(r'([\w])([#@%=+&/\-](?=[\w]|$))', r'\1 \2 ', token)
+        token = re.sub(r'([\w])([#@&%=+/\-](?=[\w]|$))', r'\1 \2 ', token)
 
         # put a space after some punctuation that precedes a letter
-        token = re.sub(r'([#@%=+&/])((?=[\w]|$))', r'\1 \2', token)
+        token = re.sub(r'([#@&%=+/])((?=[\w]|$))', r'\1 \2', token)
 
         # put a space before a some punctuation that follows a letter
-        token = re.sub(r'([\w])?([#@%=+&/])', r'\1 \2', token)
+        token = re.sub(r'([\w])?([#@&%=+/])', r'\1 \2', token)
 
         # replace some punctuation with words
         token = token.replace('#', 'hashtag')
         token = token.replace('@', 'at')
+        token = token.replace('&', 'and')
         token = token.replace('%', 'percent')
         token = token.replace('=', 'equals')
-        token = token.replace('+', 'plus')
-        token = token.replace('&', 'and')
+        # token = token.replace('+', 'plus')
         # token = token.replace('/', 'slash')
 
         # keep letters and apostrophes

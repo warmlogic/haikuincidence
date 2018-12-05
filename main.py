@@ -7,7 +7,6 @@ from pprint import pformat
 import pytz
 # import random
 import re
-import time
 
 from ftfy import fix_text
 import inflect
@@ -36,13 +35,13 @@ logger = logging.getLogger(__name__)
 # Minimum amount of time between haiku posts
 if DEBUG:
     EVERY_N_SECONDS = 1  # 1 second
-    INITIAL_TIME = 0
+    INITIAL_TIME = datetime(1970, 1, 1)
 else:
     # EVERY_N_SECONDS = 600  # 10 minutes
     # EVERY_N_SECONDS = 1800  # 30 minutes
     EVERY_N_SECONDS = 3600  # 1 hour
     # Wait half the rate limit time before making first post
-    INITIAL_TIME = int(time.monotonic()) - (EVERY_N_SECONDS // 2)
+    INITIAL_TIME = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=EVERY_N_SECONDS // 2)
 
 # track tweets that contain any of these words
 if (Path('data') / 'track.txt').exists():
@@ -86,17 +85,17 @@ class MyTwitterClient(Twython):
         super(MyTwitterClient, self).__init__(*args, **kwargs)
         if initial_time is None:
             # Wait half the rate limit time before making first post
-            initial_time = int(time.monotonic()) - (every_n_seconds // 2)
+            initial_time = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=every_n_seconds // 2)
         # self.twitter = twitter
         self.every_n_seconds = every_n_seconds
         self.last_post_time = initial_time
 
     def update_status_check_rate(self, *args, **kwargs):
-        current_time = int(time.monotonic())
+        current_time = datetime.now().replace(tzinfo=pytz.UTC)
         logger.info(f'Current time: {current_time}')
         logger.info(f'Previous post time: {self.last_post_time}')
         logger.info(f'Difference: {current_time - self.last_post_time}')
-        if (current_time - self.last_post_time) > self.every_n_seconds:
+        if (current_time - self.last_post_time).total_seconds() > self.every_n_seconds:
             self.update_status(*args, **kwargs)
             self.last_post_time = current_time
             logger.info('Success')

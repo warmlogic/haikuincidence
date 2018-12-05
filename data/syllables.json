@@ -99,6 +99,11 @@
         "pronunciation": "B F Fs",
         "syllables": 3
     },
+    "boi": {
+        "alt": [],
+        "pronunciation": "boy",
+        "syllables": 1
+    },
     "brb": {
         "alt": [],
         "pronunciation": "be right back",
@@ -128,15 +133,40 @@
         "pronunciation": "C N N",
         "syllables": 3
     },
+    "couldnt": {
+        "alt": [],
+        "pronunciation": "couldn't",
+        "syllables": 2
+    },
     "CSPAN": {
         "alt": [],
         "pronunciation": "C SPAN",
         "syllables": 2
     },
+    "cus": {
+        "alt": [],
+        "pronunciation": "cus",
+        "syllables": 1
+    },
+    "cuz": {
+        "alt": [],
+        "pronunciation": "cuz",
+        "syllables": 1
+    },
     "dae": {
         "alt": [],
         "pronunciation": "does anyone else",
         "syllables": 5
+    },
+    "dafuq": {
+        "alt": [],
+        "pronunciation": "the fuck",
+        "syllables": 2
+    },
+    "def": {
+        "alt": [],
+        "pronunciation": "def",
+        "syllables": 1
     },
     "dgaf": {
         "alt": [
@@ -155,6 +185,21 @@
     "dm": {
         "alt": [],
         "pronunciation": "D M",
+        "syllables": 2
+    },
+    "dms": {
+        "alt": [],
+        "pronunciation": "D Ms",
+        "syllables": 2
+    },
+    "doesnt": {
+        "alt": [],
+        "pronunciation": "doesn't",
+        "syllables": 2
+    },
+    "dnt": {
+        "alt": [],
+        "pronunciation": "didn't",
         "syllables": 2
     },
     "endzone": {
@@ -177,10 +222,20 @@
         "pronunciation": "F A Q",
         "syllables": 3
     },
+    "finna": {
+        "alt": [],
+        "pronunciation": "gonna",
+        "syllables": 2
+    },
     "fml": {
         "alt": [],
         "pronunciation": "fuck my life",
         "syllables": 3
+    },
+    "fn": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
     },
     "fomo": {
         "alt": [],
@@ -221,6 +276,16 @@
         "alt": [],
         "pronunciation": "G L B T",
         "syllables": 4
+    },
+    "gon": {
+        "alt": [],
+        "pronunciation": "gon",
+        "syllables": 1
+    },
+    "hasnt": {
+        "alt": [],
+        "pronunciation": "hasn't",
+        "syllables": 2
     },
     "HBO": {
         "alt": [],
@@ -327,10 +392,25 @@
         "pronunciation": "J K",
         "syllables": 2
     },
+    "jr": {
+        "alt": [],
+        "pronunciation": "junior",
+        "syllables": 2
+    },
+    "jus": {
+        "alt": [],
+        "pronunciation": "just",
+        "syllables": 1
+    },
     "kk": {
         "alt": [],
         "pronunciation": "K K",
         "syllables": 2
+    },
+    "kno": {
+        "alt": [],
+        "pronunciation": "know",
+        "syllables": 1
     },
     "kthnxbye": {
         "alt": [],
@@ -412,6 +492,11 @@
         "pronunciation": "L M F A O",
         "syllables": 5
     },
+    "lmk": {
+        "alt": [],
+        "pronunciation": "let me know",
+        "syllables": 3
+    },
     "lol": {
         "alt": [
             {
@@ -442,6 +527,11 @@
         "pronunciation": "love",
         "syllables": 1
     },
+    "loompa": {
+        "alt": [],
+        "pronunciation": "loompa",
+        "syllables": 2
+    },
     "luv": {
         "alt": [],
         "pronunciation": "love",
@@ -452,10 +542,20 @@
         "pronunciation": "motherfucker",
         "syllables": 4
     },
+    "mfn": {
+        "alt": [],
+        "pronunciation": "motherfucking",
+        "syllables": 4
+    },
     "mfw": {
         "alt": [],
         "pronunciation": "my face when",
         "syllables": 4
+    },
+    "mightnt": {
+        "alt": [],
+        "pronunciation": "mightn't",
+        "syllables": 2
     },
     "MLB": {
         "alt": [],
@@ -476,6 +576,11 @@
         "alt": [],
         "pronunciation": "M T V",
         "syllables": 3
+    },
+    "mustnt": {
+        "alt": [],
+        "pronunciation": "mustn't",
+        "syllables": 2
     },
     "NBA": {
         "alt": [],
@@ -532,6 +637,11 @@
         "pronunciation": "oh my god",
         "syllables": 3
     },
+    "oompa": {
+        "alt": [],
+        "pronunciation": "oompa",
+        "syllables": 2
+    },
     "our": {
         "alt": [],
         "pronunciation": "our",
@@ -551,6 +661,11 @@
         "alt": [],
         "pronunciation": "P M",
         "syllables": 2
+    },
+    "pms": {
+        "alt": [],
+        "pronunciation": "P M S",
+        "syllables": 3
     },
     "ppl": {
         "alt": [],
@@ -597,6 +712,16 @@
         "pronunciation": "retweets",
         "syllables": 2
     },
+    "sf": {
+        "alt": [],
+        "pronunciation": "S F",
+        "syllables": 2
+    },
+    "shouldnt": {
+        "alt": [],
+        "pronunciation": "shouldn't",
+        "syllables": 2
+    },
     "smdh": {
         "alt": [
             {
@@ -620,6 +745,11 @@
     "Spongebob": {
         "alt": [],
         "pronunciation": "Sponge bob",
+        "syllables": 2
+    },
+    "sr": {
+        "alt": [],
+        "pronunciation": "senior",
         "syllables": 2
     },
     "sry": {
@@ -657,6 +787,16 @@
         "pronunciation": "that feeling when",
         "syllables": 4
     },
+    "tgiving": {
+        "alt": [],
+        "pronunciation": "thanksgiving",
+        "syllables": 3
+    },
+    "thic": {
+        "alt": [],
+        "pronunciation": "thick",
+        "syllables": 1
+    },
     "thnx": {
         "alt": [],
         "pronunciation": "thanks",
@@ -692,6 +832,11 @@
         "pronunciation": "thanks",
         "syllables": 1
     },
+    "tryna": {
+        "alt": [],
+        "pronunciation": "tryna",
+        "syllables": 2
+    },
     "ttyl": {
         "alt": [],
         "pronunciation": "talk to you later",
@@ -711,6 +856,16 @@
         "alt": [],
         "pronunciation": "us",
         "syllables": 1
+    },
+    "voy": {
+        "alt": [],
+        "pronunciation": "voy",
+        "syllables": 1
+    },
+    "vr": {
+        "alt": [],
+        "pronunciation": "V R",
+        "syllables": 2
     },
     "wat": {
         "alt": [],

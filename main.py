@@ -437,19 +437,26 @@ def get_haiku(text: str) -> str:
     haiku = [[] for _ in range(len(haiku_form))]
     syllable_count = 0
     haiku_line = 0
+    haiku_line_prev = 0
 
     text_split = text.split()
     # Add tokens to create potential haiku
     for i, token in enumerate(text_split):
         # if logger.isEnabledFor(logging.DEBUG):
         #     logger.debug(f'Token: {token}')
-        # Add punctuation (with no syllables) to the end of the previous line
-        if ((haiku_line > 0) and re.findall(r"[^\w']", token) and (count_syllables(token) == 0)):
-            haiku[haiku_line - 1].append(token)
+        # Add tokens with no syllables (punctuation, emoji)) to the end of the
+        # previous line instead of the start of the current line
+        if (re.findall(r"[^\w']", token) and (count_syllables(token) == 0)):
+            if haiku_line_prev == haiku_line:
+                haiku[haiku_line].append(token)
+            else:
+                haiku[haiku_line - 1].append(token)
             continue
         else:
             # Add token to this line of the potential haiku
             haiku[haiku_line].append(token)
+            # note what line was being worked on for this token
+            haiku_line_prev = haiku_line
 
         # Count number of syllables for this token
         syllable_count += count_syllables(token)

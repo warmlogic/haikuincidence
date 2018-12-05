@@ -201,9 +201,10 @@ def clean_text(text: str):
         '''Split short acronyms. One option for all caps, one for lowercase.
         Otherwise return the token.
         '''
-        if len(token) <= 5 and re.findall(r'\b[A-Z\.]{2,}s?\b', token):
+        token_clean = re.sub(r"[^\w']", ' ', token).lower().strip()
+        if len(token_clean) <= 5 and re.findall(r'\b[A-Z\.]{2,}s?\b', token_clean):
             return ' '.join(token).split()
-        elif len(token) <= 3 and re.findall(r'\b[a-z\.]{2,}s?\b', token):
+        elif len(token_clean) <= 3 and re.findall(r'\b[a-z\.]{2,}s?\b', token_clean):
             return ' '.join(token).split()
         else:
             return [token]
@@ -304,7 +305,7 @@ def get_haiku(text: str) -> str:
         # token = token.replace('/', 'slash')
 
         # keep letters and apostrophes
-        token_clean = re.sub(r"[^\w']", ' ', token).lower()
+        token_clean = re.sub(r"[^\w']", ' ', token).lower().strip()
 
         subsyllable_count = 0
         for subtoken in token_clean.split():

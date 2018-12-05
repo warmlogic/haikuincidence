@@ -665,9 +665,7 @@ class MyStreamer(TwythonStreamer):
                         status['user']['screen_name'],
                         status['user']['id_str'],
                         status['user']['verified'],
-                        datetime.strptime(
-                            status['created_at'],
-                            '%a %b %d %H:%M:%S +0000 %Y').replace(tzinfo=pytz.UTC),
+                        date_string_to_datetime(status['created_at']),
                         status['text'],
                         text,
                         haiku,

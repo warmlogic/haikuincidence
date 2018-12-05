@@ -272,6 +272,11 @@
         "pronunciation": "girlfriend",
         "syllables": 2
     },
+    "gg": {
+        "alt": [],
+        "pronunciation": "good game",
+        "syllables": 2
+    },
     "glbt": {
         "alt": [],
         "pronunciation": "G L B T",
@@ -282,10 +287,20 @@
         "pronunciation": "gon",
         "syllables": 1
     },
+    "gtg": {
+        "alt": [],
+        "pronunciation": "got to go",
+        "syllables": 3
+    },
     "hasnt": {
         "alt": [],
         "pronunciation": "hasn't",
         "syllables": 2
+    },
+    "haz": {
+        "alt": [],
+        "pronunciation": "has",
+        "syllables": 1
     },
     "HBO": {
         "alt": [],

@@ -207,6 +207,11 @@
         "pronunciation": "didn't",
         "syllables": 2
     },
+    "emotionally": {
+        "alt": [],
+        "pronunciation": "emotionally",
+        "syllables": 5
+    },
     "endzone": {
         "alt": [],
         "pronunciation": "end zone",
@@ -261,6 +266,24 @@
         "alt": [],
         "pronunciation": "for what it's worth",
         "syllables": 4
+    },
+    "fwy": {
+        "alt": [
+            {
+                "pronunciation": "freeway",
+                "syllables": 2
+            },
+            {
+                "pronunciation": "fucking with you",
+                "syllables": 4
+            },
+            {
+                "pronunciation": "F W Y",
+                "syllables": 5
+            }
+        ],
+        "pronunciation": "fuck with you",
+        "syllables": 3
     },
     "fyi": {
         "alt": [],
@@ -532,6 +555,16 @@
         "pronunciation": "lols",
         "syllables": 1
     },
+    "loompa": {
+        "alt": [],
+        "pronunciation": "loompa",
+        "syllables": 2
+    },
+    "lrt": {
+        "alt": [],
+        "pronunciation": "last retweet",
+        "syllables": 3
+    },
     "luls": {
         "alt": [],
         "pronunciation": "luls",
@@ -546,11 +579,6 @@
         "alt": [],
         "pronunciation": "love",
         "syllables": 1
-    },
-    "loompa": {
-        "alt": [],
-        "pronunciation": "loompa",
-        "syllables": 2
     },
     "luv": {
         "alt": [],
@@ -809,7 +837,7 @@
     },
     "tf": {
         "alt": [],
-        "pronunciation": "T F",
+        "pronunciation": "the fuck",
         "syllables": 2
     },
     "tfw": {

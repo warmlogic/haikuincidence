@@ -666,7 +666,7 @@ class MyStreamer(TwythonStreamer):
         if 'text' in status and check_tweet(status):
             # print(status['text'])
             text = clean_text(status['text'])
-            if text:
+            if check_text_wrapper(text):
                 haiku = get_haiku(text)
                 if haiku:
                     # add tweet to database

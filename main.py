@@ -363,23 +363,25 @@ def get_haiku(text: str) -> str:
                     logger.debug(f"    CMU: {subtoken}: {max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])}")
             else:
                 # it's not a "real" word
-                # if there are non-letter characters remaining
+                # if there are some non-letter characters remaining (shouldn't be possible)
                 if re.findall(r"[^\w']", subtoken):
                     subsyllable_count += count_syllables(subtoken)
                 else:
-                    contractions = ['d', 'll', 'm', 're', 's', 't', 've']
-                    # guess syllables for the whole token
-                    if (len(subtoken) > 2 and subtoken.rsplit("'")[-1] in contractions):
+                    if "'" in subtoken:
+                        contractions = ['d', 'll', 'm', 're', 's', 't', 've']
+                        if subtoken.rsplit("'")[-1] in contractions:
+                            subsyllable_count += guess_syllables(subtoken)[0]
+                            if logger.isEnabledFor(logging.DEBUG):
+                                logger.debug(f"    Guess: {subtoken}: {guess_syllables(subtoken)[0]}")
+                        else:
+                            # count each chunk between apostrophes
+                            for subsubtoken in subtoken.rsplit("'"):
+                                subsyllable_count += count_syllables(subsubtoken)
+                    else:
+                        # make a guess
                         subsyllable_count += guess_syllables(subtoken)[0]
                         if logger.isEnabledFor(logging.DEBUG):
                             logger.debug(f"    Guess: {subtoken}: {guess_syllables(subtoken)[0]}")
-                    else:
-                        # split on any other apostrophe and guess syllables for each
-                        for subsubtoken in subtoken.split("'"):
-                            subsyllable_count += guess_syllables(subsubtoken)[0]
-                            if logger.isEnabledFor(logging.DEBUG):
-                                logger.debug(f"    Guess: {subsubtoken}: {guess_syllables(subsubtoken)[0]}")
-
         return subsyllable_count
 
     def guess_syllables(word, verbose=False):
@@ -443,8 +445,8 @@ def get_haiku(text: str) -> str:
         # if found no syllables but there's at least one letter,
         # count as one syllable
         if re.findall(r'[\w]', word):
-            if not minsyl:
-                minsyl = 1
+            # if not minsyl:
+            #     minsyl = 1
             if not maxsyl:
                 maxsyl = 1
 

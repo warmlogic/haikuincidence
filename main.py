@@ -302,13 +302,13 @@ def get_haiku(text: str) -> str:
 
     def count_syllables(token):
         # add space around some punctuation if letters on both sides
-        token = re.sub(r'([\w])([#@&%=+/\-](?=[\w]|$))', r'\1 \2 ', token)
+        token = re.sub(r'([\w])([#@&%=+/\-×](?=[\w]|$))', r'\1 \2 ', token)
 
         # put a space after some punctuation that precedes a letter
-        token = re.sub(r'([#@&%=+/])((?=[\w]|$))', r'\1 \2', token)
+        token = re.sub(r'([#@&%=+/×])((?=[\w]|$))', r'\1 \2', token)
 
         # put a space before a some punctuation that follows a letter
-        token = re.sub(r'([\w])?([#@&%=+/])', r'\1 \2', token)
+        token = re.sub(r'([\w])?([#@&%=+/×])', r'\1 \2', token)
 
         # replace some punctuation with words
         token = token.replace('#', 'hashtag')
@@ -316,23 +316,23 @@ def get_haiku(text: str) -> str:
         token = token.replace('&', 'and')
         token = token.replace('%', 'percent')
         token = token.replace('=', 'equals')
+        token = token.replace('×', 'times')
         # token = token.replace('+', 'plus')
         # token = token.replace('/', 'slash')
 
-        # keep letters and apostrophes
-        token_clean = re.sub(r"[^\w']", ' ', token).lower().strip()
+        # keep letters and apostrophes for contractions, and commas and periods for numbers
+        punct_to_keep = ["'", ',', '.']
+        token_clean = re.sub(r"[^\w',\.]", ' ', token).lower().strip()
 
         subsyllable_count = 0
         for subtoken in token_clean.split():
-            # remove starting or ending apostrophes
-            if subtoken[0] == "'":
-                subtoken = subtoken[1:]
-            elif subtoken[-1] == "'":
-                subtoken = subtoken[:-1]
+            # remove starting or ending punctuation
+            for punct in punct_to_keep:
+                subtoken = subtoken.strip(punct)
 
             if logger.isEnabledFor(logging.DEBUG):
                 logger.debug(f'    Subtoken: {subtoken}')
-            if subtoken.isdigit():
+            if subtoken.replace('.', '').isdigit() or subtoken.replace(',', '').isdigit():
                 # split a string that looks like a year
                 if len(subtoken) == 4:
                     if (subtoken[:2] == '18') or (subtoken[:2] == '19'):
@@ -341,6 +341,8 @@ def get_haiku(text: str) -> str:
                         subtoken = inflect_p.number_to_words(subtoken, andword='')
                 else:
                     subtoken = inflect_p.number_to_words(subtoken, andword='')
+                # remove all punctuation except apostrophes
+                subtoken = re.sub(r"[^\w']", ' ', subtoken).strip()
             if subtoken in syllable_dict:
                 subsyllable_count += syllable_dict[subtoken]['syllables']
                 if logger.isEnabledFor(logging.DEBUG):

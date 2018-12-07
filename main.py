@@ -187,8 +187,8 @@ def any_token_in_ignore_list(text: str):
 
 
 def all_tokens_are_real(text: str):
-    '''Return True if all tokens are real words (in spaCy English dictionary) or
-    in syllable dictionary
+    '''Return True if all tokens are real words (in pronunciation dictionary or
+    in syllable dictionary)
     '''
     # Keep characters and apostrphes
     return all(

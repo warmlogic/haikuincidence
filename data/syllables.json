@@ -187,6 +187,11 @@
         "pronunciation": "don't give a fuck",
         "syllables": 4
     },
+    "didnt": {
+        "alt": [],
+        "pronunciation": "didn't",
+        "syllables": 2
+    },
     "dm": {
         "alt": [],
         "pronunciation": "D M",
@@ -288,6 +293,11 @@
     "fyi": {
         "alt": [],
         "pronunciation": "F Y I",
+        "syllables": 3
+    },
+    "gb": {
+        "alt": [],
+        "pronunciation": "gigabyte",
         "syllables": 3
     },
     "geaux": {
@@ -415,6 +425,11 @@
         "pronunciation": "in real life",
         "syllables": 3
     },
+    "isnt": {
+        "alt": [],
+        "pronunciation": "isn't",
+        "syllables": 2
+    },
     "ive": {
         "alt": [],
         "pronunciation": "I've",
@@ -469,6 +484,11 @@
         "alt": [],
         "pronunciation": "ktnxbye",
         "syllables": 3
+    },
+    "learned": {
+        "alt": [],
+        "pronunciation": "learned",
+        "syllables": 1
     },
     "lgbt": {
         "alt": [],
@@ -585,14 +605,39 @@
         "pronunciation": "love",
         "syllables": 1
     },
+    "mb": {
+        "alt": [],
+        "pronunciation": "megabyte",
+        "syllables": 3
+    },
     "mf": {
+        "alt": [
+            {
+                "pronunciation": "motherfucker",
+                "syllables": 4
+            }
+        ],
+        "pronunciation": "motherfuck",
+        "syllables": 3
+    },
+    "mfer": {
         "alt": [],
         "pronunciation": "motherfucker",
+        "syllables": 4
+    },
+    "mfing": {
+        "alt": [],
+        "pronunciation": "motherfucking",
         "syllables": 4
     },
     "mfn": {
         "alt": [],
         "pronunciation": "motherfucking",
+        "syllables": 4
+    },
+    "mfs": {
+        "alt": [],
+        "pronunciation": "motherfuckers",
         "syllables": 4
     },
     "mfw": {
@@ -663,6 +708,11 @@
     "nyc": {
         "alt": [],
         "pronunciation": "N Y C",
+        "syllables": 3
+    },
+    "nye": {
+        "alt": [],
+        "pronunciation": "new year's eve",
         "syllables": 3
     },
     "ofc": {
@@ -765,6 +815,11 @@
         "pronunciation": "S F",
         "syllables": 2
     },
+    "sfx": {
+        "alt": [],
+        "pronunciation": "sound effects",
+        "syllables": 3
+    },
     "shouldnt": {
         "alt": [],
         "pronunciation": "shouldn't",
@@ -853,6 +908,11 @@
     "thic": {
         "alt": [],
         "pronunciation": "thick",
+        "syllables": 1
+    },
+    "thn": {
+        "alt": [],
+        "pronunciation": "than",
         "syllables": 1
     },
     "thnx": {
@@ -959,6 +1019,11 @@
         "alt": [],
         "pronunciation": "whoa",
         "syllables": 1
+    },
+    "wouldnt": {
+        "alt": [],
+        "pronunciation": "wouldn't",
+        "syllables": 2
     },
     "wtf": {
         "alt": [

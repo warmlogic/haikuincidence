@@ -254,30 +254,36 @@ def clean_text(text: str):
     return text_final
 
 
+def check_text_wrapper(text):
+    return all([
+        (not text_contains_url(text)),
+        (not any_token_in_ignore_list(text)),
+        (not text_has_chars_digits_together(text)),
+        (not text_is_all_uppercase(text)),
+        # (all_tokens_are_real(text)),
+    ])
+
+
 def check_tweet(status):
     '''Return True if tweet satisfies specific criteria
     '''
-    return (
-        (not text_contains_url(status['text'])) and
-        (not any_token_in_ignore_list(status['text'])) and
-        (not text_has_chars_digits_together(status['text'])) and
-        (not text_is_all_uppercase(status['text'])) and
-        # (all_tokens_are_real(status['text'])) and
-        (status['lang'] == 'en') and
-        (not status['entities']['hashtags']) and
-        (not status['entities']['urls']) and
-        (not status['entities']['user_mentions']) and
-        (not status['entities']['symbols']) and
-        (not status['truncated']) and
-        (not status['is_quote_status']) and
-        (not status['in_reply_to_status_id_str']) and
-        (not status['retweeted']) and
-        (status['user']['friends_count'] > 10) and  # following
-        (status['user']['followers_count'] > 100) and  # followers
-        # (status['user']['verified']) and
-        # '(media' not in status['entities']) and
-        (len(status['text']) >= 17)
-    )
+    return all([
+        check_text_wrapper(status['text']),
+        (status['lang'] == 'en'),
+        (not status['entities']['hashtags']),
+        (not status['entities']['urls']),
+        (not status['entities']['user_mentions']),
+        (not status['entities']['symbols']),
+        (not status['truncated']),
+        (not status['is_quote_status']),
+        (not status['in_reply_to_status_id_str']),
+        (not status['retweeted']),
+        (status['user']['friends_count'] > 10),  # following
+        (status['user']['followers_count'] > 100),  # followers
+        # (status['user']['verified']),
+        # '(media' not in status['entities']),
+        (len(status['text']) >= 17),
+    ])
 
 
 def get_haiku(text: str) -> str:

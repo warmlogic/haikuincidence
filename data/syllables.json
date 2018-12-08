@@ -109,6 +109,11 @@
         "pronunciation": "boy",
         "syllables": 1
     },
+    "bois": {
+        "alt": [],
+        "pronunciation": "boys",
+        "syllables": 1
+    },
     "brb": {
         "alt": [],
         "pronunciation": "be right back",
@@ -242,6 +247,11 @@
         "pronunciation": "F A Q",
         "syllables": 3
     },
+    "fav": {
+        "alt": [],
+        "pronunciation": "fave",
+        "syllables": 1
+    },
     "finna": {
         "alt": [],
         "pronunciation": "gonna",
@@ -261,6 +271,11 @@
         "alt": [],
         "pronunciation": "fomo",
         "syllables": 2
+    },
+    "ft": {
+        "alt": [],
+        "pronunciation": "featuring",
+        "syllables": 3
     },
     "ftfy": {
         "alt": [],
@@ -813,6 +828,11 @@
     "rts": {
         "alt": [],
         "pronunciation": "retweets",
+        "syllables": 2
+    },
+    "ryu": {
+        "alt": [],
+        "pronunciation": "Ryu",
         "syllables": 2
     },
     "sf": {

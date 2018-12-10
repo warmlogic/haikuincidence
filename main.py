@@ -402,60 +402,61 @@ def get_haiku(text: str) -> str:
         maxsyl = 0
         lastchar = None
 
-        word = word.lower()
-        for c in word:
-            is_vowel = c in vowels
+        if word:
+            word = word.lower()
+            for c in word:
+                is_vowel = c in vowels
 
-            if on_vowel is None:
-                on_vowel = is_vowel
+                if on_vowel is None:
+                    on_vowel = is_vowel
 
-            # y is a special case
-            if c == 'y':
-                is_vowel = not on_vowel
+                # y is a special case
+                if c == 'y':
+                    is_vowel = not on_vowel
 
-            if is_vowel:
-                if verbose:
-                    print(f"{c} is a vowel")
-                if not on_vowel:
-                    # We weren't on a vowel before.
-                    # Seeing a new vowel bumps the syllable count.
+                if is_vowel:
                     if verbose:
-                        print("new syllable")
-                    minsyl += 1
-                    maxsyl += 1
-                elif on_vowel and not in_diphthong and c != lastchar:
-                    # We were already in a vowel.
-                    # Don't increment anything except the max count,
-                    # and only do that once per diphthong.
-                    if verbose:
-                        print(f"{c} is a diphthong")
-                    in_diphthong = True
-                    maxsyl += 1
-            else:
-                if re.findall(r'[\w]', c):
-                    if verbose:
-                        print("[consonant]")
+                        print(f"{c} is a vowel")
+                    if not on_vowel:
+                        # We weren't on a vowel before.
+                        # Seeing a new vowel bumps the syllable count.
+                        if verbose:
+                            print("new syllable")
+                        minsyl += 1
+                        maxsyl += 1
+                    elif on_vowel and not in_diphthong and c != lastchar:
+                        # We were already in a vowel.
+                        # Don't increment anything except the max count,
+                        # and only do that once per diphthong.
+                        if verbose:
+                            print(f"{c} is a diphthong")
+                        in_diphthong = True
+                        maxsyl += 1
                 else:
-                    if verbose:
-                        print("[other]")
+                    if re.findall(r'[\w]', c):
+                        if verbose:
+                            print("[consonant]")
+                    else:
+                        if verbose:
+                            print("[other]")
 
-            on_vowel = is_vowel
-            lastchar = c
+                on_vowel = is_vowel
+                lastchar = c
 
-        # Some special cases:
-        if word[-1] == 'e':
-            minsyl -= 1
-        # if it ended with a consonant followed by y, count that as a syllable.
-        if word[-1] == 'y' and not on_vowel:
-            maxsyl += 1
+            # Some special cases:
+            if len(word) >= 2 and (word[-2:] != 'ie') and (word[-1] == 'e'):
+                minsyl -= 1
+            # if it ended with a consonant followed by y, count that as a syllable.
+            if word[-1] == 'y' and not on_vowel:
+                maxsyl += 1
 
-        # if found no syllables but there's at least one letter,
-        # count as one syllable
-        if re.findall(r'[\w]', word):
-            # if not minsyl:
-            #     minsyl = 1
-            if not maxsyl:
-                maxsyl = 1
+            # if found no syllables but there's at least one letter,
+            # count as one syllable
+            if re.findall(r'[\w]', word):
+                # if not minsyl:
+                #     minsyl = 1
+                if not maxsyl:
+                    maxsyl = 1
 
         return minsyl, maxsyl
 

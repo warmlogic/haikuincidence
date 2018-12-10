@@ -252,10 +252,25 @@
         "pronunciation": "F A Q",
         "syllables": 3
     },
+    "fb": {
+        "alt": [],
+        "pronunciation": "facebook",
+        "syllables": 2
+    },
     "fav": {
         "alt": [],
         "pronunciation": "fave",
         "syllables": 1
+    },
+    "fck": {
+        "alt": [],
+        "pronunciation": "fuck",
+        "syllables": 1
+    },
+    "fcking": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
     },
     "finna": {
         "alt": [],
@@ -514,6 +529,11 @@
         "alt": [],
         "pronunciation": "ktnxbye",
         "syllables": 3
+    },
+    "la": {
+        "alt": [],
+        "pronunciation": "L A",
+        "syllables": 2
     },
     "learned": {
         "alt": [],
@@ -845,6 +865,11 @@
         "pronunciation": "Ryu",
         "syllables": 2
     },
+    "selfie": {
+        "alt": [],
+        "pronunciation": "selfie",
+        "syllables": 2
+    },
     "sf": {
         "alt": [],
         "pronunciation": "S F",
@@ -859,6 +884,11 @@
         "alt": [],
         "pronunciation": "shouldn't",
         "syllables": 2
+    },
+    "sht": {
+        "alt": [],
+        "pronunciation": "shit",
+        "syllables": 1
     },
     "smdh": {
         "alt": [

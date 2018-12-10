@@ -174,14 +174,19 @@ def text_is_all_uppercase(text: str):
 
 
 def any_token_in_ignore_list(text: str):
-    '''Return True if any token is in the ignore_list
-    or anything from the ignore list is in the text
+    '''Return True if anything from the ignore_list is in the text.
+    All tokens from one ignore_list line must be somewhere in the text (AND logic),
+    and each line is considered separately (OR logic).
     '''
-    if any((re.sub(r"[^\w']", '', token).lower() in ignore_list)
-            for token in text.split()):
-            return True
-    elif any([ignore_phrase in text for ignore_phrase in ignore_list]):
+    if any([all([ip in text.lower() for ip in ignore_line.split()]) for ignore_line in ignore_list]):
+        # found all of the subtokens from one ignore line in the status
         return True
+    # elif any((re.sub(r"[^\w']", '', token).lower() in ignore_list) for token in text.split()):
+    #     # found one of the tokens in the status in the ignore list
+    #     return True
+    # elif any([ignore_line in text.lower() for ignore_line in ignore_list]):
+    #     # found exact substring match of one of the ignore lines in the status
+    #     return True
     else:
         return False
 

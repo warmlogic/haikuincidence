@@ -26,10 +26,10 @@ Hey, that's a haiku! ✌️
 
 ### Additional setup
 
-1. Add phrases to `data/ignore.txt` to ignore tweets that contain these exact strings, one string per line
-    1. If file does not exist or is empty, does not ignore any tweets
 1. Add phrases to `data/track.txt` to only search for tweets that contain any of the exact strings, one string per line (see [the documentation about `track`](https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters) for more info)
     1. If file does not exist or is empty, gets tweets from the [sample stream](https://developer.twitter.com/en/docs/tweets/sample-realtime/api-reference/get-statuses-sample)
+1. Add phrases to `data/ignore.txt` to ignore tweets that contain tokens from any of these strings, one string per line. Uses `AND` and `OR` logic like the track list, but tokens for `AND` (a single line) can match anywhere.
+    1. If file does not exist or is empty, does not ignore any tweets
 1. Add additional pre-defined syllable counts to `data/syllables.json`
 1. `sudo cp haikuincidence.service /etc/systemd/system/haikuincidence.service`
 1. `sudo systemctl daemon-reload`

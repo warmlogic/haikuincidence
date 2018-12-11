@@ -252,22 +252,7 @@ def clean_text(text: str):
         else:
             text_final.extend(split_acronym(token))
 
-    text_final = ' '.join(text_final)
-
-    # remove space before some punctuation ("hello ,how are you ? doing")
-    text_final = re.sub(r'\s([.,;!?](?=\s|$)?)', r'\1', text_final)
-
-    # put space after some punctuation if followed by a letter or number ("cat,dog")
-    text_final = re.sub(r'(?<=[;!?])(?=[\w])', r' ', text_final)
-
-    # put space after period if followed by a letter ("good.What")
-    text_final = re.sub(r'(?<=[.,])(?=[A-Za-z])', r' ', text_final)
-
-    # remove spaces around apostrophe if letter-space-apostrophe-space-letter
-    text_final = re.sub(r"(\w)\s[']\s(\w)", r"\1'\2", text_final)
-
-    text_final = ' '.join(text_final.split())
-    return text_final
+    return ' '.join(text_final)
 
 
 def check_text_wrapper(text):
@@ -319,6 +304,19 @@ def get_haiku(text: str) -> str:
     def count_syllables(token: str):
         if token in emoticons_list:
             return 0
+
+        # remove space before some punctuation if preceded by a letter or number
+        # ("hello ,how are you ? doing")
+        token = re.sub(r'(\w)\s([.,;!?](?=\s|$)?)', r'\1\2', token)
+
+        # put space after some punctuation if followed by a letter or number ("cat,dog")
+        token = re.sub(r'(?<=[;!?])(?=[\w])', r' ', token)
+
+        # put space after period if followed by a letter ("good.What")
+        token = re.sub(r'(?<=[.,])(?=[A-Za-z])', r' ', token)
+
+        # remove spaces around apostrophe if letter-space-apostrophe-space-letter
+        token = re.sub(r"(\w)\s[']\s(\w)", r"\1'\2", token)
 
         # add space around some punctuation if letters on both sides
         token = re.sub(r'([\w])([#@&%=+/×\-](?=[\w]|$))', r'\1 \2 ', token)
@@ -509,7 +507,7 @@ def get_haiku(text: str) -> str:
         #     logger.debug(f'{syllable_count} syllables counted')
 
         if syllable_count == haiku_form[haiku_line]:
-            # Reached the number of syllables for this line, go to next line
+            # Reached exactly the number of syllables for this line, go to next line
             haiku_line += 1
         if i < len(text_split) - 1 and haiku_line >= len(haiku_form) and (count_syllables(' '.join(text_split[i + 1:])) > 0):
             # There are syllables in the remaining tokens to check, but have reached the number of lines in a haiku.

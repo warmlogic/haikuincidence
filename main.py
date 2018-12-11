@@ -321,13 +321,21 @@ def get_haiku(text: str) -> str:
             return 0
 
         # add space around some punctuation if letters on both sides
-        token = re.sub(r'([\w])([#@&%=+/\-×](?=[\w]|$))', r'\1 \2 ', token)
+        token = re.sub(r'([\w])([#@&%=+/×\-](?=[\w]|$))', r'\1 \2 ', token)
 
         # put a space after some punctuation that precedes a letter
         token = re.sub(r'([#@&%=+/×])((?=[\w]|$))', r'\1 \2', token)
 
-        # put a space before a some punctuation that follows a letter
-        token = re.sub(r'([\w])?([#@&%=+/×])', r'\1 \2', token)
+        # put a space before some punctuation that follows a letter
+        token = re.sub(r'([\w])([#@&%=+/×])', r'\1 \2', token)
+
+        # special cases
+        token = token.replace('b / c', 'because')
+        token = token.replace('b / t', 'between')
+        token = token.replace('w / o', 'without')
+        if token == 'w /':
+            token = 'with'
+        token = token.replace('w / ', 'with ')
 
         # replace some punctuation with words
         token = token.replace('#', 'hashtag')

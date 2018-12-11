@@ -333,6 +333,7 @@ def get_haiku(text: str) -> str:
         token = re.sub(r'\bw / o\b', 'without', token)
         token = re.sub(r'\bw /\s\b', 'with ', token)
         token = re.sub(r'\bw /\b', 'with', token)
+        token = re.sub(r'\ba *\b', 'a star', token.lower())
 
         # replace some punctuation with words
         token = token.replace('#', 'hashtag')
@@ -341,6 +342,7 @@ def get_haiku(text: str) -> str:
         token = token.replace('%', 'percent')
         token = token.replace('=', 'equals')
         token = token.replace('×', 'times')
+        # token = token.replace('*', 'star')
         # token = token.replace('+', 'plus')
         # token = token.replace('/', 'slash')
 

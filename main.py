@@ -226,7 +226,7 @@ def clean_text(text: str):
         '''Split short acronyms. One option for all caps, one for lowercase.
         Otherwise return the token.
         '''
-        token_clean = re.sub(r"[^\w']", ' ', token).lower().strip()
+        token_clean = re.sub(r"[^\w']", ' ', token).strip()
         if len(token_clean) <= 5 and re.findall(r'\b[A-Z\.]{2,}s?\b', token_clean):
             return ' '.join(token).split()
         elif len(token_clean) <= 3 and re.findall(r'\b[a-z\.]{2,}s?\b', token_clean):
@@ -363,6 +363,11 @@ def get_haiku(text: str) -> str:
                         subtoken = f'{subtoken[:2]} {subtoken[2:]}'
                     else:
                         subtoken = inflect_p.number_to_words(subtoken, andword='')
+                elif len(subtoken) == 2:
+                    if (subtoken[0] == '0') and subtoken[1].isdigit():
+                        subtoken = f'oh {subtoken[1]}'
+                    else:
+                        subtoken = inflect_p.number_to_words(subtoken, andword='')
                 else:
                     subtoken = inflect_p.number_to_words(subtoken, andword='')
                 # remove all punctuation except apostrophes
@@ -469,8 +474,8 @@ def get_haiku(text: str) -> str:
             # if found no syllables but there's at least one letter,
             # count as one syllable
             if re.findall(r'[\w]', word):
-                # if not minsyl:
-                #     minsyl = 1
+                if not minsyl:
+                    minsyl = 1
                 if not maxsyl:
                     maxsyl = 1
 

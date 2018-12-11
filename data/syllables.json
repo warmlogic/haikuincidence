@@ -19,6 +19,11 @@
         "pronunciation": "as far as I know",
         "syllables": 5
     },
+    "aged": {
+        "alt": [],
+        "pronunciation": "aged",
+        "syllables": 1
+    },
     "afk": {
         "alt": [],
         "pronunciation": "A F K",
@@ -38,6 +43,11 @@
         "alt": [],
         "pronunciation": "appointment",
         "syllables": 3
+    },
+    "asf": {
+        "alt": [],
+        "pronunciation": "as fuck",
+        "syllables": 2
     },
     "asap": {
         "alt": [],
@@ -72,6 +82,11 @@
     "bdrm": {
         "alt": [],
         "pronunciation": "bedroom",
+        "syllables": 2
+    },
+    "beloved": {
+        "alt": [],
+        "pronunciation": "beloved",
         "syllables": 2
     },
     "bf": {
@@ -237,6 +252,11 @@
         "pronunciation": "E S P N",
         "syllables": 4
     },
+    "ew": {
+        "alt": [],
+        "pronunciation": "ew",
+        "syllables": 1
+    },
     "facebook": {
         "alt": [],
         "pronunciation": "facebook",
@@ -267,6 +287,16 @@
         "pronunciation": "fuck",
         "syllables": 1
     },
+    "fcken": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "fckn": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
     "fcking": {
         "alt": [],
         "pronunciation": "fucking",
@@ -275,6 +305,11 @@
     "finna": {
         "alt": [],
         "pronunciation": "gonna",
+        "syllables": 2
+    },
+    "flickr": {
+        "alt": [],
+        "pronunciation": "flicker",
         "syllables": 2
     },
     "fml": {
@@ -360,6 +395,11 @@
         "pronunciation": "good game",
         "syllables": 2
     },
+    "gif": {
+        "alt": [],
+        "pronunciation": "gif",
+        "syllables": 1
+    },
     "glbt": {
         "alt": [],
         "pronunciation": "G L B T",
@@ -369,6 +409,11 @@
         "alt": [],
         "pronunciation": "gon",
         "syllables": 1
+    },
+    "grindr": {
+        "alt": [],
+        "pronunciation": "grinder",
+        "syllables": 2
     },
     "gtfo": {
         "alt": [],
@@ -499,6 +544,11 @@
         "alt": [],
         "pronunciation": "J K",
         "syllables": 2
+    },
+    "jpg": {
+        "alt": [],
+        "pronunciation": "jpeg",
+        "syllables": 1
     },
     "jr": {
         "alt": [],
@@ -639,6 +689,11 @@
         "alt": [],
         "pronunciation": "last retweet",
         "syllables": 3
+    },
+    "ltr": {
+        "alt": [],
+        "pronunciation": "later",
+        "syllables": 2
     },
     "luls": {
         "alt": [],
@@ -819,6 +874,11 @@
         "alt": [],
         "pronunciation": "P M S",
         "syllables": 3
+    },
+    "png": {
+        "alt": [],
+        "pronunciation": "ping",
+        "syllables": 1
     },
     "ppl": {
         "alt": [],
@@ -1030,10 +1090,20 @@
         "pronunciation": "talk to you later",
         "syllables": 5
     },
+    "tumblr": {
+        "alt": [],
+        "pronunciation": "tumbler",
+        "syllables": 2
+    },
     "tweet": {
         "alt": [],
         "pronunciation": "tweet",
         "syllables": 1
+    },
+    "twtter": {
+        "alt": [],
+        "pronunciation": "twitter",
+        "syllables": 2
     },
     "twitter": {
         "alt": [],
@@ -1054,6 +1124,11 @@
         "alt": [],
         "pronunciation": "voy",
         "syllables": 1
+    },
+    "vs": {
+        "alt": [],
+        "pronunciation": "versus",
+        "syllables": 2
     },
     "vr": {
         "alt": [],

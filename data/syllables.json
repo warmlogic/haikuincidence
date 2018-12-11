@@ -9,6 +9,11 @@
         "pronunciation": "about",
         "syllables": 2
     },
+    "acc": {
+        "alt": [],
+        "pronunciation": "account",
+        "syllables": 2
+    },
     "acct": {
         "alt": [],
         "pronunciation": "account",
@@ -455,6 +460,11 @@
         "pronunciation": "got to go",
         "syllables": 3
     },
+    "ha": {
+        "alt": [],
+        "pronunciation": "ha",
+        "syllables": 1
+    },
     "hasnt": {
         "alt": [],
         "pronunciation": "hasn't",
@@ -479,6 +489,11 @@
         "alt": [],
         "pronunciation": "hm",
         "syllables": 1
+    },
+    "hodl": {
+        "alt": [],
+        "pronunciation": "hodl",
+        "syllables": 2
     },
     "hol": {
         "alt": [],
@@ -1109,6 +1124,11 @@
         "alt": [],
         "pronunciation": "today I learned",
         "syllables": 4
+    },
+    "tl": {
+        "alt": [],
+        "pronunciation": "timeline",
+        "syllables": 2
     },
     "TLC": {
         "alt": [],

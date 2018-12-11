@@ -9,6 +9,11 @@
         "pronunciation": "about",
         "syllables": 2
     },
+    "acct": {
+        "alt": [],
+        "pronunciation": "account",
+        "syllables": 2
+    },
     "af": {
         "alt": [],
         "pronunciation": "as fuck",
@@ -84,6 +89,11 @@
         "pronunciation": "bedroom",
         "syllables": 2
     },
+    "bein": {
+        "alt": [],
+        "pronunciation": "being",
+        "syllables": 2
+    },
     "beloved": {
         "alt": [],
         "pronunciation": "beloved",
@@ -92,6 +102,11 @@
     "bf": {
         "alt": [],
         "pronunciation": "boyfriend",
+        "syllables": 2
+    },
+    "bfs": {
+        "alt": [],
+        "pronunciation": "best friends",
         "syllables": 2
     },
     "bff": {
@@ -133,6 +148,11 @@
         "alt": [],
         "pronunciation": "be right back",
         "syllables": 3
+    },
+    "bs": {
+        "alt": [],
+        "pronunciation": "bullshit",
+        "syllables": 2
     },
     "bts": {
         "alt": [],
@@ -235,6 +255,11 @@
     "dnt": {
         "alt": [],
         "pronunciation": "didn't",
+        "syllables": 2
+    },
+    "dya": {
+        "alt": [],
+        "pronunciation": "do you",
         "syllables": 2
     },
     "emotionally": {
@@ -390,6 +415,11 @@
         "pronunciation": "girlfriend",
         "syllables": 2
     },
+    "gfs": {
+        "alt": [],
+        "pronunciation": "girl friends",
+        "syllables": 2
+    },
     "gg": {
         "alt": [],
         "pronunciation": "good game",
@@ -445,15 +475,30 @@
         "pronunciation": "hehehe",
         "syllables": 3
     },
-    "hrs": {
+    "hm": {
         "alt": [],
-        "pronunciation": "hours",
-        "syllables": 2
+        "pronunciation": "hm",
+        "syllables": 1
     },
     "hol": {
         "alt": [],
         "pronunciation": "hol",
         "syllables": 1
+    },
+    "hrs": {
+        "alt": [],
+        "pronunciation": "hours",
+        "syllables": 2
+    },
+    "http": {
+        "alt": [],
+        "pronunciation": "H T T P",
+        "syllables": 4
+    },
+    "https": {
+        "alt": [],
+        "pronunciation": "H T T P S",
+        "syllables": 5
     },
     "ianal": {
         "alt": [],
@@ -1110,10 +1155,20 @@
         "pronunciation": "twitter",
         "syllables": 2
     },
+    "tysm": {
+        "alt": [],
+        "pronunciation": "thank you so much",
+        "syllables": 4
+    },
     "ur": {
         "alt": [],
         "pronunciation": "your",
         "syllables": 1
+    },
+    "url": {
+        "alt": [],
+        "pronunciation": "U R L",
+        "syllables": 3
     },
     "us": {
         "alt": [],

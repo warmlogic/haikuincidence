@@ -330,12 +330,11 @@ def get_haiku(text: str) -> str:
         token = re.sub(r'([\w])([#@&%=+/×])', r'\1 \2', token)
 
         # special cases
-        token = token.replace('b / c', 'because')
-        token = token.replace('b / t', 'between')
-        token = token.replace('w / o', 'without')
-        if token == 'w /':
-            token = 'with'
-        token = token.replace('w / ', 'with ')
+        token = re.sub(r'\bb / c\b', 'because', token)
+        token = re.sub(r'\bb / t\b', 'between', token)
+        token = re.sub(r'\bw / o\b', 'without', token)
+        token = re.sub(r'\bw /\s\b', 'with ', token)
+        token = re.sub(r'\bw /\b', 'with', token)
 
         # replace some punctuation with words
         token = token.replace('#', 'hashtag')

@@ -282,6 +282,11 @@
         "pronunciation": "E S P N",
         "syllables": 4
     },
+    "eta": {
+        "alt": [],
+        "pronunciation": "E T A",
+        "syllables": 3
+    },
     "ew": {
         "alt": [],
         "pronunciation": "ew",
@@ -444,6 +449,11 @@
         "alt": [],
         "pronunciation": "gon",
         "syllables": 1
+    },
+    "gn": {
+        "alt": [],
+        "pronunciation": "goodnight",
+        "syllables": 2
     },
     "grindr": {
         "alt": [],
@@ -1144,6 +1154,11 @@
         "alt": [],
         "pronunciation": "tomorrow",
         "syllables": 3
+    },
+    "tn": {
+        "alt": [],
+        "pronunciation": "tonight",
+        "syllables": 2
     },
     "tnx": {
         "alt": [],

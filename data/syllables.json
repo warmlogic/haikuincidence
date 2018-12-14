@@ -89,6 +89,11 @@
         "pronunciation": "be back later",
         "syllables": 3
     },
+    "bby": {
+        "alt": [],
+        "pronunciation": "baby",
+        "syllables": 2
+    },
     "bc": {
         "alt": [],
         "pronunciation": "because",
@@ -108,6 +113,16 @@
         "alt": [],
         "pronunciation": "beloved",
         "syllables": 2
+    },
+    "Beyonce": {
+        "alt": [],
+        "pronunciation": "Beyoncé",
+        "syllables": 3
+    },
+    "Beyoncé": {
+        "alt": [],
+        "pronunciation": "Beyoncé",
+        "syllables": 3
     },
     "bf": {
         "alt": [],
@@ -247,6 +262,26 @@
         "pronunciation": "didn't",
         "syllables": 2
     },
+    "different": {
+        "alt": [
+            {
+                "pronunciation": "different",
+                "syllables": 3
+            }
+        ],
+        "pronunciation": "different",
+        "syllables": 2
+    },
+    "difference": {
+        "alt": [
+            {
+                "pronunciation": "difference",
+                "syllables": 3
+            }
+        ],
+        "pronunciation": "difference",
+        "syllables": 2
+    },
     "dm": {
         "alt": [],
         "pronunciation": "D M",
@@ -297,6 +332,16 @@
         "pronunciation": "E T A",
         "syllables": 3
     },
+    "every": {
+        "alt": [
+            {
+                "pronunciation": "every",
+                "syllables": 3
+            }
+        ],
+        "pronunciation": "every",
+        "syllables": 2
+    },
     "ew": {
         "alt": [],
         "pronunciation": "ew",
@@ -315,6 +360,16 @@
     "faq": {
         "alt": [],
         "pronunciation": "F A Q",
+        "syllables": 3
+    },
+    "favorite": {
+        "alt": [
+            {
+                "pronunciation": "favorite",
+                "syllables": 2
+            }
+        ],
+        "pronunciation": "favorite",
         "syllables": 3
     },
     "fb": {
@@ -346,6 +401,16 @@
         "alt": [],
         "pronunciation": "fucking",
         "syllables": 2
+    },
+    "fiance": {
+        "alt": [],
+        "pronunciation": "fiancé",
+        "syllables": 3
+    },
+    "fiancé": {
+        "alt": [],
+        "pronunciation": "fiancé",
+        "syllables": 3
     },
     "finna": {
         "alt": [],
@@ -615,6 +680,11 @@
         "pronunciation": "isn't",
         "syllables": 2
     },
+    "iTunes": {
+        "alt": [],
+        "pronunciation": "iTunes",
+        "syllables": 2
+    },
     "ive": {
         "alt": [],
         "pronunciation": "I've",
@@ -699,6 +769,16 @@
         "alt": [],
         "pronunciation": "L A",
         "syllables": 2
+    },
+    "laboratory": {
+        "alt": [
+            {
+                "pronunciation": "laboratory",
+                "syllables": 5
+            }
+        ],
+        "pronunciation": "laboratory",
+        "syllables": 4
     },
     "learned": {
         "alt": [],
@@ -960,6 +1040,11 @@
         "pronunciation": "oh my god",
         "syllables": 3
     },
+    "oof": {
+        "alt": [],
+        "pronunciation": "oof",
+        "syllables": 1
+    },
     "oompa": {
         "alt": [],
         "pronunciation": "oompa",
@@ -1159,6 +1244,11 @@
         "alt": [],
         "pronunciation": "thanksgiving",
         "syllables": 3
+    },
+    "thats": {
+        "alt": [],
+        "pronunciation": "that's",
+        "syllables": 1
     },
     "thic": {
         "alt": [],
@@ -1384,6 +1474,11 @@
         "alt": [],
         "pronunciation": "christmas",
         "syllables": 2
+    },
+    "xxx": {
+        "alt": [],
+        "pronunciation": "X X X",
+        "syllables": 3
     },
     "ymmv": {
         "alt": [],

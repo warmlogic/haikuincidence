@@ -321,6 +321,9 @@ def get_haiku(text: str) -> str:
         # add space around some punctuation if letters on both sides
         token = re.sub(r'([\w])([#@&%=+/×\-](?=[\w]|$))', r'\1 \2 ', token)
 
+        # try to replace a missing vowel with "u"
+        token = re.sub(r'([\w])[\*]((?=[\w]|$))', r'\1u\2', token)
+
         # put a space after some punctuation that precedes a letter
         token = re.sub(r'([#@&%=+/×])((?=[\w]|$))', r'\1 \2', token)
 
@@ -342,8 +345,8 @@ def get_haiku(text: str) -> str:
         token = token.replace('%', 'percent')
         token = token.replace('=', 'equals')
         token = token.replace('×', 'times')
+        token = token.replace('+', 'plus')
         # token = token.replace('*', 'star')
-        # token = token.replace('+', 'plus')
         # token = token.replace('/', 'slash')
 
         # keep letters and apostrophes for contractions, and commas and periods for numbers
@@ -416,6 +419,8 @@ def get_haiku(text: str) -> str:
 
     def guess_syllables(word: str, verbose=False):
         '''Adapted from https://github.com/akkana/scripts/blob/master/countsyl
+
+        Dipthong: Two vowels in a single syllable
         '''
         vowels = ['a', 'e', 'i', 'o', 'u']
 
@@ -439,12 +444,12 @@ def get_haiku(text: str) -> str:
 
                 if is_vowel:
                     if verbose:
-                        print(f"{c} is a vowel")
+                        print(f'{c} is a vowel')
                     if not on_vowel:
                         # We weren't on a vowel before.
                         # Seeing a new vowel bumps the syllable count.
                         if verbose:
-                            print("new syllable")
+                            print('new syllable')
                         minsyl += 1
                         maxsyl += 1
                     elif on_vowel and not in_diphthong and c != lastchar:
@@ -452,22 +457,22 @@ def get_haiku(text: str) -> str:
                         # Don't increment anything except the max count,
                         # and only do that once per diphthong.
                         if verbose:
-                            print(f"{c} is a diphthong")
+                            print(f'{c} is a diphthong')
                         in_diphthong = True
                         maxsyl += 1
                 else:
                     if re.findall(r'[\w]', c):
                         if verbose:
-                            print("[consonant]")
+                            print('[consonant]')
                     else:
                         if verbose:
-                            print("[other]")
+                            print('[other]')
 
                 on_vowel = is_vowel
                 lastchar = c
 
-            # Some special cases:
-            if len(word) >= 2 and (word[-2:] != 'ie') and (word[-1] == 'e'):
+            # Some special cases: ends in e, or past tense, may have counted too many
+            if len(word) >= 2 and (word[-2:] != 'ie') and ((word[-1] == 'e') or (word[-2:] == 'ed')):
                 minsyl -= 1
             # if it ended with a consonant followed by y, count that as a syllable.
             if word[-1] == 'y' and not on_vowel:

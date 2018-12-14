@@ -49,6 +49,11 @@
         "pronunciation": "am",
         "syllables": 1
     },
+    "anime": {
+        "alt": [],
+        "pronunciation": "anime",
+        "syllables": 3
+    },
     "appt": {
         "alt": [],
         "pronunciation": "appointment",
@@ -262,6 +267,11 @@
         "pronunciation": "didn't",
         "syllables": 2
     },
+    "dr": {
+        "alt": [],
+        "pronunciation": "doctor",
+        "syllables": 2
+    },
     "dya": {
         "alt": [],
         "pronunciation": "do you",
@@ -440,6 +450,11 @@
         "pronunciation": "gif",
         "syllables": 1
     },
+    "gifs": {
+        "alt": [],
+        "pronunciation": "gifs",
+        "syllables": 1
+    },
     "glbt": {
         "alt": [],
         "pronunciation": "G L B T",
@@ -469,6 +484,11 @@
         "alt": [],
         "pronunciation": "got to go",
         "syllables": 3
+    },
+    "guh": {
+        "alt": [],
+        "pronunciation": "guh",
+        "syllables": 1
     },
     "ha": {
         "alt": [],
@@ -615,10 +635,25 @@
         "pronunciation": "J K",
         "syllables": 2
     },
+    "jpeg": {
+        "alt": [],
+        "pronunciation": "j peg",
+        "syllables": 2
+    },
+    "jpegs": {
+        "alt": [],
+        "pronunciation": "j pegs",
+        "syllables": 2
+    },
     "jpg": {
         "alt": [],
-        "pronunciation": "jpeg",
-        "syllables": 1
+        "pronunciation": "j peg",
+        "syllables": 2
+    },
+    "jpgs": {
+        "alt": [],
+        "pronunciation": "j pegs",
+        "syllables": 2
     },
     "jr": {
         "alt": [],
@@ -629,6 +664,11 @@
         "alt": [],
         "pronunciation": "just",
         "syllables": 1
+    },
+    "kanye": {
+        "alt": [],
+        "pronunciation": "Kanye",
+        "syllables": 2
     },
     "kk": {
         "alt": [],
@@ -793,12 +833,12 @@
     "mf": {
         "alt": [
             {
-                "pronunciation": "motherfucker",
-                "syllables": 4
+                "pronunciation": "motherfuck",
+                "syllables": 3
             }
         ],
-        "pronunciation": "motherfuck",
-        "syllables": 3
+        "pronunciation": "motherfucker",
+        "syllables": 4
     },
     "mfer": {
         "alt": [],
@@ -854,6 +894,11 @@
         "alt": [],
         "pronunciation": "mustn't",
         "syllables": 2
+    },
+    "MVP": {
+        "alt": [],
+        "pronunciation": "M V P",
+        "syllables": 3
     },
     "NBA": {
         "alt": [],
@@ -984,6 +1029,11 @@
         "alt": [],
         "pronunciation": "right now",
         "syllables": 2
+    },
+    "rnb": {
+        "alt": [],
+        "pronunciation": "R N B",
+        "syllables": 3
     },
     "rofl": {
         "alt": [],
@@ -1178,6 +1228,11 @@
     "tumblr": {
         "alt": [],
         "pronunciation": "tumbler",
+        "syllables": 2
+    },
+    "tv": {
+        "alt": [],
+        "pronunciation": "T V",
         "syllables": 2
     },
     "tweet": {

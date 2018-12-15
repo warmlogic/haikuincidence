@@ -19,6 +19,11 @@
         "pronunciation": "account",
         "syllables": 2
     },
+    "accts": {
+        "alt": [],
+        "pronunciation": "accounts",
+        "syllables": 2
+    },
     "af": {
         "alt": [],
         "pronunciation": "as fuck",
@@ -76,7 +81,7 @@
     },
     "awol": {
         "alt": [],
-        "pronunciation": "A WOL",
+        "pronunciation": "A wol",
         "syllables": 2
     },
     "BBC": {
@@ -246,7 +251,7 @@
     "dgaf": {
         "alt": [
             {
-                "pronunciation": "DGAF",
+                "pronunciation": "D gaf",
                 "syllables": 2
             },
             {
@@ -476,7 +481,12 @@
         "syllables": 3
     },
     "fyi": {
-        "alt": [],
+        "alt": [
+            {
+                "pronunciation": "for your information",
+                "syllables": 6
+            }
+        ],
         "pronunciation": "F Y I",
         "syllables": 3
     },
@@ -592,7 +602,7 @@
     },
     "hol": {
         "alt": [],
-        "pronunciation": "hol",
+        "pronunciation": "hold",
         "syllables": 1
     },
     "hrs": {
@@ -700,10 +710,25 @@
         "pronunciation": "jejeje",
         "syllables": 3
     },
+    "jfc": {
+        "alt": [
+            {
+                "pronunciation": "J F C",
+                "syllables": 3
+            }
+        ],
+        "pronunciation": "jesus fucking christ",
+        "syllables": 5
+    },
     "jk": {
-        "alt": [],
-        "pronunciation": "J K",
-        "syllables": 2
+        "alt": [
+            {
+                "pronunciation": "J K",
+                "syllables": 2
+            }
+        ],
+        "pronunciation": "just kidding",
+        "syllables": 3
     },
     "jpeg": {
         "alt": [],
@@ -752,21 +777,26 @@
     },
     "kthnxbye": {
         "alt": [],
-        "pronunciation": "kthnxbye",
+        "pronunciation": "k thanks bye",
         "syllables": 3
     },
     "kthxbye": {
         "alt": [],
-        "pronunciation": "kthxbye",
+        "pronunciation": "k thanks bye",
         "syllables": 3
     },
     "ktnxbye": {
         "alt": [],
-        "pronunciation": "ktnxbye",
+        "pronunciation": "k thanks bye",
         "syllables": 3
     },
     "la": {
-        "alt": [],
+        "alt": [
+            {
+                "pronunciation": "los angeles",
+                "syllables": 4
+            }
+        ],
         "pronunciation": "L A",
         "syllables": 2
     },
@@ -801,52 +831,22 @@
         "syllables": 5
     },
     "lmao": {
-        "alt": [],
-        "pronunciation": "L M A O",
-        "syllables": 4
-    },
-    "lmaoo": {
-        "alt": [],
-        "pronunciation": "L M A O",
-        "syllables": 4
-    },
-    "lmaooo": {
-        "alt": [],
-        "pronunciation": "L M A O",
-        "syllables": 4
-    },
-    "lmaoooo": {
-        "alt": [],
-        "pronunciation": "L M A O",
-        "syllables": 4
-    },
-    "lmaooooo": {
-        "alt": [],
+        "alt": [
+            {
+                "pronunciation": "laughing my ass off",
+                "syllables": 5
+            }
+        ],
         "pronunciation": "L M A O",
         "syllables": 4
     },
     "lmfao": {
-        "alt": [],
-        "pronunciation": "L M F A O",
-        "syllables": 5
-    },
-    "lmfaoo": {
-        "alt": [],
-        "pronunciation": "L M F A O",
-        "syllables": 5
-    },
-    "lmfaooo": {
-        "alt": [],
-        "pronunciation": "L M F A O",
-        "syllables": 5
-    },
-    "lmfaoooo": {
-        "alt": [],
-        "pronunciation": "L M F A O",
-        "syllables": 5
-    },
-    "lmfaooooo": {
-        "alt": [],
+        "alt": [
+            {
+                "pronunciation": "laughing my fucking ass off",
+                "syllables": 7
+            }
+        ],
         "pronunciation": "L M F A O",
         "syllables": 5
     },
@@ -943,7 +943,7 @@
     "mfw": {
         "alt": [],
         "pronunciation": "my face when",
-        "syllables": 4
+        "syllables": 3
     },
     "mightnt": {
         "alt": [],
@@ -1011,7 +1011,12 @@
         "syllables": 2
     },
     "nyc": {
-        "alt": [],
+        "alt": [
+            {
+                "pronunciation": "New York City",
+                "syllables": 4
+            }
+        ],
         "pronunciation": "N Y C",
         "syllables": 3
     },
@@ -1028,12 +1033,12 @@
     "omfg": {
         "alt": [
             {
-                "pronunciation": "oh my fucking god",
-                "syllables": 5
+                "pronunciation": "O M F G",
+                "syllables": 4
             }
         ],
-        "pronunciation": "O M F G",
-        "syllables": 4
+        "pronunciation": "oh my fucking god",
+        "syllables": 5
     },
     "omg": {
         "alt": [],
@@ -1395,6 +1400,11 @@
         "pronunciation": "what is",
         "syllables": 2
     },
+    "wifi": {
+        "alt": [],
+        "pronunciation": "wi fi",
+        "syllables": 2
+    },
     "wiv": {
         "alt": [],
         "pronunciation": "with",
@@ -1413,52 +1423,12 @@
     "wtf": {
         "alt": [
             {
-                "pronunciation": "what the fuck",
-                "syllables": 3
+                "pronunciation": "W T F",
+                "syllables": 5
             }
         ],
-        "pronunciation": "W T F",
-        "syllables": 5
-    },
-    "wtff": {
-        "alt": [
-            {
-                "pronunciation": "what the fuck",
-                "syllables": 3
-            }
-        ],
-        "pronunciation": "W T F",
-        "syllables": 5
-    },
-    "wtfff": {
-        "alt": [
-            {
-                "pronunciation": "what the fuck",
-                "syllables": 3
-            }
-        ],
-        "pronunciation": "W T F",
-        "syllables": 5
-    },
-    "wtffff": {
-        "alt": [
-            {
-                "pronunciation": "what the fuck",
-                "syllables": 3
-            }
-        ],
-        "pronunciation": "W T F",
-        "syllables": 5
-    },
-    "wtfffff": {
-        "alt": [
-            {
-                "pronunciation": "what the fuck",
-                "syllables": 3
-            }
-        ],
-        "pronunciation": "W T F",
-        "syllables": 5
+        "pronunciation": "what the fuck",
+        "syllables": 3
     },
     "wut": {
         "alt": [],

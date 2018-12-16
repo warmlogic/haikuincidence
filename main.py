@@ -316,16 +316,16 @@ def get_haiku(text: str) -> str:
         token = re.sub(r'(?<=[.,])(?=[A-Za-z])', r' ', token)
 
         # remove spaces around apostrophe if letter-space-apostrophe-space-letter
-        token = re.sub(r"(\w)\s[']\s(\w)", r"\1'\2", token)
+        token = re.sub(r"(\w)\s(['])[?=\s\w]", r"\1\2", token)
 
         # add space around some punctuation if letters on both sides
-        token = re.sub(r'([\w])([#@&%=+/×\-](?=[\w]|$))', r'\1 \2 ', token)
+        token = re.sub(r'([\w])([#@&%=+/×\-](?=[\w]))', r'\1 \2 ', token)
 
         # try to replace a missing vowel with "u"
-        token = re.sub(r'([\w])[\*]((?=[\w]|$))', r'\1u\2', token)
+        token = re.sub(r'([\w])[\*]((?=[\w]))', r'\1u\2', token)
 
         # put a space after some punctuation that precedes a letter
-        token = re.sub(r'([#@&%=+/×])((?=[\w]|$))', r'\1 \2', token)
+        token = re.sub(r'([#@&%=+/×])((?=[\w]))', r'\1 \2', token)
 
         # put a space before some punctuation that follows a letter
         token = re.sub(r'([\w])([#@&%=+/×])', r'\1 \2', token)

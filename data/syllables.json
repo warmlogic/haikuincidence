@@ -164,6 +164,11 @@
         "pronunciation": "B F Fs",
         "syllables": 3
     },
+    "BMW": {
+        "alt": [],
+        "pronunciation": "B M W",
+        "syllables": 5
+    },
     "boi": {
         "alt": [],
         "pronunciation": "boy",
@@ -243,9 +248,19 @@
         "pronunciation": "the fuck",
         "syllables": 2
     },
+    "DD": {
+        "alt": [],
+        "pronunciation": "D D",
+        "syllables": 2
+    },
     "def": {
         "alt": [],
         "pronunciation": "def",
+        "syllables": 1
+    },
+    "dem": {
+        "alt": [],
+        "pronunciation": "them",
         "syllables": 1
     },
     "dgaf": {
@@ -271,11 +286,11 @@
         "alt": [
             {
                 "pronunciation": "different",
-                "syllables": 3
+                "syllables": 2
             }
         ],
         "pronunciation": "different",
-        "syllables": 2
+        "syllables": 3
     },
     "difference": {
         "alt": [
@@ -595,6 +610,11 @@
         "pronunciation": "hm",
         "syllables": 1
     },
+    "hmu": {
+        "alt": [],
+        "pronunciation": "hit me up",
+        "syllables": 3
+    },
     "hodl": {
         "alt": [],
         "pronunciation": "hodl",
@@ -679,6 +699,11 @@
         "alt": [],
         "pronunciation": "in my opinion",
         "syllables": 5
+    },
+    "iono": {
+        "alt": [],
+        "pronunciation": "I don't know",
+        "syllables": 3
     },
     "irl": {
         "alt": [],
@@ -925,9 +950,34 @@
         "pronunciation": "motherfucker",
         "syllables": 4
     },
+    "mfers": {
+        "alt": [],
+        "pronunciation": "motherfuckers",
+        "syllables": 4
+    },
     "mfing": {
         "alt": [],
         "pronunciation": "motherfucking",
+        "syllables": 4
+    },
+    "mfker": {
+        "alt": [],
+        "pronunciation": "motherfucker",
+        "syllables": 4
+    },
+    "mfkers": {
+        "alt": [],
+        "pronunciation": "motherfuckers",
+        "syllables": 4
+    },
+    "mfkr": {
+        "alt": [],
+        "pronunciation": "motherfucker",
+        "syllables": 4
+    },
+    "mfkrs": {
+        "alt": [],
+        "pronunciation": "motherfuckers",
         "syllables": 4
     },
     "mfn": {
@@ -1443,6 +1493,31 @@
     "xmas": {
         "alt": [],
         "pronunciation": "christmas",
+        "syllables": 2
+    },
+    "xo": {
+        "alt": [],
+        "pronunciation": "X O",
+        "syllables": 2
+    },
+    "xox": {
+        "alt": [],
+        "pronunciation": "X O X",
+        "syllables": 3
+    },
+    "xoxo": {
+        "alt": [],
+        "pronunciation": "X O X O",
+        "syllables": 4
+    },
+    "xoxox": {
+        "alt": [],
+        "pronunciation": "X O X O X",
+        "syllables": 5
+    },
+    "xx": {
+        "alt": [],
+        "pronunciation": "X X",
         "syllables": 2
     },
     "xxx": {

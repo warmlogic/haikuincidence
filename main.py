@@ -562,10 +562,10 @@ def get_haikus_all():
 
 
 def get_haikus_posted():
-    '''Get all unposted records
+    '''Get all posted records
     '''
     haiku_query = session.query(Haiku).filter(
-        Haiku.date_posted != None).filter(Haiku.date_deleted != None)
+        Haiku.date_posted != None).filter(Haiku.date_deleted == None)
     return haiku_query.all()
 
 

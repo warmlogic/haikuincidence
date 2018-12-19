@@ -788,7 +788,7 @@ class MyStreamer(TwythonStreamer):
                                     if follow_poet:
                                         try:
                                             followed = twitter.create_friendship(
-                                                screen_name=haiku_to_post['user_screen_name'], follow='true')
+                                                screen_name=haiku_to_post['user_screen_name'], follow='false')
                                             if followed['following']:
                                                 logger.info('Success')
                                             else:

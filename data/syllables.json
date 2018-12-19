@@ -44,6 +44,16 @@
         "pronunciation": "A F K",
         "syllables": 3
     },
+    "ain": {
+        "alt": [],
+        "pronunciation": "ain't",
+        "syllables": 1
+    },
+    "aint": {
+        "alt": [],
+        "pronunciation": "ain't",
+        "syllables": 1
+    },
     "aka": {
         "alt": [],
         "pronunciation": "A K A",
@@ -494,6 +504,26 @@
         ],
         "pronunciation": "fuck with you",
         "syllables": 3
+    },
+    "fxck": {
+        "alt": [],
+        "pronunciation": "fuck",
+        "syllables": 1
+    },
+    "fxcken": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "fxckin": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "fxcking": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
     },
     "fyi": {
         "alt": [
@@ -1079,6 +1109,11 @@
         "alt": [],
         "pronunciation": "of course",
         "syllables": 2
+    },
+    "ol": {
+        "alt": [],
+        "pronunciation": "old",
+        "syllables": 1
     },
     "omfg": {
         "alt": [

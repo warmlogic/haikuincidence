@@ -43,6 +43,13 @@ Hey, that's a haiku! ✌️
 
 ## TODO
 
+- [ ] Keep acronym letters together
+- [ ] Deal with monetary amounts ($5 £1 €3)
+- [ ] Deal with negative numbers
+- [ ] Figure out when `am` corresponds to a time of day (after a number?) vs is a verb
+- [ ] Figure out when `w` should be pronounced `with` vs "double-u"
+- [ ] If no vowels, assume acronym?
+- [x] Autofollow these awesome poets
 - [ ] Retweet with comment, rather than as reply
     - Not sure Twitter's API supports this
 - [x] Lower memory requirement method for checking if word is in a dictionary (currently using `spaCy`; maybe try `nltk`?)

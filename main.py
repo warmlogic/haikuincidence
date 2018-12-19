@@ -11,7 +11,7 @@ import re
 from ftfy import fix_text
 import inflect
 from nltk.corpus import cmudict
-from twython import Twython
+from twython import Twython, TwythonError
 from twython import TwythonStreamer
 
 from data_base import session_factory
@@ -561,6 +561,14 @@ def get_haikus_all():
     return haiku_query.all()
 
 
+def get_haikus_posted():
+    '''Get all unposted records
+    '''
+    haiku_query = session.query(Haiku).filter(
+        Haiku.date_posted != None).filter(Haiku.date_deleted != None)
+    return haiku_query.all()
+
+
 def get_haikus_unposted():
     '''Get all unposted records
     '''
@@ -778,7 +786,15 @@ class MyStreamer(TwythonStreamer):
 
                                     # follow the user
                                     if follow_poet:
-                                        twitter.create_friendship(user_id=haiku_to_post['user_id_str'])
+                                        try:
+                                            followed = twitter.create_friendship(
+                                                screen_name=haiku_to_post['user_screen_name'], follow='true')
+                                            if followed['following']:
+                                                logger.info('Success')
+                                            else:
+                                                logger.info('Could not follow')
+                                        except TwythonError as e:
+                                            logging.info(e)
 
                             else:
                                 logger.debug('Found haiku but did not post')

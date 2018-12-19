@@ -27,9 +27,12 @@ POST_AS_REPLY = True
 if DEBUG:
     logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.DEBUG, style='{')
     post_haiku = False
+    follow_poet = False
+
 else:
     logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
     post_haiku = True
+    follow_poet = True
 logger = logging.getLogger(__name__)
 
 # Minimum amount of time between haiku posts
@@ -632,8 +635,9 @@ def update_haiku_undeleted(status_id_str):
 
 def get_haiku_to_post(h, this_status):
     return {
-        'status_id_str': h.status_id_str,
+        'user_id_str': h.user_id_str,
         'user_screen_name': h.user_screen_name,
+        'status_id_str': h.status_id_str,
         'favorite_count': this_status['favorite_count'],
         'retweet_count': this_status['retweet_count'],
         'followers_count': this_status['user']['followers_count'],
@@ -647,6 +651,8 @@ def get_best_haiku(haikus):
     '''Attempt to get the haiku by assessing verified user,
     or number of favorites, retweets, or followers.
     High probability that followers will yield a tweet. Otherwise get the most recent one.
+
+    TODO: If there's more than 1 verified user (extremely unlikely), rank tweets
     '''
     # initialize
     haiku_to_post = {
@@ -767,7 +773,13 @@ class MyStreamer(TwythonStreamer):
                                         attachment_url=tweet_url,
                                     )
                                 if posted_status:
+                                    logger.info('Attempting to follow this poet...')
                                     update_haiku_posted(haiku_to_post['status_id_str'])
+
+                                    # follow the user
+                                    if follow_poet:
+                                        twitter.create_friendship(user_id=haiku_to_post['user_id_str'])
+
                             else:
                                 logger.debug('Found haiku but did not post')
                     else:

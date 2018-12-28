@@ -94,6 +94,11 @@
         "pronunciation": "A wol",
         "syllables": 2
     },
+    "azz": {
+        "alt": [],
+        "pronunciation": "ass",
+        "syllables": 1
+    },
     "BBC": {
         "alt": [],
         "pronunciation": "B B C",
@@ -112,6 +117,11 @@
     "bc": {
         "alt": [],
         "pronunciation": "because",
+        "syllables": 2
+    },
+    "bday": {
+        "alt": [],
+        "pronunciation": "b day",
         "syllables": 2
     },
     "bdrm": {
@@ -465,6 +475,11 @@
     "fomo": {
         "alt": [],
         "pronunciation": "fomo",
+        "syllables": 2
+    },
+    "fr": {
+        "alt": [],
+        "pronunciation": "for real",
         "syllables": 2
     },
     "ft": {
@@ -1045,6 +1060,11 @@
         "pronunciation": "M S N B C",
         "syllables": 5
     },
+    "mtn": {
+        "alt": [],
+        "pronunciation": "mountain",
+        "syllables": 2
+    },
     "MTV": {
         "alt": [],
         "pronunciation": "M T V",
@@ -1078,6 +1098,11 @@
     "NHL": {
         "alt": [],
         "pronunciation": "N H L",
+        "syllables": 3
+    },
+    "nsa": {
+        "alt": [],
+        "pronunciation": "N S A",
         "syllables": 3
     },
     "nsfw": {
@@ -1300,6 +1325,11 @@
         "pronunciation": "shut the fuck up",
         "syllables": 4
     },
+    "sumn": {
+        "alt": [],
+        "pronunciation": "someone",
+        "syllables": 2
+    },
     "szn": {
         "alt": [],
         "pronunciation": "season",
@@ -1359,11 +1389,6 @@
         "alt": [],
         "pronunciation": "thanks",
         "syllables": 1
-    },
-    "til": {
-        "alt": [],
-        "pronunciation": "today I learned",
-        "syllables": 4
     },
     "tl": {
         "alt": [],
@@ -1450,6 +1475,11 @@
         "pronunciation": "us",
         "syllables": 1
     },
+    "vid": {
+        "alt": [],
+        "pronunciation": "vid",
+        "syllables": 1
+    },
     "voy": {
         "alt": [],
         "pronunciation": "voy",
@@ -1465,10 +1495,20 @@
         "pronunciation": "V R",
         "syllables": 2
     },
+    "w": {
+        "alt": [],
+        "pronunciation": "with",
+        "syllables": 1
+    },
     "wat": {
         "alt": [],
         "pronunciation": "what",
         "syllables": 1
+    },
+    "weeknd": {
+        "alt": [],
+        "pronunciation": "weekend",
+        "syllables": 2
     },
     "wfh": {
         "alt": [],

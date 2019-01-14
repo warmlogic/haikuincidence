@@ -74,6 +74,11 @@
         "pronunciation": "appointment",
         "syllables": 3
     },
+    "ARMYS": {
+        "alt": [],
+        "pronunciation": "armys",
+        "syllables": 2
+    },
     "asf": {
         "alt": [],
         "pronunciation": "as fuck",
@@ -362,6 +367,11 @@
         "pronunciation": "end zone",
         "syllables": 2
     },
+    "EQ": {
+        "alt": [],
+        "pronunciation": "E Q",
+        "syllables": 2
+    },
     "ESPN": {
         "alt": [],
         "pronunciation": "E S P N",
@@ -550,6 +560,11 @@
         "pronunciation": "F Y I",
         "syllables": 3
     },
+    "gah": {
+        "alt": [],
+        "pronunciation": "gah",
+        "syllables": 1
+    },
     "gb": {
         "alt": [],
         "pronunciation": "gigabyte",
@@ -725,9 +740,19 @@
         "pronunciation": "I love you",
         "syllables": 3
     },
+    "i'ma": {
+        "alt": [],
+        "pronunciation": "ima",
+        "syllables": 2
+    },
     "ima": {
         "alt": [],
         "pronunciation": "ima",
+        "syllables": 2
+    },
+    "i'mma": {
+        "alt": [],
+        "pronunciation": "imma",
         "syllables": 2
     },
     "imma": {
@@ -749,6 +774,11 @@
         "alt": [],
         "pronunciation": "I don't know",
         "syllables": 3
+    },
+    "IQ": {
+        "alt": [],
+        "pronunciation": "I Q",
+        "syllables": 2
     },
     "irl": {
         "alt": [],
@@ -1135,6 +1165,11 @@
         "pronunciation": "of course",
         "syllables": 2
     },
+    "OG": {
+        "alt": [],
+        "pronunciation": "O G",
+        "syllables": 2
+    },
     "ol": {
         "alt": [],
         "pronunciation": "old",
@@ -1224,6 +1259,16 @@
         "alt": [],
         "pronunciation": "Q E D",
         "syllables": 3
+    },
+    "rly": {
+        "alt": [],
+        "pronunciation": "really",
+        "syllables": 2
+    },
+    "rlly": {
+        "alt": [],
+        "pronunciation": "really",
+        "syllables": 2
     },
     "rn": {
         "alt": [],

@@ -40,3 +40,15 @@ Hey, that's a haiku! ✌️
 
 - To read systemd's logs (includes log messages from Python): `sudo journalctl -u haikuincidence`
 - To follow systemd's logs (includes log messages from Python): `sudo journalctl -f -u haikuincidence`
+
+## Attribution
+
+I borrowed and adapted code from these nice resources. Thank you!
+
+- Default oppressive word filter from [this repo](https://github.com/dariusk/wordfilter)
+- Syllable counting from [this script](https://github.com/akkana/scripts/blob/master/countsyl)
+- Haiku checker from [this script](https://github.com/tomwardill/python-haiku/blob/master/haiku_checker.py)
+
+## License
+
+Copyright (c) 2018 Matt Mollison Licensed under the MIT license.

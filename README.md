@@ -48,6 +48,7 @@ I borrowed and adapted code from these nice resources. Thank you!
 - Default oppressive word filter from [this repo](https://github.com/dariusk/wordfilter)
 - Syllable counting from [this script](https://github.com/akkana/scripts/blob/master/countsyl)
 - Haiku checker from [this script](https://github.com/tomwardill/python-haiku/blob/master/haiku_checker.py)
+- URL regex from [this gist](https://gist.github.com/gruber/8891611)
 
 ## License
 

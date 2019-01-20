@@ -1,5 +1,6 @@
 import configparser
 from datetime import datetime, timedelta
+import requests
 import json
 import logging
 from pathlib import Path
@@ -58,9 +59,15 @@ if (Path('data') / 'ignore.txt').exists():
     with open(Path('data') / 'ignore.txt') as fp:
         ignore_list = fp.read().splitlines()
     # ensure lowercase
-    ignore_list = set(x.lower() for x in ignore_list)
+    ignore_list = list(set(x.lower() for x in ignore_list))
 else:
     ignore_list = []
+
+# filter out likely oppressive/offensive tweets using this word list
+bad_words_url = 'https://raw.githubusercontent.com/dariusk/wordfilter/master/lib/badwords.json'
+response = requests.get(bad_words_url)
+if response.status_code == 200:
+    ignore_list = list(set(x.lower() for x in response.json() + ignore_list))
 
 # Specify syllables for certain acronyms or abbreviations
 if (Path('data') / 'syllables.json').exists():
@@ -75,7 +82,7 @@ else:
 if (Path('data') / 'emoticons.txt').exists():
     with open(Path('data') / 'emoticons.txt') as fp:
         emoticons_list = fp.read().splitlines()
-    emoticons_list = set(emoticons_list)
+    emoticons_list = list(set(emoticons_list))
 else:
     emoticons_list = []
 

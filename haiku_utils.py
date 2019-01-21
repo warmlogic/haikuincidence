@@ -110,23 +110,29 @@ def count_syllables(token: str,
             subtoken = re.sub(r"[^\w']", ' ', subtoken).strip()
 
         if subtoken in syllable_dict:
-            subsyllable_count += syllable_dict[subtoken]['syllables']
-            if logger.isEnabledFor(logging.DEBUG):
-                logger.debug(f"    Dict: {subtoken}: {syllable_dict[subtoken]['syllables']}")
+            subtoken_syl = syllable_dict[subtoken]['syllables']
+            source = 'Dict'
+            subsyllable_count += subtoken_syl
         elif remove_repeat_last_letter(subtoken) in syllable_dict:
-            subtoken = remove_repeat_last_letter(subtoken)
-            subsyllable_count += syllable_dict[subtoken]['syllables']
-            if logger.isEnabledFor(logging.DEBUG):
-                logger.debug(f"    Dict: {subtoken}: {syllable_dict[subtoken]['syllables']}")
+            subtoken_syl = syllable_dict[remove_repeat_last_letter(subtoken)]['syllables']
+            source = 'Dict (remove repeat)'
+            subsyllable_count += subtoken_syl
+        elif (subtoken.endswith('s') or subtoken.endswith('z')) and (subtoken[:-1] in syllable_dict):
+            subtoken_syl = syllable_dict[subtoken[:-1]]['syllables']
+            source = 'Dict (singular)'
+            subsyllable_count += subtoken_syl
         elif subtoken in pronounce_dict:
-            subsyllable_count += max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])
-            if logger.isEnabledFor(logging.DEBUG):
-                logger.debug(f"    CMU: {subtoken}: {max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])}")
+            subtoken_syl = max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])
+            source = 'CMU'
+            subsyllable_count += subtoken_syl
         elif remove_repeat_last_letter(subtoken) in pronounce_dict:
-            subtoken = remove_repeat_last_letter(subtoken)
-            subsyllable_count += max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])
-            if logger.isEnabledFor(logging.DEBUG):
-                logger.debug(f"    CMU: {subtoken}: {max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])}")
+            subtoken_syl = max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[remove_repeat_last_letter(subtoken)]])
+            source = 'CMU (remove repeat)'
+            subsyllable_count += subtoken_syl
+        elif (subtoken.endswith('s') or subtoken.endswith('z')) and (subtoken[:-1] in pronounce_dict):
+            subtoken_syl = max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken[:-1]]])
+            source = 'CMU (singular)'
+            subsyllable_count += subtoken_syl
         else:
             # it's not a "real" word
             if re.findall(r"[^\w']", subtoken):
@@ -137,9 +143,9 @@ def count_syllables(token: str,
                     # contains an apostrophe
                     if subtoken.rsplit("'")[-1] in contraction_ends:
                         # ends with one of the contraction endings; make a guess
-                        subsyllable_count += guess_syllables(subtoken)[0]
-                        if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug(f"    Guess: {subtoken}: {guess_syllables(subtoken)[0]}")
+                        subtoken_syl = guess_syllables(subtoken)[0]
+                        source = 'Guess'
+                        subsyllable_count += subtoken_syl
                     else:
                         # doesn't end with a contraction ending; count each chunk between apostrophes
                         for subsubtoken in subtoken.rsplit("'"):
@@ -151,9 +157,11 @@ def count_syllables(token: str,
                         subsyllable_count += count_syllables(' '.join(subtoken), inflect_p, pronounce_dict, syllable_dict, emoticons_list)
                     else:
                         # make a guess
-                        subsyllable_count += guess_syllables(subtoken)[0]
-                        if logger.isEnabledFor(logging.DEBUG):
-                            logger.debug(f"    Guess: {subtoken}: {guess_syllables(subtoken)[0]}")
+                        subtoken_syl = guess_syllables(subtoken)[0]
+                        source = 'Guess'
+                        subsyllable_count += subtoken_syl
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f"    {source}: {subtoken}: {subtoken_syl}")
 
     return subsyllable_count
 

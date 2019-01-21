@@ -19,11 +19,6 @@
         "pronunciation": "account",
         "syllables": 2
     },
-    "accts": {
-        "alt": [],
-        "pronunciation": "accounts",
-        "syllables": 2
-    },
     "af": {
         "alt": [],
         "pronunciation": "as fuck",
@@ -159,11 +154,6 @@
         "pronunciation": "boyfriend",
         "syllables": 2
     },
-    "bfs": {
-        "alt": [],
-        "pronunciation": "best friends",
-        "syllables": 2
-    },
     "bff": {
         "alt": [
             {
@@ -179,16 +169,6 @@
         "pronunciation": "best friends for life",
         "syllables": 4
     },
-    "bffs": {
-        "alt": [
-            {
-                "pronunciation": "best friends forever",
-                "syllables": 5
-            }
-        ],
-        "pronunciation": "B F Fs",
-        "syllables": 3
-    },
     "BMW": {
         "alt": [],
         "pronunciation": "B M W",
@@ -197,11 +177,6 @@
     "boi": {
         "alt": [],
         "pronunciation": "boy",
-        "syllables": 1
-    },
-    "bois": {
-        "alt": [],
-        "pronunciation": "boys",
         "syllables": 1
     },
     "brb": {
@@ -337,11 +312,6 @@
         "pronunciation": "D M",
         "syllables": 2
     },
-    "dms": {
-        "alt": [],
-        "pronunciation": "D Ms",
-        "syllables": 2
-    },
     "doesnt": {
         "alt": [],
         "pronunciation": "doesn't",
@@ -400,11 +370,6 @@
     "ew": {
         "alt": [],
         "pronunciation": "ew",
-        "syllables": 1
-    },
-    "eyez": {
-        "alt": [],
-        "pronunciation": "eyes",
         "syllables": 1
     },
     "facebook": {
@@ -595,11 +560,6 @@
         "pronunciation": "girlfriend",
         "syllables": 2
     },
-    "gfs": {
-        "alt": [],
-        "pronunciation": "girl friends",
-        "syllables": 2
-    },
     "gg": {
         "alt": [],
         "pronunciation": "good game",
@@ -608,11 +568,6 @@
     "gif": {
         "alt": [],
         "pronunciation": "gif",
-        "syllables": 1
-    },
-    "gifs": {
-        "alt": [],
-        "pronunciation": "gifs",
         "syllables": 1
     },
     "glbt": {
@@ -850,19 +805,9 @@
         "pronunciation": "j peg",
         "syllables": 2
     },
-    "jpegs": {
-        "alt": [],
-        "pronunciation": "j pegs",
-        "syllables": 2
-    },
     "jpg": {
         "alt": [],
         "pronunciation": "j peg",
-        "syllables": 2
-    },
-    "jpgs": {
-        "alt": [],
-        "pronunciation": "j pegs",
         "syllables": 2
     },
     "jr": {
@@ -975,10 +920,19 @@
             {
                 "pronunciation": "lol",
                 "syllables": 1
+            },
+            {
+                "pronunciation": "laughing out loud",
+                "syllables": 4
             }
         ],
         "pronunciation": "L O L",
         "syllables": 3
+    },
+    "lols": {
+        "alt": [],
+        "pronunciation": "lols",
+        "syllables": 1
     },
     "lolz": {
         "alt": [],
@@ -999,6 +953,11 @@
         "alt": [],
         "pronunciation": "later",
         "syllables": 2
+    },
+    "lul": {
+        "alt": [],
+        "pronunciation": "lul",
+        "syllables": 1
     },
     "luls": {
         "alt": [],
@@ -1025,9 +984,9 @@
         "pronunciation": "megabyte",
         "syllables": 3
     },
-    "memes": {
+    "meme": {
         "alt": [],
-        "pronunciation": "memes",
+        "pronunciation": "meme",
         "syllables": 1
     },
     "mf": {
@@ -1045,11 +1004,6 @@
         "pronunciation": "motherfucker",
         "syllables": 4
     },
-    "mfers": {
-        "alt": [],
-        "pronunciation": "motherfuckers",
-        "syllables": 4
-    },
     "mfing": {
         "alt": [],
         "pronunciation": "motherfucking",
@@ -1060,29 +1014,14 @@
         "pronunciation": "motherfucker",
         "syllables": 4
     },
-    "mfkers": {
-        "alt": [],
-        "pronunciation": "motherfuckers",
-        "syllables": 4
-    },
     "mfkr": {
         "alt": [],
         "pronunciation": "motherfucker",
         "syllables": 4
     },
-    "mfkrs": {
-        "alt": [],
-        "pronunciation": "motherfuckers",
-        "syllables": 4
-    },
     "mfn": {
         "alt": [],
         "pronunciation": "motherfucking",
-        "syllables": 4
-    },
-    "mfs": {
-        "alt": [],
-        "pronunciation": "motherfuckers",
         "syllables": 4
     },
     "mfw": {
@@ -1310,11 +1249,6 @@
         "pronunciation": "retweet",
         "syllables": 2
     },
-    "rts": {
-        "alt": [],
-        "pronunciation": "retweets",
-        "syllables": 2
-    },
     "runescape": {
         "alt": [],
         "pronunciation": "runescape",
@@ -1434,11 +1368,6 @@
         "alt": [],
         "pronunciation": "thanksgiving",
         "syllables": 3
-    },
-    "thats": {
-        "alt": [],
-        "pronunciation": "that's",
-        "syllables": 1
     },
     "thic": {
         "alt": [],

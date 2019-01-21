@@ -1025,6 +1025,11 @@
         "pronunciation": "megabyte",
         "syllables": 3
     },
+    "memes": {
+        "alt": [],
+        "pronunciation": "memes",
+        "syllables": 1
+    },
     "mf": {
         "alt": [
             {
@@ -1308,6 +1313,11 @@
     "rts": {
         "alt": [],
         "pronunciation": "retweets",
+        "syllables": 2
+    },
+    "runescape": {
+        "alt": [],
+        "pronunciation": "runescape",
         "syllables": 2
     },
     "ryu": {

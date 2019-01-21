@@ -4,7 +4,7 @@ import re
 # import random
 from typing import List, Dict
 
-from text_utils import count_syllables
+from text_utils import remove_repeat_last_letter, split_acronym
 from data_tweets_haiku import db_update_haiku_deleted
 
 config = configparser.ConfigParser()
@@ -13,6 +13,214 @@ config.read('config.ini')
 logger_name = config['haiku'].get('logger_name', 'default_logger')
 
 logger = logging.getLogger(logger_name)
+
+# keep letters and apostrophes for contractions, and commas and periods for numbers
+punct_to_keep = ["'", ',', '.']
+
+# endings of contractions, for counting syllables
+contraction_ends = ['d', 'll', 'm', 're', 's', 't', 've']
+
+
+def clean_token(token):
+    # remove space before some punctuation if preceded by a letter or number
+    # ("hello ,how are you ? doing")
+    token = re.sub(r'(\w)\s([.,;!?](?=\s|$)?)', r'\1\2', token)
+
+    # put space after some punctuation if followed by a letter or number ("cat,dog")
+    token = re.sub(r'(?<=[;!?])(?=[\w])', r' ', token)
+
+    # put space after period if followed by a letter ("good.What")
+    token = re.sub(r'(?<=[.,])(?=[A-Za-z])', r' ', token)
+
+    # remove spaces around apostrophe if letter-space-apostrophe-space-letter
+    token = re.sub(r"(\w)\s(['])[?=\s\w]", r"\1\2", token)
+
+    # add space around some punctuation if letters on both sides
+    token = re.sub(r'([\w])([#@&%=+/×\-](?=[\w]))', r'\1 \2 ', token)
+
+    # try to replace a missing vowel with "u"
+    token = re.sub(r'([\w])[\*]((?=[\w]))', r'\1u\2', token)
+
+    # put a space after some punctuation that precedes a letter
+    token = re.sub(r'([#@&%=+/×])((?=[\w]))', r'\1 \2', token)
+
+    # put a space before some punctuation that follows a letter
+    token = re.sub(r'([\w])([#@&%=+/×])', r'\1 \2', token)
+
+    # special cases
+    token = re.sub(r'\bb / c\b', 'because', token)
+    token = re.sub(r'\bb / t\b', 'between', token)
+    token = re.sub(r'\bw / o\b', 'without', token)
+    token = re.sub(r'\bw /\s\b', 'with ', token)
+    token = re.sub(r'\bw /\b', 'with', token)
+    token = re.sub(r'\ba\b\*', 'a star', token.lower())
+
+    # replace some punctuation with words
+    token = token.replace('@', 'at')
+    token = token.replace('&', 'and')
+    token = token.replace('%', 'percent')
+    token = token.replace('=', 'equals')
+    token = token.replace('×', 'times')
+    token = token.replace('+', 'plus')
+    # token = token.replace('*', 'star')
+    # token = token.replace('/', 'slash')
+
+    # keep the punctuation in punct_to_keep
+    token_clean = re.sub(r"[^\w',\.]", ' ', token).lower().strip()
+
+    return token_clean
+
+
+def count_syllables(token: str,
+                    inflect_p,
+                    pronounce_dict: Dict,
+                    syllable_dict: Dict,
+                    emoticons_list: List,
+                    ) -> int:
+    if token in emoticons_list:
+        return 0
+
+    token_clean = clean_token(token)
+
+    subsyllable_count = 0
+    for subtoken in token_clean.split():
+        # remove starting or ending punctuation
+        for punct in punct_to_keep:
+            subtoken = subtoken.strip(punct)
+
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f'    Subtoken: {subtoken}')
+        if subtoken.replace('.', '').isdigit() or subtoken.replace(',', '').isdigit():
+            # split a string that looks like a year
+            if len(subtoken) == 4:
+                if (subtoken[:2] == '18') or (subtoken[:2] == '19'):
+                    subtoken = f'{subtoken[:2]} {subtoken[2:]}'
+                else:
+                    subtoken = inflect_p.number_to_words(subtoken, andword='')
+            elif len(subtoken) == 2:
+                # pronounce zero as "oh"
+                if (subtoken[0] == '0') and subtoken[1].isdigit():
+                    subtoken = f'oh {subtoken[1]}'
+                else:
+                    subtoken = inflect_p.number_to_words(subtoken, andword='')
+            else:
+                subtoken = inflect_p.number_to_words(subtoken, andword='')
+            # remove all punctuation except apostrophes
+            subtoken = re.sub(r"[^\w']", ' ', subtoken).strip()
+        if subtoken in syllable_dict:
+            subsyllable_count += syllable_dict[subtoken]['syllables']
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(f"    Dict: {subtoken}: {syllable_dict[subtoken]['syllables']}")
+        elif remove_repeat_last_letter(subtoken) in syllable_dict:
+            subtoken = remove_repeat_last_letter(subtoken)
+            subsyllable_count += syllable_dict[subtoken]['syllables']
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(f"    Dict: {subtoken}: {syllable_dict[subtoken]['syllables']}")
+        elif subtoken in pronounce_dict:
+            subsyllable_count += max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(f"    CMU: {subtoken}: {max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])}")
+        elif remove_repeat_last_letter(subtoken) in pronounce_dict:
+            subtoken = remove_repeat_last_letter(subtoken)
+            subsyllable_count += max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(f"    CMU: {subtoken}: {max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])}")
+        else:
+            # it's not a "real" word
+            # if there are some non-letter characters remaining (shouldn't be possible)
+            if re.findall(r"[^\w']", subtoken):
+                subsyllable_count += count_syllables(subtoken, inflect_p, pronounce_dict, syllable_dict, emoticons_list)
+            else:
+                if "'" in subtoken:
+                    if subtoken.rsplit("'")[-1] in contraction_ends:
+                        subsyllable_count += guess_syllables(subtoken)[0]
+                        if logger.isEnabledFor(logging.DEBUG):
+                            logger.debug(f"    Guess: {subtoken}: {guess_syllables(subtoken)[0]}")
+                    else:
+                        # count each chunk between apostrophes
+                        for subsubtoken in subtoken.rsplit("'"):
+                            subsyllable_count += count_syllables(subsubtoken, inflect_p, pronounce_dict, syllable_dict, emoticons_list)
+                else:
+                    # make a guess
+                    subsyllable_count += guess_syllables(subtoken)[0]
+                    if logger.isEnabledFor(logging.DEBUG):
+                        logger.debug(f"    Guess: {subtoken}: {guess_syllables(subtoken)[0]}")
+    return subsyllable_count
+
+
+def guess_syllables(word: str, verbose=False) -> (int, int):
+    '''Guess the number of syllables in a string.
+    Returns minimum and maximum guesses. Minimum is usually good enough.
+
+    A diphthong is two vowel sounds in a single syllable (e.g., pie, boy, cow)
+
+    Adapted from https://github.com/akkana/scripts/blob/master/countsyl
+    '''
+    vowels = ['a', 'e', 'i', 'o', 'u']
+
+    on_vowel = False
+    in_diphthong = False
+    minsyl = 0
+    maxsyl = 0
+    lastchar = None
+
+    if word:
+        word = word.lower()
+        for c in word:
+            is_vowel = c in vowels
+
+            if on_vowel is None:
+                on_vowel = is_vowel
+
+            # y is a special case
+            if c == 'y':
+                is_vowel = not on_vowel
+
+            if is_vowel:
+                if verbose:
+                    print(f'{c} is a vowel')
+                if not on_vowel:
+                    # We weren't on a vowel before.
+                    # Seeing a new vowel bumps the syllable count.
+                    if verbose:
+                        print('new syllable')
+                    minsyl += 1
+                    maxsyl += 1
+                elif on_vowel and not in_diphthong and c != lastchar:
+                    # We were already in a vowel.
+                    # Don't increment anything except the max count,
+                    # and only do that once per diphthong.
+                    if verbose:
+                        print(f'{c} is a diphthong')
+                    in_diphthong = True
+                    maxsyl += 1
+            else:
+                if re.findall(r'[\w]', c):
+                    if verbose:
+                        print('[consonant]')
+                else:
+                    if verbose:
+                        print('[other]')
+
+            on_vowel = is_vowel
+            lastchar = c
+
+        # Some special cases: ends in e, or past tense, may have counted too many
+        if len(word) >= 2 and (word[-2:] != 'ie') and ((word[-1] == 'e') or (word[-2:] == 'ed')):
+            minsyl -= 1
+        # if it ended with a consonant followed by y, count that as a syllable.
+        if word[-1] == 'y' and not on_vowel:
+            maxsyl += 1
+
+        # if found no syllables but there's at least one letter,
+        # count as one syllable
+        if re.findall(r'[\w]', word):
+            if not minsyl:
+                minsyl = 1
+            if not maxsyl:
+                maxsyl = 1
+
+    return minsyl, maxsyl
 
 
 def get_haiku(text: str,
@@ -80,7 +288,7 @@ def get_haiku(text: str,
         return ''
 
 
-def construct_haiku_to_post(h, this_status):
+def construct_haiku_to_post(h, this_status) -> Dict:
     return {
         'user_id_str': h.user_id_str,
         'user_screen_name': h.user_screen_name,
@@ -94,7 +302,7 @@ def construct_haiku_to_post(h, this_status):
     }
 
 
-def get_best_haiku(haikus, twitter, session):
+def get_best_haiku(haikus, twitter, session) -> Dict:
     '''Attempt to get the haiku by assessing verified user,
     or number of favorites, retweets, or followers.
     High probability that followers will yield a tweet. Otherwise get the most recent one.

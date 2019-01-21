@@ -63,9 +63,10 @@ pip install -U ipython
 pip install -U ftfy
 pip install -U inflect
 pip install -U nltk
-pip install -U sqlalchemy psycopg2-binary
 pip install -U pytz
+pip install -U sqlalchemy psycopg2-binary
 pip install -U twython
+pip install -U unidecode
 
 # Install the CMU dictionary
 python -c "import nltk; nltk.download('cmudict')"

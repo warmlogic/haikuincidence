@@ -5,6 +5,7 @@ import pytz
 import re
 from typing import List
 
+from unidecode import unidecode
 from ftfy import fix_text
 
 config = configparser.ConfigParser()
@@ -23,7 +24,7 @@ def clean_text(text: str) -> str:
     '''
 
     # fix wonky characters
-    text = fix_text(text)
+    text = unidecode(fix_text(text))
 
     # split on whitespace and rejoin; removes multiple spaces and newlines
     return ' '.join(text.split())

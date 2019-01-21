@@ -8,5 +8,6 @@ dependencies:
   - nltk
   - psycopg2-binary
   - pytz
-  - twython
   - sqlalchemy
+  - twython
+  - unidecode

@@ -10,7 +10,7 @@ from twython import Twython, TwythonError
 from twython import TwythonStreamer
 
 from data_utils import get_track_str, get_ignore_list, get_syllable_dict, get_emoticons_list
-from text_utils import date_string_to_datetime, clean_text, check_text_wrapper, check_tweet
+from text_utils import date_string_to_datetime, check_tweet, clean_text, check_text_wrapper
 from haiku_utils import get_haiku, get_best_haiku
 
 from data_base import session_factory
@@ -24,7 +24,7 @@ config.read('config.ini')
 logger_name = config['haiku'].get('logger_name', 'default_logger')
 logger = logging.getLogger(logger_name)
 
-debug_run = config['haiku'].getboolean('debug_run')
+debug_run = config['haiku'].getboolean('debug_run', False)
 
 if debug_run:
     logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.DEBUG, style='{')
@@ -35,9 +35,9 @@ if debug_run:
     initial_time = datetime(1970, 1, 1)
 else:
     logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
-    post_haiku = config['haiku'].getboolean('post_haiku')
-    post_as_reply = config['haiku'].getboolean('post_as_reply')
-    follow_poet = config['haiku'].getboolean('follow_poet')
+    post_haiku = config['haiku'].getboolean('post_haiku', False)
+    post_as_reply = config['haiku'].getboolean('post_as_reply', False)
+    follow_poet = config['haiku'].getboolean('follow_poet', False)
     # Minimum amount of time between haiku posts
     every_n_seconds = config['haiku'].getint('every_n_seconds', 3600)
     # Wait half the rate limit time before making first post

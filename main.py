@@ -76,7 +76,7 @@ class MyStreamer(TwythonStreamer):
     def on_success(self, status):
         if 'text' in status and check_tweet(status, ignore_list):
             # print(status['text'])
-            text = clean_text(status['text'], pronounce_dict, syllable_dict)
+            text = clean_text(status['text'])
             if check_text_wrapper(text, ignore_list):
                 haiku = get_haiku(text, inflect_p, pronounce_dict, syllable_dict, emoticons_list)
                 if haiku:
@@ -195,7 +195,8 @@ twitter = MyTwitterClient(
 )
 
 # if this screen_name has a recent tweet, use that timestamp as the time of the last post
-most_recent_tweet = twitter.get_user_timeline(screen_name='haikuincidence', count=1, trim_user=True)
+my_screen_name = config['haiku'].get('my_screen_name', 'twitter')
+most_recent_tweet = twitter.get_user_timeline(screen_name=my_screen_name, count=1, trim_user=True)
 if len(most_recent_tweet) > 0:
     twitter.last_post_time = date_string_to_datetime(most_recent_tweet[0]['created_at'])
 

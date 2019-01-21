@@ -4,7 +4,7 @@ import re
 # import random
 from typing import List, Dict
 
-from text_utils import remove_repeat_last_letter, split_acronym
+from text_utils import remove_repeat_last_letter, text_might_contain_acronym
 from data_tweets_haiku import db_update_haiku_deleted
 
 config = configparser.ConfigParser()
@@ -90,6 +90,7 @@ def count_syllables(token: str,
 
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f'    Subtoken: {subtoken}')
+
         if subtoken.replace('.', '').isdigit() or subtoken.replace(',', '').isdigit():
             # split a string that looks like a year
             if len(subtoken) == 4:
@@ -107,6 +108,7 @@ def count_syllables(token: str,
                 subtoken = inflect_p.number_to_words(subtoken, andword='')
             # remove all punctuation except apostrophes
             subtoken = re.sub(r"[^\w']", ' ', subtoken).strip()
+
         if subtoken in syllable_dict:
             subsyllable_count += syllable_dict[subtoken]['syllables']
             if logger.isEnabledFor(logging.DEBUG):
@@ -127,24 +129,32 @@ def count_syllables(token: str,
                 logger.debug(f"    CMU: {subtoken}: {max([len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]])}")
         else:
             # it's not a "real" word
-            # if there are some non-letter characters remaining (shouldn't be possible)
             if re.findall(r"[^\w']", subtoken):
+                # there are some non-letter characters remaining (shouldn't be possible); run it through again
                 subsyllable_count += count_syllables(subtoken, inflect_p, pronounce_dict, syllable_dict, emoticons_list)
             else:
                 if "'" in subtoken:
+                    # contains an apostrophe
                     if subtoken.rsplit("'")[-1] in contraction_ends:
+                        # ends with one of the contraction endings; make a guess
                         subsyllable_count += guess_syllables(subtoken)[0]
                         if logger.isEnabledFor(logging.DEBUG):
                             logger.debug(f"    Guess: {subtoken}: {guess_syllables(subtoken)[0]}")
                     else:
-                        # count each chunk between apostrophes
+                        # doesn't end with a contraction ending; count each chunk between apostrophes
                         for subsubtoken in subtoken.rsplit("'"):
                             subsyllable_count += count_syllables(subsubtoken, inflect_p, pronounce_dict, syllable_dict, emoticons_list)
                 else:
-                    # make a guess
-                    subsyllable_count += guess_syllables(subtoken)[0]
-                    if logger.isEnabledFor(logging.DEBUG):
-                        logger.debug(f"    Guess: {subtoken}: {guess_syllables(subtoken)[0]}")
+                    # no apostrophes;
+                    # might be an acronym, split the letters apart and run it through again
+                    if text_might_contain_acronym(subtoken):
+                        subsyllable_count += count_syllables(' '.join(subtoken), inflect_p, pronounce_dict, syllable_dict, emoticons_list)
+                    else:
+                        # make a guess
+                        subsyllable_count += guess_syllables(subtoken)[0]
+                        if logger.isEnabledFor(logging.DEBUG):
+                            logger.debug(f"    Guess: {subtoken}: {guess_syllables(subtoken)[0]}")
+
     return subsyllable_count
 
 

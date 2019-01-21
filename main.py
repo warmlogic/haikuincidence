@@ -53,7 +53,6 @@ class MyTwitterClient(Twython):
         if initial_time is None:
             # Wait half the rate limit time before making first post
             initial_time = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=every_n_seconds // 2)
-        # self.twitter = twitter
         self.every_n_seconds = every_n_seconds
         self.last_post_time = initial_time
 

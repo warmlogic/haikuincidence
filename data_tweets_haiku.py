@@ -2,6 +2,7 @@ import configparser
 from datetime import datetime, timedelta
 import logging
 import pytz
+from typing import List
 
 from sqlalchemy import Column, String, Integer, Boolean, DateTime
 from data_base import Base
@@ -69,14 +70,14 @@ def db_add_haiku(session, tweet_haiku):
         session.rollback()
 
 
-def db_get_haikus_all(session):
+def db_get_haikus_all(session) -> List:
     '''Get all records
     '''
     haiku_query = session.query(Haiku)
     return haiku_query.all()
 
 
-def db_get_haikus_posted(session):
+def db_get_haikus_posted(session) -> List:
     '''Get all posted records
     '''
     haiku_query = session.query(Haiku).filter(
@@ -84,7 +85,7 @@ def db_get_haikus_posted(session):
     return haiku_query.all()
 
 
-def db_get_haikus_unposted(session):
+def db_get_haikus_unposted(session) -> List:
     '''Get all unposted records
     '''
     haiku_query = session.query(Haiku).filter(
@@ -92,7 +93,7 @@ def db_get_haikus_unposted(session):
     return haiku_query.all()
 
 
-def db_get_haikus_unposted_timedelta(session, td_seconds=None):
+def db_get_haikus_unposted_timedelta(session, td_seconds=None) -> List:
     '''Get all unposted records from the last N seconds
     '''
     if td_seconds is None:

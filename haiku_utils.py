@@ -48,12 +48,12 @@ def clean_token(token):
     token = re.sub(r'([\w])([#@&%=+/×])', r'\1 \2', token)
 
     # special cases
-    token = re.sub(r'\bb / c\b', 'because', token)
-    token = re.sub(r'\bb / t\b', 'between', token)
-    token = re.sub(r'\bw / o\b', 'without', token)
-    token = re.sub(r'\bw /\s\b', 'with ', token)
-    token = re.sub(r'\bw /\b', 'with', token)
-    token = re.sub(r'\ba\b\*', 'a star', token.lower())
+    token = re.sub(r'\bb / c\b', 'because', token, flags=re.IGNORECASE)
+    token = re.sub(r'\bb / t\b', 'between', token, flags=re.IGNORECASE)
+    token = re.sub(r'\bw / o\b', 'without', token, flags=re.IGNORECASE)
+    token = re.sub(r'\bw /\s\b', 'with ', token, flags=re.IGNORECASE)
+    token = re.sub(r'\bw /\b', 'with', token, flags=re.IGNORECASE)
+    token = re.sub(r'\ba\b\*', 'a star', token, flags=re.IGNORECASE)
 
     # replace some punctuation with words
     token = token.replace('@', 'at')
@@ -66,7 +66,7 @@ def clean_token(token):
     # token = token.replace('/', 'slash')
 
     # keep the punctuation in punct_to_keep
-    token_clean = re.sub(r"[^\w',\.]", ' ', token).lower().strip()
+    token_clean = re.sub(r"[^\w',\.]", ' ', token).strip()
 
     return token_clean
 
@@ -87,6 +87,11 @@ def count_syllables(token: str,
         # remove starting or ending punctuation
         for punct in punct_to_keep:
             subtoken = subtoken.strip(punct)
+
+        # keep capitalization for checking acronyms
+        subtoken_orig = subtoken
+        # lowercase for checking against syllable_dict and pronounce_dict
+        subtoken = subtoken.lower()
 
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f'    Subtoken: {subtoken}')
@@ -137,7 +142,9 @@ def count_syllables(token: str,
             # it's not a "real" word
             if re.findall(r"[^\w']", subtoken):
                 # there are some non-letter characters remaining (shouldn't be possible); run it through again
-                subsyllable_count += count_syllables(subtoken, inflect_p, pronounce_dict, syllable_dict, emoticons_list)
+                subtoken_syl = count_syllables(subtoken, inflect_p, pronounce_dict, syllable_dict, emoticons_list)
+                source = 'Non-letter chars'
+                subsyllable_count += subtoken_syl
             else:
                 if "'" in subtoken:
                     # contains an apostrophe
@@ -149,12 +156,16 @@ def count_syllables(token: str,
                     else:
                         # doesn't end with a contraction ending; count each chunk between apostrophes
                         for subsubtoken in subtoken.rsplit("'"):
-                            subsyllable_count += count_syllables(subsubtoken, inflect_p, pronounce_dict, syllable_dict, emoticons_list)
+                            subtoken_syl = count_syllables(subsubtoken, inflect_p, pronounce_dict, syllable_dict, emoticons_list)
+                            source = 'Multiple apostrophes'
+                            subsyllable_count += subtoken_syl
                 else:
                     # no apostrophes;
                     # might be an acronym, split the letters apart and run it through again
-                    if text_might_contain_acronym(subtoken):
-                        subsyllable_count += count_syllables(' '.join(subtoken), inflect_p, pronounce_dict, syllable_dict, emoticons_list)
+                    if text_might_contain_acronym(subtoken_orig):
+                        subtoken_syl = count_syllables(' '.join(subtoken), inflect_p, pronounce_dict, syllable_dict, emoticons_list)
+                        source = 'Acronym'
+                        subsyllable_count += subtoken_syl
                     else:
                         # make a guess
                         subtoken_syl = guess_syllables(subtoken)[0]

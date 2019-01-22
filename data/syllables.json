@@ -1,4 +1,59 @@
 {
+    "jan": {
+        "alt": [],
+        "pronunciation": "jan",
+        "syllables": 1
+    },
+    "feb": {
+        "alt": [],
+        "pronunciation": "feb",
+        "syllables": 1
+    },
+    "mar": {
+        "alt": [],
+        "pronunciation": "mar",
+        "syllables": 1
+    },
+    "apr": {
+        "alt": [],
+        "pronunciation": "apr",
+        "syllables": 2
+    },
+    "jun": {
+        "alt": [],
+        "pronunciation": "jun",
+        "syllables": 1
+    },
+    "jul": {
+        "alt": [],
+        "pronunciation": "jul",
+        "syllables": 1
+    },
+    "aug": {
+        "alt": [],
+        "pronunciation": "aug",
+        "syllables": 1
+    },
+    "sep": {
+        "alt": [],
+        "pronunciation": "sep",
+        "syllables": 1
+    },
+    "oct": {
+        "alt": [],
+        "pronunciation": "oct",
+        "syllables": 1
+    },
+    "nov": {
+        "alt": [],
+        "pronunciation": "nov",
+        "syllables": 1
+    },
+    "dec": {
+        "alt": [],
+        "pronunciation": "dec",
+        "syllables": 1
+    },
     "ABC": {
         "alt": [],
         "pronunciation": "A B C",
@@ -819,6 +874,11 @@
         "alt": [],
         "pronunciation": "just",
         "syllables": 1
+    },
+    "juul": {
+        "alt": [],
+        "pronunciation": "jewel",
+        "syllables": 2
     },
     "kanye": {
         "alt": [],

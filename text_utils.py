@@ -21,13 +21,13 @@ url_re = re.compile(r'(?i)\b((?:https?:(?:/{1,3}|[a-z0-9%])|[a-z0-9.\-]+[.](?:co
 
 def clean_text(text: str) -> str:
     '''Process text so it's ready for syllable counting
+
+    If this doesn't properly handle emojis, try https://stackoverflow.com/a/49930688/2592858
     '''
-
-    # fix wonky characters
-    text = unidecode(fix_text(text))
-
+    # fix wonky characters, but keep emojis
     # split on whitespace and rejoin; removes multiple spaces and newlines
-    return ' '.join(text.split())
+    return ' '.join([''.join([unidecode(letter) if (str(letter.encode('unicode-escape'))[2] != '\\')
+                    else letter for letter in word]) for word in fix_text(text).split()])
 
 
 def check_text_wrapper(text: str, ignore_list: List[str]) -> bool:

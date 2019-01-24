@@ -261,8 +261,6 @@ def get_haiku(text: str,
     '''Attempt to turn a string into a haiku.
     Returns haiku if able, otherwise returns empty string.
 
-    Maybe TODO: Don't allow an acronym to be split across lines
-
     Inspired by https://github.com/tomwardill/python-haiku/blob/master/haiku_checker.py
     '''
     haiku_form = [5, 12, 17]
@@ -274,8 +272,8 @@ def get_haiku(text: str,
     text_split = text.split()
     # Add tokens to create potential haiku
     for i, token in enumerate(text_split):
-        # if logger.isEnabledFor(logging.DEBUG):
-        #     logger.debug(f'Token: {token}')
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f'Original token: {token}')
         # Add tokens with no syllables (punctuation, emoji)) to the end of the
         # previous line instead of the start of the current line
         if (re.findall(r"[^\w']", token) and (count_syllables(token, inflect_p, pronounce_dict, syllable_dict, emoticons_list) == 0)):
@@ -292,8 +290,8 @@ def get_haiku(text: str,
 
         # Count number of syllables for this token
         syllable_count += count_syllables(token, inflect_p, pronounce_dict, syllable_dict, emoticons_list)
-        # if logger.isEnabledFor(logging.DEBUG):
-        #     logger.debug(f'{syllable_count} syllables counted')
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f'{syllable_count} syllables counted total')
 
         if syllable_count == haiku_form[haiku_line]:
             # Reached exactly the number of syllables for this line, go to next line
@@ -301,16 +299,11 @@ def get_haiku(text: str,
         if i < len(text_split) - 1 and haiku_line >= len(haiku_form) and (count_syllables(' '.join(text_split[i + 1:]), inflect_p, pronounce_dict, syllable_dict, emoticons_list) > 0):
             # There are syllables in the remaining tokens to check, but have reached the number of lines in a haiku.
             # Therefore not a haiku coincidence!
-            # if logger.isEnabledFor(logging.DEBUG):
-            #     logger.debug(f"Not a haiku because are more lines to check: {' '.join(text_split[i + 1:])}")
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(f"Not a haiku because are more lines to check: {' '.join(text_split[i + 1:])}")
             return ''
     if haiku_line == len(haiku_form):
         # Reached the end, and found the right number of lines. Haiku coincidence!
-
-        # # Put acronyms back together
-        # for i, line in enumerate(haiku):
-        #     haiku[i] = reform_acronyms(line)
-
         return ['\n'.join([' '.join(line) for line in haiku])][0]
     else:
         # Did not find the right number of lines. Not a haiku coincidence!

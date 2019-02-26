@@ -12,7 +12,6 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 logger_name = config['haiku'].get('logger_name', 'default_logger')
-
 logger = logging.getLogger(logger_name)
 
 # Regex to look for URLs https://gist.github.com/gruber/8891611
@@ -92,6 +91,7 @@ def text_contains_ignore_list(text: str, ignore_list: List[str]) -> bool:
     '''Return True if anything from the ignore_list is in the text.
     All tokens from one ignore_list line must be somewhere in the text (AND logic),
     and each line is considered separately (OR logic).
+    Matches substrings from ignore_list lines (e.g., if ignore_list line is 'god dog', will match 'dogs are gods')
     '''
     # found all of the subtokens from one ignore line in the status
     return any([all([ip in text.lower() for ip in ignore_line.split()]) for ignore_line in ignore_list])

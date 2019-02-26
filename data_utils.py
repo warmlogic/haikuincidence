@@ -1,7 +1,15 @@
+import configparser
 import json
 from pathlib import Path
 import requests
 from typing import List, Dict
+import logging
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+logger_name = config['haiku'].get('logger_name', 'default_logger')
+logger = logging.getLogger(logger_name)
 
 
 def get_track_str(filepath: Path=None) -> str:
@@ -16,7 +24,7 @@ def get_track_str(filepath: Path=None) -> str:
     return track_str
 
 
-def get_ignore_list(filepath: Path=None) -> List:
+def get_ignore_list(filepath: Path=None, use_external: bool=True) -> List:
     '''ignore tweets that contain any of these words
     '''
     filepath = filepath or Path('data') / 'ignore.txt'
@@ -29,10 +37,12 @@ def get_ignore_list(filepath: Path=None) -> List:
         ignore_list = []
 
     # filter out likely oppressive/offensive tweets using this word list
-    bad_words_url = 'https://raw.githubusercontent.com/dariusk/wordfilter/master/lib/badwords.json'
-    response = requests.get(bad_words_url)
-    if response.status_code == 200:
-        ignore_list = list(set(x.lower() for x in response.json() + ignore_list))
+    if use_external:
+        bad_words_url = 'https://raw.githubusercontent.com/dariusk/wordfilter/master/lib/badwords.json'
+        logger.info(f'Reading external ignore list: {bad_words_url}')
+        response = requests.get(bad_words_url)
+        if response.status_code == 200:
+            ignore_list = list(set(x.lower() for x in response.json() + ignore_list))
 
     return ignore_list
 

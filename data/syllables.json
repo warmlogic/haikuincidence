@@ -234,6 +234,11 @@
         "pronunciation": "boy",
         "syllables": 1
     },
+    "bored": {
+        "alt": [],
+        "pronunciation": "bored",
+        "syllables": 1
+    },
     "brb": {
         "alt": [],
         "pronunciation": "be right back",
@@ -386,6 +391,16 @@
         "alt": [],
         "pronunciation": "do you",
         "syllables": 2
+    },
+    "EAFP": {
+        "alt": [
+            {
+                "pronunciation": "Easier to ask for forgiveness than permission",
+                "syllables": 13
+            }
+        ],
+        "pronunciation": "E A F P",
+        "syllables": 4
     },
     "emotionally": {
         "alt": [],
@@ -715,6 +730,11 @@
         "pronunciation": "hours",
         "syllables": 2
     },
+    "h/t": {
+        "alt": [],
+        "pronunciation": "hat tip",
+        "syllables": 2
+    },
     "http": {
         "alt": [],
         "pronunciation": "H T T P",
@@ -909,6 +929,16 @@
         "alt": [],
         "pronunciation": "k thanks bye",
         "syllables": 3
+    },
+    "LBYL": {
+        "alt": [
+            {
+                "pronunciation": "LBYL",
+                "syllables": 4
+            }
+        ],
+        "pronunciation": "look before you leap",
+        "syllables": 5
     },
     "la": {
         "alt": [
@@ -1144,6 +1174,11 @@
         "pronunciation": "N F L",
         "syllables": 3
     },
+    "NGL": {
+        "alt": [],
+        "pronunciation": "not gonna lie",
+        "syllables": 4
+    },
     "NHL": {
         "alt": [],
         "pronunciation": "N H L",
@@ -1192,6 +1227,11 @@
     "ol": {
         "alt": [],
         "pronunciation": "old",
+        "syllables": 1
+    },
+    "om": {
+        "alt": [],
+        "pronunciation": "om",
         "syllables": 1
     },
     "omfg": {
@@ -1364,6 +1404,11 @@
         "pronunciation": "shaking my head",
         "syllables": 4
     },
+    "sos": {
+        "alt": [],
+        "pronunciation": "S O S",
+        "syllables": 3
+    },
     "Spongebob": {
         "alt": [],
         "pronunciation": "Sponge bob",
@@ -1418,6 +1463,11 @@
         "alt": [],
         "pronunciation": "the fuck",
         "syllables": 2
+    },
+    "tha": {
+        "alt": [],
+        "pronunciation": "the",
+        "syllables": 1
     },
     "tfw": {
         "alt": [],

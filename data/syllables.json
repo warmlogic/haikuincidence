@@ -372,6 +372,21 @@
         "pronunciation": "D M",
         "syllables": 2
     },
+    "dm'd": {
+        "alt": [],
+        "pronunciation": "D M'd",
+        "syllables": 2
+    },
+    "dmd": {
+        "alt": [],
+        "pronunciation": "D M'd",
+        "syllables": 2
+    },
+    "dmed": {
+        "alt": [],
+        "pronunciation": "D M'd",
+        "syllables": 2
+    },
     "doesnt": {
         "alt": [],
         "pronunciation": "doesn't",
@@ -735,6 +750,11 @@
         "pronunciation": "hat tip",
         "syllables": 2
     },
+    "ht": {
+        "alt": [],
+        "pronunciation": "hat tip",
+        "syllables": 2
+    },
     "http": {
         "alt": [],
         "pronunciation": "H T T P",
@@ -979,6 +999,11 @@
         "alt": [],
         "pronunciation": "L G B T Q",
         "syllables": 5
+    },
+    "livetweet": {
+        "alt": [],
+        "pronunciation": "livetweet",
+        "syllables": 2
     },
     "lmao": {
         "alt": [
@@ -1252,6 +1277,11 @@
     "omg": {
         "alt": [],
         "pronunciation": "oh my god",
+        "syllables": 3
+    },
+    "omp": {
+        "alt": [],
+        "pronunciation": "on my phone",
         "syllables": 3
     },
     "oof": {
@@ -1723,5 +1753,15 @@
         "alt": [],
         "pronunciation": "yolo",
         "syllables": 2
+    },
+    "yr": {
+        "alt": [],
+        "pronunciation": "your",
+        "syllables": 1
+    },
+    "yrs": {
+        "alt": [],
+        "pronunciation": "years",
+        "syllables": 1
     }
 }

@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=matt
 WorkingDirectory=/home/matt/github/warmlogic/haikuincidence/
-ExecStart=/home/matt/miniconda3/bin/python /home/matt/github/warmlogic/haikuincidence/main.py
+ExecStart=/home/matt/miniconda/bin/python /home/matt/github/warmlogic/haikuincidence/main.py
 Restart=on-abort
 
 [Install]

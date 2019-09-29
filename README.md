@@ -18,9 +18,11 @@ Hey, that's a haiku! ✌️
 
 1. Run the following command to install [Miniconda (Python 3)](https://conda.io/miniconda.html), create a conda environment, and install the required libraries:
 
-```bash
-./python_env_setup.sh
-```
+    ```bash
+    ./python_env_setup.sh
+    ```
+
+1. Log out and back in
 
 ### Additional setup
 
@@ -30,6 +32,7 @@ Hey, that's a haiku! ✌️
     1. Whether or not this file exists, by default this program ignores tweets with words read in the `get_ignore_list` function (in `data_utils.py`)
 1. Add additional pre-defined syllable counts to `data/syllables.json`
 1. `sudo cp haikuincidence.service /etc/systemd/system/haikuincidence.service`
+   1. Update the user name and repo path as necessary (e.g., the user will be `ubuntu` if using an AWS EC2 instance)
 1. `sudo systemctl daemon-reload`
 1. `sudo systemctl enable haikuincidence`
 1. `sudo systemctl start haikuincidence`

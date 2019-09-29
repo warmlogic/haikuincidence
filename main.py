@@ -106,7 +106,7 @@ class MyStreamer(TwythonStreamer):
                         # Get haikus from the last hour
                         haikus = db_get_haikus_unposted_timedelta(session, td_seconds=every_n_seconds)
                         # Prune old haikus
-                        db_delete_haikus_unposted_timedelta(td_days=delete_older_than_days)
+                        db_delete_haikus_unposted_timedelta(session, td_days=delete_older_than_days)
                     else:
                         # Use the current haiku
                         haikus = [tweet_haiku]

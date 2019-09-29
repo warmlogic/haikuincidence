@@ -14,7 +14,8 @@ from text_utils import date_string_to_datetime, check_tweet, clean_text, check_t
 from haiku_utils import get_haiku, get_best_haiku
 
 from data_base import session_factory
-from data_tweets_haiku import Haiku, db_add_haiku, db_get_haikus_unposted_timedelta, db_update_haiku_posted
+from data_tweets_haiku import Haiku, db_add_haiku, db_get_haikus_unposted_timedelta
+from data_tweets_haiku import db_update_haiku_posted, db_delete_haikus_unposted_timedelta
 
 # I'm a poet and I didn't even know it. Hey, that's a haiku!
 
@@ -33,6 +34,7 @@ if debug_run:
     follow_poet = False
     every_n_seconds = 1
     initial_time = datetime(1970, 1, 1)
+    delete_older_than_days = None
 else:
     logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
     post_haiku = config['haiku'].getboolean('post_haiku', False)
@@ -42,6 +44,8 @@ else:
     every_n_seconds = config['haiku'].getint('every_n_seconds', 3600)
     # Wait half the rate limit time before making first post
     initial_time = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=every_n_seconds // 2)
+    # Delete unposted haikus from database that are older than this many days
+    delete_older_than_days = config['haiku'].getint('delete_older_than_days', 180)
 
 
 class MyTwitterClient(Twython):
@@ -101,6 +105,8 @@ class MyStreamer(TwythonStreamer):
                     if not debug_run:
                         # Get haikus from the last hour
                         haikus = db_get_haikus_unposted_timedelta(session, td_seconds=every_n_seconds)
+                        # Prune old haikus
+                        db_delete_haikus_unposted_timedelta(td_days=delete_older_than_days)
                     else:
                         # Use the current haiku
                         haikus = [tweet_haiku]

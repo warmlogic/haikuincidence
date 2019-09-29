@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # to manually nuke the current miniconda install
-# rm -rf ~/miniconda3 ~/.condarc ~/.conda ~/.continuum ~/.jupyter ~/.ipython ~/.local/share/jupyter/ ~/Library/Jupyter
+# rm -rf ~/miniconda ~/.condarc ~/.conda ~/.continuum ~/.jupyter ~/.ipython ~/.local/share/jupyter/ ~/Library/Jupyter
 
 # make a Downloads folder
 {
@@ -10,7 +10,7 @@ if [ ! -d "$HOME/Downloads" ]; then
 fi
 }
 
-MC_DIR="miniconda3"
+MC_DIR="miniconda"
 MC_DL_FILE="Miniconda3-latest-Linux-x86_64.sh"
 MC_DL_PATH="$HOME/Downloads/$MC_DL_FILE"
 MC_DIR_PATH="$HOME/$MC_DIR"
@@ -33,9 +33,12 @@ fi
 # install
 bash $MC_DL_PATH -b -p $MC_DIR_PATH
 
-# conda update -q conda -y
-
-# conda upgrade --all -y
+# Remove Miniconda file
+{
+if [ -f "$MC_DL_PATH" ]; then
+    rm $MC_DL_PATH
+fi
+}
 
 # enable usage of conda command
 echo 'Enabling conda command'
@@ -56,17 +59,8 @@ conda activate
 
 # Install dependencies
 echo 'Installing dependencies...'
-# conda env update -f environment.yml
 
-pip install -U pip
-pip install -U ipython
-pip install -U ftfy
-pip install -U inflect
-pip install -U nltk
-pip install -U pytz
-pip install -U sqlalchemy psycopg2-binary
-pip install -U twython
-pip install -U unidecode
+pip install --trusted-host pypi.python.org --no-cache-dir -r requirements.txt
 
 # Install the CMU dictionary
 python -c "import nltk; nltk.download('cmudict')"

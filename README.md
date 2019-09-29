@@ -16,13 +16,11 @@ Hey, that's a haiku! ✌️
 
 ### Install required packages
 
-1. Install Miniconda (Python 3), create a conda environment, and install the requirements.
+1. Run the following command to install [Miniconda (Python 3)](https://conda.io/miniconda.html), create a conda environment, and install the required libraries:
 
-- https://conda.io/miniconda.html
-
-    ```bash
-    $ ./python_env_setup.sh
-    ```
+```bash
+./python_env_setup.sh
+```
 
 ### Additional setup
 

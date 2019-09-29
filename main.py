@@ -45,7 +45,7 @@ else:
     # Wait half the rate limit time before making first post
     initial_time = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=every_n_seconds // 2)
     # Delete unposted haikus from database that are older than this many days
-    delete_older_than_days = config['haiku'].getint('delete_older_than_days', 90)
+    delete_older_than_days = config['haiku'].getint('delete_older_than_days', 180)
 
 
 class MyTwitterClient(Twython):

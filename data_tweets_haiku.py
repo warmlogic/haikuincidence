@@ -164,7 +164,7 @@ def db_delete_haikus_unposted_timedelta(session, td_days: int = None) -> List:
         filter_td = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(days=td_days)
         try:
             delete_q = Haiku.__table__.delete().where(
-                Haiku.created_at > filter_td).where(
+                Haiku.created_at <= filter_td).where(
                     Haiku.date_posted == None)  # noqa: E711
 
             session.execute(delete_q)

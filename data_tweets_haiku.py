@@ -155,3 +155,20 @@ def db_update_haiku_undeleted(session, status_id_str):
     except Exception as e:
         logger.info(f'Exception when updating haiku as undeleted: {e}')
         session.rollback()
+
+
+def db_delete_haikus_unposted_timedelta(session, td_days: int = None) -> List:
+    '''Delete all unposted records older than N days
+    '''
+    if td_days:
+        filter_td = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(days=td_days)
+        try:
+            delete_q = Haiku.__table__.delete().where(
+                Haiku.created_at > filter_td).where(
+                    Haiku.date_posted == None)  # noqa: E711
+
+            session.execute(delete_q)
+            session.commit()
+        except Exception:
+            logger.exception(f'Exception when deleting unposted haikus older than {td_days} days')
+            session.rollback()

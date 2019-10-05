@@ -8,7 +8,7 @@ logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.
 logger = logging.getLogger(__name__)
 
 
-def get_track_str(filepath: Path=None) -> str:
+def get_track_str(filepath: Path = None) -> str:
     '''track tweets that contain any of these words
     '''
     filepath = filepath or Path('data') / 'track.txt'
@@ -20,7 +20,7 @@ def get_track_str(filepath: Path=None) -> str:
     return track_str
 
 
-def get_ignore_list(filepath: Path=None, use_external: bool=True) -> List:
+def get_ignore_list(filepath: Path = None, use_external: bool = True) -> List:
     '''ignore tweets that contain any of these words
     '''
     filepath = filepath or Path('data') / 'ignore.txt'
@@ -43,7 +43,7 @@ def get_ignore_list(filepath: Path=None, use_external: bool=True) -> List:
     return ignore_list
 
 
-def get_syllable_dict(filepath: Path=None) -> Dict:
+def get_syllable_dict(filepath: Path = None) -> Dict:
     '''specify syllables for certain acronyms or abbreviations
     '''
     filepath = filepath or Path('data') / 'syllables.json'
@@ -57,7 +57,7 @@ def get_syllable_dict(filepath: Path=None) -> Dict:
     return syllable_dict
 
 
-def get_emoticons_list(filepath: Path=None) -> List:
+def get_emoticons_list(filepath: Path = None) -> List:
     '''text emoticons do not contribute to the syllable count
     '''
     filepath = filepath or Path('data') / 'emoticons.txt'

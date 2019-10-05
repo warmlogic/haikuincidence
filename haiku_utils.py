@@ -16,7 +16,7 @@ punct_to_keep = ["'", ',', '.']
 contraction_ends = ['d', 'll', 'm', 're', 's', 't', 've']
 
 
-def clean_token(token):
+def clean_token(token: str) -> str:
     # remove space before some punctuation if preceded by a letter or number
     # ("hello ,how are you ? doing")
     token = re.sub(r'(\w)\s([.,;!?](?=\s|$)?)', r'\1\2', token)
@@ -66,12 +66,13 @@ def clean_token(token):
     return token_clean
 
 
-def count_syllables(token: str,
-                    inflect_p,
-                    pronounce_dict: Dict,
-                    syllable_dict: Dict,
-                    emoticons_list: List,
-                    ) -> int:
+def count_syllables(
+    token: str,
+    inflect_p,
+    pronounce_dict: Dict,
+    syllable_dict: Dict,
+    emoticons_list: List,
+) -> int:
     if token in emoticons_list:
         return 0
 
@@ -172,7 +173,7 @@ def count_syllables(token: str,
     return subsyllable_count
 
 
-def guess_syllables(word: str, verbose=False) -> (int, int):
+def guess_syllables(word: str, verbose: bool = False) -> (int, int):
     '''Guess the number of syllables in a string.
     Returns minimum and maximum guesses. Minimum is usually good enough.
 
@@ -247,12 +248,13 @@ def guess_syllables(word: str, verbose=False) -> (int, int):
     return minsyl, maxsyl
 
 
-def get_haiku(text: str,
-              inflect_p,
-              pronounce_dict: Dict,
-              syllable_dict: Dict,
-              emoticons_list: List,
-              ) -> str:
+def get_haiku(
+    text: str,
+    inflect_p,
+    pronounce_dict: Dict,
+    syllable_dict: Dict,
+    emoticons_list: List,
+) -> str:
     '''Attempt to turn a string into a haiku.
     Returns haiku if able, otherwise returns empty string.
 

@@ -36,7 +36,7 @@ def check_text_wrapper(text: str, ignore_list: List[str]) -> bool:
     ])
 
 
-def check_tweet(status, ignore_list):
+def check_tweet(status, ignore_list: List[str]) -> bool:
     '''Return True if tweet satisfies specific criteria
     '''
     return all([
@@ -58,7 +58,11 @@ def check_tweet(status, ignore_list):
     ])
 
 
-def date_string_to_datetime(date_string, fmt='%a %b %d %H:%M:%S +0000 %Y', tzinfo=pytz.UTC):
+def date_string_to_datetime(
+    date_string: str,
+    fmt: str = '%a %b %d %H:%M:%S +0000 %Y',
+    tzinfo=pytz.UTC,
+) -> datetime:
     return datetime.strptime(date_string, fmt).replace(tzinfo=tzinfo)
 
 

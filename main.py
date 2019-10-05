@@ -1,9 +1,11 @@
-import configparser
 from datetime import datetime, timedelta
 import logging
+import os
+from pathlib import Path
 from pprint import pformat
 import pytz
 
+from dotenv import load_dotenv
 import inflect
 from nltk.corpus import cmudict
 from twython import Twython, TwythonError
@@ -19,45 +21,65 @@ from data_tweets_haiku import db_update_haiku_posted, db_delete_haikus_unposted_
 
 # I'm a poet and I didn't even know it. Hey, that's a haiku!
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-
-logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
 logger = logging.getLogger(__name__)
 
-debug_run = config['haiku'].getboolean('debug_run', False)
+IS_PROD = os.getenv("IS_PROD", default=None)
 
-if debug_run:
+if IS_PROD is None:
+    env_path = Path.cwd() / ".env"
+    if env_path.exists():
+        load_dotenv(dotenv_path=env_path)
+    else:
+        raise OSError(f"{env_path} not found. Did you set it up?")
+
+    DEBUG_RUN = os.getenv("DEBUG_RUN", default="False")
+    if DEBUG_RUN not in ["True", "False"]:
+        raise ValueError(f"DEBUG_RUN must be True or False, current value: {DEBUG_RUN}")
+    DEBUG_RUN = DEBUG_RUN == "True"
+
+    if DEBUG_RUN:
+        POST_HAIKU = False
+        POST_AS_REPLY = False
+        FOLLOW_POET = False
+        EVERY_N_SECONDS = 1
+        DELETE_OLDER_THAN_DAYS = None
+    else:
+        POST_HAIKU = os.getenv("POST_HAIKU", default="False") == "True"
+        POST_AS_REPLY = os.getenv("POST_AS_REPLY", default="False") == "True"
+        FOLLOW_POET = os.getenv("FOLLOW_POET", default="False") == "True"
+        EVERY_N_SECONDS = int(os.getenv("EVERY_N_SECONDS", default="3600"))
+        DELETE_OLDER_THAN_DAYS = int(os.getenv("DELETE_OLDER_THAN_DAYS", default="180"))
+
+    APP_KEY = os.getenv("API_KEY", default="")
+    APP_SECRET = os.getenv("API_SECRET", default="")
+    OAUTH_TOKEN = os.getenv("ACCESS_TOKEN", default="")
+    OAUTH_TOKEN_SECRET = os.getenv("ACCESS_TOKEN_SECRET", default="")
+
+    MY_SCREEN_NAME = os.getenv("MY_SCREEN_NAME", default="twitter")
+
+    DB_USER = os.getenv("DB_USER", default="")
+    DB_PASSWORD = os.getenv("DB_PASSWORD", default="")
+    DB_SERVER = os.getenv("DB_SERVER", default="localhost")
+    DB_PORT = os.getenv("DB_PORT", default="5432")
+
+if DEBUG_RUN:
     logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.DEBUG, style='{')
-    post_haiku = False
-    post_as_reply = False
-    follow_poet = False
-    every_n_seconds = 1
-    initial_time = datetime(1970, 1, 1)
-    delete_older_than_days = None
+    INITIAL_TIME = datetime(1970, 1, 1)
 else:
     logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
-    post_haiku = config['haiku'].getboolean('post_haiku', False)
-    post_as_reply = config['haiku'].getboolean('post_as_reply', False)
-    follow_poet = config['haiku'].getboolean('follow_poet', False)
-    # Minimum amount of time between haiku posts
-    every_n_seconds = config['haiku'].getint('every_n_seconds', 3600)
     # Wait half the rate limit time before making first post
-    initial_time = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=every_n_seconds // 2)
-    # Delete unposted haikus from database that are older than this many days
-    delete_older_than_days = config['haiku'].getint('delete_older_than_days', 180)
+    INITIAL_TIME = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=EVERY_N_SECONDS // 2)
 
 
 class MyTwitterClient(Twython):
     '''Wrapper around the Twython Twitter client.
     Limits status update rate.
     '''
-    def __init__(self, every_n_seconds=3600, initial_time=None, *args, **kwargs):
+    def __init__(self, initial_time=None, *args, **kwargs):
         super(MyTwitterClient, self).__init__(*args, **kwargs)
         if initial_time is None:
             # Wait half the rate limit time before making first post
-            initial_time = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=every_n_seconds // 2)
-        self.every_n_seconds = every_n_seconds
+            initial_time = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=EVERY_N_SECONDS // 2)
         self.last_post_time = initial_time
 
     def update_status_check_rate(self, *args, **kwargs):
@@ -65,7 +87,7 @@ class MyTwitterClient(Twython):
         logger.info(f'Current time: {current_time}')
         logger.info(f'Previous post time: {self.last_post_time}')
         logger.info(f'Difference: {current_time - self.last_post_time}')
-        if (current_time - self.last_post_time).total_seconds() > self.every_n_seconds:
+        if (current_time - self.last_post_time).total_seconds() > EVERY_N_SECONDS:
             self.update_status(*args, **kwargs)
             self.last_post_time = current_time
             logger.info('Success')
@@ -96,17 +118,17 @@ class MyStreamer(TwythonStreamer):
                         None,
                         None,
                     )
-                    if not debug_run:
+                    if not DEBUG_RUN:
                         # Add it to the database
                         db_add_haiku(session, tweet_haiku)
                     logger.info('=' * 50)
                     logger.info(f"Found new haiku:\n{tweet_haiku.haiku}")
 
-                    if not debug_run:
+                    if not DEBUG_RUN:
                         # Get haikus from the last hour
-                        haikus = db_get_haikus_unposted_timedelta(session, td_seconds=every_n_seconds)
+                        haikus = db_get_haikus_unposted_timedelta(session, td_seconds=EVERY_N_SECONDS)
                         # Prune old haikus
-                        db_delete_haikus_unposted_timedelta(session, td_days=delete_older_than_days)
+                        db_delete_haikus_unposted_timedelta(session, td_days=DELETE_OLDER_THAN_DAYS)
                     else:
                         # Use the current haiku
                         haikus = [tweet_haiku]
@@ -134,8 +156,8 @@ class MyStreamer(TwythonStreamer):
                             logger.info(f"Haiku to post:\n{haiku_attributed}")
 
                             # Try to post haiku (client checks rate limit time internally)
-                            if post_haiku:
-                                if post_as_reply:
+                            if POST_HAIKU:
+                                if POST_AS_REPLY:
                                     logger.info('Attempting to post haiku as reply...')
                                     # Post a tweet, sending as a reply to the coincidental haiku
                                     posted_status = twitter.update_status_check_rate(
@@ -156,7 +178,7 @@ class MyStreamer(TwythonStreamer):
                                     db_update_haiku_posted(session, haiku_to_post['status_id_str'])
 
                                     # follow the user
-                                    if follow_poet:
+                                    if FOLLOW_POET:
                                         try:
                                             followed = twitter.create_friendship(
                                                 screen_name=haiku_to_post['user_screen_name'], follow='false')
@@ -191,31 +213,29 @@ pronounce_dict = cmudict.dict()
 
 # Establish connection to Twitter
 twitter = MyTwitterClient(
-    every_n_seconds=every_n_seconds,
-    initial_time=initial_time,
-    app_key=config['twitter'].get('api_key', ''),
-    app_secret=config['twitter'].get('api_secret', ''),
-    oauth_token=config['twitter'].get('access_token', ''),
-    oauth_token_secret=config['twitter'].get('access_token_secret', ''),
+    initial_time=INITIAL_TIME,
+    app_key=APP_KEY,
+    app_secret=APP_SECRET,
+    oauth_token=OAUTH_TOKEN,
+    oauth_token_secret=OAUTH_TOKEN_SECRET,
 )
 
 # if this screen_name has a recent tweet, use that timestamp as the time of the last post
-my_screen_name = config['haiku'].get('my_screen_name', 'twitter')
-most_recent_tweet = twitter.get_user_timeline(screen_name=my_screen_name, count=1, trim_user=True)
+most_recent_tweet = twitter.get_user_timeline(screen_name=MY_SCREEN_NAME, count=1, trim_user=True)
 if len(most_recent_tweet) > 0:
     twitter.last_post_time = date_string_to_datetime(most_recent_tweet[0]['created_at'])
 
 # Establish connection to database
-session = session_factory()
+session = session_factory(DB_USER, DB_PASSWORD, DB_SERVER, DB_PORT)
 
 
 if __name__ == '__main__':
     logger.info('Initializing tweet streamer...')
     stream = MyStreamer(
-        app_key=config['twitter']['api_key'],
-        app_secret=config['twitter']['api_secret'],
-        oauth_token=config['twitter']['access_token'],
-        oauth_token_secret=config['twitter']['access_token_secret'],
+        app_key=APP_KEY,
+        app_secret=APP_SECRET,
+        oauth_token=OAUTH_TOKEN,
+        oauth_token_secret=OAUTH_TOKEN_SECRET,
     )
 
     logger.info('Looking for haikus...')

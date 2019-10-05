@@ -60,8 +60,8 @@ def db_add_haiku(session, tweet_haiku):
     try:
         session.add(tweet_haiku)
         session.commit()
-    except Exception as e:
-        logger.info(f'Exception when adding haiku: {e}')
+    except Exception:
+        logger.exception('Exception when adding haiku')
         session.rollback()
 
 
@@ -108,8 +108,8 @@ def db_update_haiku_posted(session, status_id_str: str):
             Haiku.status_id_str == status_id_str).update(
                 {'date_posted': datetime.now().replace(tzinfo=pytz.UTC)})
         session.commit()
-    except Exception as e:
-        logger.info(f'Exception when updating haiku as posted: {e}')
+    except Exception:
+        logger.exception('Exception when updating haiku as posted')
         session.rollback()
 
 
@@ -121,8 +121,8 @@ def db_update_haiku_unposted(session, status_id_str: str):
             Haiku.status_id_str == status_id_str).update(
                 {'date_posted': None})
         session.commit()
-    except Exception as e:
-        logger.info(f'Exception when updating haiku as unposted: {e}')
+    except Exception:
+        logger.exception('Exception when updating haiku as unposted')
         session.rollback()
 
 
@@ -134,8 +134,8 @@ def db_update_haiku_deleted(session, status_id_str: str):
             Haiku.status_id_str == status_id_str).update(
                 {'date_deleted': datetime.now().replace(tzinfo=pytz.UTC)})
         session.commit()
-    except Exception as e:
-        logger.info(f'Exception when updating haiku as deleted: {e}')
+    except Exception:
+        logger.exception('Exception when updating haiku as deleted')
         session.rollback()
 
 
@@ -147,8 +147,8 @@ def db_update_haiku_undeleted(session, status_id_str: str):
             Haiku.status_id_str == status_id_str).update(
                 {'date_deleted': None})
         session.commit()
-    except Exception as e:
-        logger.info(f'Exception when updating haiku as undeleted: {e}')
+    except Exception:
+        logger.exception('Exception when updating haiku as undeleted')
         session.rollback()
 
 

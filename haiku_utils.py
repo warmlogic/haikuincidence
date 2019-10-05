@@ -338,8 +338,8 @@ def get_best_haiku(haikus, twitter, session) -> Dict:
         logger.debug(f'Haiku: {h.haiku}')
         try:
             this_status = twitter.show_status(id=h.status_id_str)
-        except Exception as e:
-            logger.info(f'Exception when checking statuses (1): {e}')
+        except Exception:
+            logger.exception('Exception when checking statuses (1)')
             logger.info(f'{h.user_screen_name}/status/{h.status_id_str}')
             # Tweet no longer exists
             this_status = {}
@@ -363,8 +363,8 @@ def get_best_haiku(haikus, twitter, session) -> Dict:
         for h in haikus[::-1]:
             try:
                 this_status = twitter.show_status(id=h.status_id_str)
-            except Exception as e:
-                logger.info(f'Exception when getting best status (2): {e}')
+            except Exception:
+                logger.exception(f'Exception when getting best status (2)')
                 logger.info(f'{h.user_screen_name}/status/{h.status_id_str}')
                 # Tweet no longer exists, not going to post a haiku this time
                 this_status = {}

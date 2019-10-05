@@ -249,6 +249,6 @@ if __name__ == '__main__':
             else:
                 # get samples from stream
                 stream.statuses.sample()
-        except Exception as e:
-            logger.warning(f'Exception when streaming tweets: {e}')
+        except Exception:
+            logger.exception('Exception when streaming tweets')
             continue

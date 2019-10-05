@@ -55,12 +55,9 @@ if IS_PROD is None:
     OAUTH_TOKEN = os.getenv("ACCESS_TOKEN", default="")
     OAUTH_TOKEN_SECRET = os.getenv("ACCESS_TOKEN_SECRET", default="")
 
-    MY_SCREEN_NAME = os.getenv("MY_SCREEN_NAME", default="twitter")
+    DATABASE_URL = os.getenv("DATABASE_URL", default="")
 
-    DB_USER = os.getenv("DB_USER", default="")
-    DB_PASSWORD = os.getenv("DB_PASSWORD", default="")
-    DB_SERVER = os.getenv("DB_SERVER", default="localhost")
-    DB_PORT = os.getenv("DB_PORT", default="5432")
+    MY_SCREEN_NAME = os.getenv("MY_SCREEN_NAME", default="twitter")
 
 if DEBUG_RUN:
     logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.DEBUG, style='{')
@@ -226,7 +223,7 @@ if len(most_recent_tweet) > 0:
     twitter.last_post_time = date_string_to_datetime(most_recent_tweet[0]['created_at'])
 
 # Establish connection to database
-session = session_factory(DB_USER, DB_PASSWORD, DB_SERVER, DB_PORT)
+session = session_factory(DATABASE_URL)
 
 
 if __name__ == '__main__':

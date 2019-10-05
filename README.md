@@ -12,7 +12,7 @@ Hey, that's a haiku! ✌️
 
 ### Account configuration variables
 
-1. Copy the `config_template.ini` file to `config.ini`, and edit it to include your credentials.
+1. Copy the (hidden) `.env_template.ini` file to `.env`, and edit it to include your credentials.
 
 ### Install required packages
 
@@ -39,8 +39,8 @@ Hey, that's a haiku! ✌️
 
 ### Logs
 
-- To read systemd's logs (includes log messages from Python): `sudo journalctl -u haikuincidence`
-- To follow systemd's logs (includes log messages from Python): `sudo journalctl -f -u haikuincidence`
+- To read `systemd`'s logs (includes log messages from Python): `sudo journalctl -u haikuincidence`
+- To follow `systemd`'s logs (includes log messages from Python): `sudo journalctl -f -u haikuincidence`
 
 ## Attribution
 

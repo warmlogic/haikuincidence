@@ -1,4 +1,3 @@
-import configparser
 from datetime import datetime, timedelta
 import logging
 import pytz
@@ -7,13 +6,8 @@ from typing import List
 from sqlalchemy import Column, String, Integer, Boolean, DateTime
 from data_base import Base
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-
 logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
 logger = logging.getLogger(__name__)
-
-EVERY_N_SECONDS = config['haiku'].getint('EVERY_N_SECONDS', 3600)
 
 
 class Haiku(Base):
@@ -92,11 +86,11 @@ def db_get_haikus_unposted(session) -> List:
     return haiku_query.all()
 
 
-def db_get_haikus_unposted_timedelta(session, td_seconds=None) -> List:
+def db_get_haikus_unposted_timedelta(session, td_seconds: int = None) -> List:
     '''Get all unposted records from the last N seconds
     '''
     if td_seconds is None:
-        td_seconds = EVERY_N_SECONDS
+        td_seconds = 3600
     filter_td = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=td_seconds)
     haiku_query = session.query(Haiku).filter(
         Haiku.created_at > filter_td).filter(
@@ -104,7 +98,7 @@ def db_get_haikus_unposted_timedelta(session, td_seconds=None) -> List:
     return haiku_query.all()
 
 
-def db_update_haiku_posted(session, status_id_str):
+def db_update_haiku_posted(session, status_id_str: str):
     '''Mark haiku as posted
     '''
     try:
@@ -117,7 +111,7 @@ def db_update_haiku_posted(session, status_id_str):
         session.rollback()
 
 
-def db_update_haiku_unposted(session, status_id_str):
+def db_update_haiku_unposted(session, status_id_str: str):
     '''Mark haiku as unposted
     '''
     try:
@@ -130,7 +124,7 @@ def db_update_haiku_unposted(session, status_id_str):
         session.rollback()
 
 
-def db_update_haiku_deleted(session, status_id_str):
+def db_update_haiku_deleted(session, status_id_str: str):
     '''Mark haiku as deleted
     '''
     try:
@@ -143,7 +137,7 @@ def db_update_haiku_deleted(session, status_id_str):
         session.rollback()
 
 
-def db_update_haiku_undeleted(session, status_id_str):
+def db_update_haiku_undeleted(session, status_id_str: str):
     '''Mark haiku as undeleted
     '''
     try:

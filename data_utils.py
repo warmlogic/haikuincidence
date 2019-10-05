@@ -1,15 +1,10 @@
-import configparser
 import json
 from pathlib import Path
 import requests
 from typing import List, Dict
 import logging
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-
-logger_name = config['haiku'].get('logger_name', 'default_logger')
-logger = logging.getLogger(logger_name)
+logger = logging.getLogger(__name__)
 
 
 def get_track_str(filepath: Path=None) -> str:

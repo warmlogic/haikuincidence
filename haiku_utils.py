@@ -1,4 +1,3 @@
-import configparser
 import logging
 import re
 # import random
@@ -7,12 +6,7 @@ from typing import List, Dict
 from text_utils import remove_repeat_last_letter, text_might_contain_acronym
 from data_tweets_haiku import db_update_haiku_deleted
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-
-logger_name = config['haiku'].get('logger_name', 'default_logger')
-
-logger = logging.getLogger(logger_name)
+logger = logging.getLogger(__name__)
 
 # keep letters and apostrophes for contractions, and commas and periods for numbers
 punct_to_keep = ["'", ',', '.']

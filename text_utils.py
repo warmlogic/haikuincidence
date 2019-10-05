@@ -1,4 +1,3 @@
-import configparser
 from datetime import datetime
 import logging
 import pytz
@@ -8,11 +7,7 @@ from typing import List
 from unidecode import unidecode
 from ftfy import fix_text
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-
-logger_name = config['haiku'].get('logger_name', 'default_logger')
-logger = logging.getLogger(logger_name)
+logger = logging.getLogger(__name__)
 
 # Regex to look for All URLs https://gist.github.com/gruber/249502
 url_all_re = re.compile(r'(?i)\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))')

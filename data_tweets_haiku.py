@@ -10,11 +10,9 @@ from data_base import Base
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-logger_name = config['haiku'].get('logger_name', 'default_logger')
+logger = logging.getLogger(__name__)
 
-logger = logging.getLogger(logger_name)
-
-every_n_seconds = config['haiku'].getint('every_n_seconds', 3600)
+EVERY_N_SECONDS = config['haiku'].getint('EVERY_N_SECONDS', 3600)
 
 
 class Haiku(Base):
@@ -97,7 +95,7 @@ def db_get_haikus_unposted_timedelta(session, td_seconds=None) -> List:
     '''Get all unposted records from the last N seconds
     '''
     if td_seconds is None:
-        td_seconds = every_n_seconds
+        td_seconds = EVERY_N_SECONDS
     filter_td = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=td_seconds)
     haiku_query = session.query(Haiku).filter(
         Haiku.created_at > filter_td).filter(

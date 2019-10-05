@@ -8,14 +8,14 @@ from sqlalchemy.orm import sessionmaker
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-db_user = config['database'].get('DB_USER', '')
-db_password = config['database'].get('DB_PASSWORD', '')
-db_server = config['database'].get('DB_SERVER', 'localhost')
-db_port = config['database'].get('DB_PORT', '5432')
+DB_USER = config['database'].get('DB_USER', '')
+DB_PASSWORD = config['database'].get('DB_PASSWORD', '')
+DB_SERVER = config['database'].get('DB_SERVER', 'localhost')
+DB_PORT = config['database'].get('DB_PORT', '5432')
 
-db_url = f"postgresql://{db_user}:{db_password}@{db_server}:{db_port}/{db_user}"
+DB_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_SERVER}:{DB_PORT}/{DB_USER}"
 
-engine = create_engine(db_url, poolclass=NullPool)
+engine = create_engine(DB_URL, poolclass=NullPool)
 _SessionFactory = sessionmaker(bind=engine)
 
 Base = declarative_base()

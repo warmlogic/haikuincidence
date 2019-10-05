@@ -4,6 +4,7 @@ import requests
 from typing import List, Dict
 import logging
 
+logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
 logger = logging.getLogger(__name__)
 
 

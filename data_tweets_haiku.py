@@ -10,6 +10,7 @@ from data_base import Base
 config = configparser.ConfigParser()
 config.read('config.ini')
 
+logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
 logger = logging.getLogger(__name__)
 
 EVERY_N_SECONDS = config['haiku'].getint('EVERY_N_SECONDS', 3600)

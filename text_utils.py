@@ -7,6 +7,7 @@ from typing import List
 from unidecode import unidecode
 from ftfy import fix_text
 
+logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
 logger = logging.getLogger(__name__)
 
 # Regex to look for All URLs https://gist.github.com/gruber/249502

@@ -22,6 +22,7 @@ from data_tweets_haiku import db_update_haiku_posted, db_delete_haikus_unposted_
 config = configparser.ConfigParser()
 config.read('config.ini')
 
+logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
 logger = logging.getLogger(__name__)
 
 debug_run = config['haiku'].getboolean('debug_run', False)

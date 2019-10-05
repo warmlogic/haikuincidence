@@ -32,40 +32,35 @@ if IS_PROD is None:
     else:
         raise OSError(f"{env_path} not found. Did you set it up?")
 
-    DEBUG_RUN = os.getenv("DEBUG_RUN", default="False")
-    if DEBUG_RUN not in ["True", "False"]:
-        raise ValueError(f"DEBUG_RUN must be True or False, current value: {DEBUG_RUN}")
-    DEBUG_RUN = DEBUG_RUN == "True"
-
-    if DEBUG_RUN:
-        POST_HAIKU = False
-        POST_AS_REPLY = False
-        FOLLOW_POET = False
-        EVERY_N_SECONDS = 1
-        DELETE_OLDER_THAN_DAYS = None
-    else:
-        POST_HAIKU = os.getenv("POST_HAIKU", default="False") == "True"
-        POST_AS_REPLY = os.getenv("POST_AS_REPLY", default="False") == "True"
-        FOLLOW_POET = os.getenv("FOLLOW_POET", default="False") == "True"
-        EVERY_N_SECONDS = int(os.getenv("EVERY_N_SECONDS", default="3600"))
-        DELETE_OLDER_THAN_DAYS = int(os.getenv("DELETE_OLDER_THAN_DAYS", default="180"))
-
-    APP_KEY = os.getenv("API_KEY", default="")
-    APP_SECRET = os.getenv("API_SECRET", default="")
-    OAUTH_TOKEN = os.getenv("ACCESS_TOKEN", default="")
-    OAUTH_TOKEN_SECRET = os.getenv("ACCESS_TOKEN_SECRET", default="")
-
-    DATABASE_URL = os.getenv("DATABASE_URL", default="")
-
-    MY_SCREEN_NAME = os.getenv("MY_SCREEN_NAME", default="twitter")
+DEBUG_RUN = os.getenv("DEBUG_RUN", default="False")
+if DEBUG_RUN not in ["True", "False"]:
+    raise ValueError(f"DEBUG_RUN must be True or False, current value: {DEBUG_RUN}")
+DEBUG_RUN = DEBUG_RUN == "True"
 
 if DEBUG_RUN:
     logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.DEBUG, style='{')
+    POST_HAIKU = False
+    POST_AS_REPLY = False
+    FOLLOW_POET = False
+    EVERY_N_SECONDS = 1
+    DELETE_OLDER_THAN_DAYS = None
     INITIAL_TIME = datetime(1970, 1, 1)
 else:
     logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
+    POST_HAIKU = os.getenv("POST_HAIKU", default="False") == "True"
+    POST_AS_REPLY = os.getenv("POST_AS_REPLY", default="False") == "True"
+    FOLLOW_POET = os.getenv("FOLLOW_POET", default="False") == "True"
+    EVERY_N_SECONDS = int(os.getenv("EVERY_N_SECONDS", default="3600"))
+    DELETE_OLDER_THAN_DAYS = int(os.getenv("DELETE_OLDER_THAN_DAYS", default="180"))
     # Wait half the rate limit time before making first post
     INITIAL_TIME = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=EVERY_N_SECONDS // 2)
+
+APP_KEY = os.getenv("API_KEY", default="")
+APP_SECRET = os.getenv("API_SECRET", default="")
+OAUTH_TOKEN = os.getenv("ACCESS_TOKEN", default="")
+OAUTH_TOKEN_SECRET = os.getenv("ACCESS_TOKEN_SECRET", default="")
+DATABASE_URL = os.getenv("DATABASE_URL", default="")
+MY_SCREEN_NAME = os.getenv("MY_SCREEN_NAME", default="twitter")
 
 
 class MyTwitterClient(Twython):

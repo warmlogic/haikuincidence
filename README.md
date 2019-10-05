@@ -31,11 +31,23 @@ Hey, that's a haiku! ✌️
 1. Add phrases to `data/ignore.txt` to ignore tweets that contain tokens from any of these strings, one string per line. Uses `AND` and `OR` logic like the track list, but tokens for `AND` (a single line) can match anywhere. Matches substrings (e.g., `dogs` in `ignore.txt` will match `dogs` in a tweet's text).
     1. Whether or not this file exists, by default this program ignores tweets with words read in the `get_ignore_list` function (in `data_utils.py`)
 1. Add additional pre-defined syllable counts to `data/syllables.json`
+
+#### Run as a systemd service
+
 1. `sudo cp haikuincidence.service /etc/systemd/system/haikuincidence.service`
    1. Update the user name and repo path as necessary (e.g., the user will be `ubuntu` if using an AWS EC2 instance)
 1. `sudo systemctl daemon-reload`
 1. `sudo systemctl enable haikuincidence`
 1. `sudo systemctl start haikuincidence`
+1. To stop completely:
+   1. `sudo systemctl stop haikuincidence`
+   1. `sudo systemctl disable haikuincidence`
+   1. `sudo systemctl daemon-reload`
+
+#### Run on Heroku
+
+1. Follow the [instructions for creating a Heroku app](https://devcenter.heroku.com/articles/getting-started-with-python)
+1. Be sure to create add-ons for [Papertrail](https://elements.heroku.com/addons/papertrail) and [Postgres](https://elements.heroku.com/addons/heroku-postgresql)
 
 ### Logs
 

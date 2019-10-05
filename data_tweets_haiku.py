@@ -4,10 +4,12 @@ import pytz
 from typing import List
 
 from sqlalchemy import Column, String, Integer, Boolean, DateTime
-from data_base import Base
+from sqlalchemy.ext.declarative import declarative_base
 
 logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
 logger = logging.getLogger(__name__)
+
+Base = declarative_base()
 
 
 class Haiku(Base):

@@ -36,14 +36,14 @@ twitter = Twython(
 # get the screen names I have replied to
 # can only make 1500 requests in a 15-minute window (100 per minute)
 # https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline
-sleep_seconds = 0.7
+sleep_seconds = 1
 poets_list = []
-mytweets = twitter.get_user_timeline(screen_name=MY_SCREEN_NAME, count=200)
+mytweets = twitter.get_user_timeline(screen_name=MY_SCREEN_NAME, count=200, exclude_replies='false', include_rts='true')
 poets_list.extend([tweet['in_reply_to_screen_name'] for tweet in mytweets])
 max_id = mytweets[-1]['id_str']
 while True:
     logging.info(f'Tweet max id: {max_id}')
-    mytweets = twitter.get_user_timeline(screen_name=MY_SCREEN_NAME, count=200, max_id=max_id)
+    mytweets = twitter.get_user_timeline(screen_name=MY_SCREEN_NAME, count=200, exclude_replies='false', include_rts='true', max_id=max_id)
     max_id_next = mytweets[-1]['id_str']
     if max_id_next == max_id:
         break
@@ -91,11 +91,11 @@ while True:
     sleep(sleep_seconds)
 
 
-# unfollow accounts who no longer follow me
+# unfollow poets who no longer follow me
 # https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/post-friendships-destroy
 unfollowed_list = []
 sleep_seconds = 0.1
-to_unfollow_list = [sn for sn in i_follow_list if sn and (sn not in follow_me_list) and (sn not in unfollowed_list)]
+to_unfollow_list = [sn for sn in i_follow_list if sn and (sn in poets_list) and (sn not in follow_me_list) and (sn not in unfollowed_list)]
 for sn in to_unfollow_list:
     if sn:
         try:

@@ -51,7 +51,7 @@ else:
     POST_AS_REPLY = os.getenv("POST_AS_REPLY", default="False") == "True"
     FOLLOW_POET = os.getenv("FOLLOW_POET", default="False") == "True"
     EVERY_N_SECONDS = int(os.getenv("EVERY_N_SECONDS", default="3600"))
-    DELETE_OLDER_THAN_DAYS = int(os.getenv("DELETE_OLDER_THAN_DAYS", default="180"))
+    DELETE_OLDER_THAN_DAYS = int(os.getenv("DELETE_OLDER_THAN_DAYS", default="45"))
     # Wait half the rate limit time before making first post
     INITIAL_TIME = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=EVERY_N_SECONDS // 2)
 

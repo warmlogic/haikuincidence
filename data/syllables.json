@@ -1534,6 +1534,16 @@
         "pronunciation": "thanks",
         "syllables": 1
     },
+    "tik": {
+        "alt": [],
+        "pronunciation": "tick",
+        "syllables": 1
+    },
+    "tiktok": {
+        "alt": [],
+        "pronunciation": "tick tock",
+        "syllables": 2
+    },
     "tl": {
         "alt": [],
         "pronunciation": "timeline",
@@ -1562,6 +1572,11 @@
     "tnx": {
         "alt": [],
         "pronunciation": "thanks",
+        "syllables": 1
+    },
+    "tok": {
+        "alt": [],
+        "pronunciation": "tock",
         "syllables": 1
     },
     "tryna": {
@@ -1743,6 +1758,11 @@
         "alt": [],
         "pronunciation": "X X X",
         "syllables": 3
+    },
+    "ymca": {
+        "alt": [],
+        "pronunciation": "Y M C A",
+        "syllables": 4
     },
     "ymmv": {
         "alt": [],

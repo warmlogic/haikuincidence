@@ -17,7 +17,7 @@ from haiku_utils import get_haiku, get_best_haiku
 
 from data_base import session_factory
 from data_tweets_haiku import Haiku, db_add_haiku, db_get_haikus_unposted_timedelta
-from data_tweets_haiku import db_update_haiku_posted, db_delete_haikus_unposted_timedelta
+from data_tweets_haiku import db_update_haiku_posted, db_delete_haikus_unposted_timedelta, db_delete_haikus_posted_timedelta
 
 # I'm a poet and I didn't even know it. Hey, that's a haiku!
 
@@ -121,6 +121,7 @@ class MyStreamer(TwythonStreamer):
                         haikus = db_get_haikus_unposted_timedelta(session, td_seconds=EVERY_N_SECONDS)
                         # Prune old haikus
                         db_delete_haikus_unposted_timedelta(session, td_days=DELETE_OLDER_THAN_DAYS)
+                        db_delete_haikus_posted_timedelta(session, td_days=DELETE_OLDER_THAN_DAYS)
                     else:
                         # Use the current haiku
                         haikus = [tweet_haiku]

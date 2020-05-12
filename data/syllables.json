@@ -855,6 +855,11 @@
         "pronunciation": "isn't",
         "syllables": 2
     },
+    "istg": {
+        "alt": [],
+        "pronunciation": "I swear to god",
+        "syllables": 4
+    },
     "iTunes": {
         "alt": [],
         "pronunciation": "iTunes",
@@ -1002,7 +1007,7 @@
     },
     "livetweet": {
         "alt": [],
-        "pronunciation": "livetweet",
+        "pronunciation": "live tweet",
         "syllables": 2
     },
     "lmao": {
@@ -1219,6 +1224,11 @@
         "pronunciation": "N S A",
         "syllables": 3
     },
+    "nsfl": {
+        "alt": [],
+        "pronunciation": "not safe for life",
+        "syllables": 4
+    },
     "nsfw": {
         "alt": [],
         "pronunciation": "not safe for work",
@@ -1331,7 +1341,7 @@
     },
     "presidente": {
         "alt": [],
-        "pronunciation": "presidente",
+        "pronunciation": "president ay",
         "syllables": 4
     },
     "psa": {
@@ -1345,7 +1355,12 @@
         "syllables": 3
     },
     "pyt": {
-        "alt": [],
+        "alt": [
+            {
+                "pronunciation": "pretty young thing",
+                "syllables": 4
+            }
+        ],
         "pronunciation": "P Y T",
         "syllables": 3
     },
@@ -1492,6 +1507,11 @@
     "tbh": {
         "alt": [],
         "pronunciation": "to be honest",
+        "syllables": 4
+    },
+    "tbt": {
+        "alt": [],
+        "pronunciation": "throwback thursday",
         "syllables": 4
     },
     "tf": {
@@ -1664,6 +1684,11 @@
         "pronunciation": "what",
         "syllables": 1
     },
+    "w/e": {
+        "alt": [],
+        "pronunciation": "whatever",
+        "syllables": 3
+    },
     "weeknd": {
         "alt": [],
         "pronunciation": "weekend",
@@ -1713,6 +1738,11 @@
         ],
         "pronunciation": "what the fuck",
         "syllables": 3
+    },
+    "wuh": {
+        "alt": [],
+        "pronunciation": "wuh",
+        "syllables": 1
     },
     "wut": {
         "alt": [],

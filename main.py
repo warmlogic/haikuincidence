@@ -21,7 +21,8 @@ from data_tweets_haiku import db_update_haiku_posted, db_delete_haikus_unposted_
 
 # I'm a poet and I didn't even know it. Hey, that's a haiku!
 
-logger = logging.getLogger(__name__)
+logging.basicConfig(format='{asctime} : {levelname} : {message}', style='{')
+logger = logging.getLogger("haikulogger")
 
 IS_PROD = os.getenv("IS_PROD", default=None)
 
@@ -38,7 +39,7 @@ if DEBUG_RUN not in ["True", "False"]:
 DEBUG_RUN = DEBUG_RUN == "True"
 
 if DEBUG_RUN:
-    logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.DEBUG, style='{')
+    logger.setLevel(logging.DEBUG)
     POST_HAIKU = False
     POST_AS_REPLY = False
     FOLLOW_POET = False
@@ -46,7 +47,7 @@ if DEBUG_RUN:
     DELETE_OLDER_THAN_DAYS = None
     INITIAL_TIME = datetime(1970, 1, 1)
 else:
-    logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
+    logger.setLevel(logging.INFO)
     POST_HAIKU = os.getenv("POST_HAIKU", default="False") == "True"
     POST_AS_REPLY = os.getenv("POST_AS_REPLY", default="False") == "True"
     FOLLOW_POET = os.getenv("FOLLOW_POET", default="False") == "True"

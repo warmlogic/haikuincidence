@@ -6,8 +6,7 @@ from typing import List
 from sqlalchemy import Column, String, Integer, Boolean, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 
-logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("haikulogger")
 
 Base = declarative_base()
 

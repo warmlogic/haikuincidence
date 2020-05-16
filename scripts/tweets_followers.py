@@ -6,8 +6,9 @@ from time import sleep
 from dotenv import load_dotenv
 from twython import Twython, TwythonError
 
-logger = logging.getLogger(__name__)
-logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
+logging.basicConfig(format='{asctime} : {levelname} : {message}', style='{')
+logger = logging.getLogger("tweet_followers")
+logger.setLevel(logging.DEBUG)
 
 IS_PROD = os.getenv("IS_PROD", default=None)
 
@@ -42,7 +43,7 @@ mytweets = twitter.get_user_timeline(screen_name=MY_SCREEN_NAME, count=200, excl
 poets_list.extend([tweet['in_reply_to_screen_name'] for tweet in mytweets])
 max_id = mytweets[-1]['id_str']
 while True:
-    logging.info(f'Tweet max id: {max_id}')
+    logger.info(f'Tweet max id: {max_id}')
     mytweets = twitter.get_user_timeline(screen_name=MY_SCREEN_NAME, count=200, exclude_replies='false', include_rts='true', max_id=max_id)
     max_id_next = mytweets[-1]['id_str']
     if max_id_next == max_id:
@@ -50,7 +51,7 @@ while True:
     else:
         max_id = max_id_next
     poets_list.extend([tweet['in_reply_to_screen_name'] for tweet in mytweets])
-    logging.info(f'Sleeping for {sleep_seconds} seconds')
+    logger.info(f'Sleeping for {sleep_seconds} seconds')
     sleep(sleep_seconds)
 
 poets_list = list(set([sn for sn in poets_list if sn]))
@@ -62,7 +63,7 @@ sleep_seconds = 65
 cursor_if = -1
 i_follow_list = []
 while True:
-    logging.info(f'I follow cursor: {cursor_if}')
+    logger.info(f'I follow cursor: {cursor_if}')
     ifollow = twitter.get_friends_list(screen_name=MY_SCREEN_NAME, count=200, skip_status='true', cursor=cursor_if)
     if len(ifollow['users']) == 0:
         break
@@ -70,7 +71,7 @@ while True:
     i_follow_list.extend([user['screen_name'] for user in ifollow['users']])
     # # find the screen names with notifications turned on
     # i_follow_list.extend([user['screen_name'] for user in ifollow['users'] if user['notifications']])
-    logging.info(f'Sleeping for {sleep_seconds} seconds')
+    logger.info(f'Sleeping for {sleep_seconds} seconds')
     sleep(sleep_seconds)
 
 
@@ -81,13 +82,13 @@ sleep_seconds = 65
 cursor_fm = -1
 follow_me_list = []
 while True:
-    logging.info(f'Follow me cursor: {cursor_fm}')
+    logger.info(f'Follow me cursor: {cursor_fm}')
     followme = twitter.get_followers_list(screen_name=MY_SCREEN_NAME, count=200, skip_status='true', cursor=cursor_fm)
     if len(followme['users']) == 0:
         break
     cursor_fm = followme['next_cursor']
     follow_me_list.extend([user['screen_name'] for user in followme['users']])
-    logging.info(f'Sleeping for {sleep_seconds} seconds')
+    logger.info(f'Sleeping for {sleep_seconds} seconds')
     sleep(sleep_seconds)
 
 
@@ -101,10 +102,10 @@ for sn in to_unfollow_list:
         try:
             unfollowed = twitter.destroy_friendship(screen_name=sn)
             unfollowed_list.append(sn)
-            logging.info(f'unfollowed {sn}')
+            logger.info(f'unfollowed {sn}')
         except TwythonError:
-            logging.exception(f'exception for {sn}')
-    # logging.info(f'Sleeping for {sleep_seconds} seconds')
+            logger.exception(f'exception for {sn}')
+    # logger.info(f'Sleeping for {sleep_seconds} seconds')
     sleep(sleep_seconds)
 
 
@@ -119,11 +120,11 @@ for sn in to_unfollow_list:
 #         try:
 #             # follow='false' means don't turn on notifications
 #             followed = twitter.create_friendship(screen_name=sn, follow='false')
-#             logging.info(f'followed {sn}')
+#             logger.info(f'followed {sn}')
 #             # device='false' means turn off notifications
 #             # followed = twitter.update_friendship(screen_name=sn, device='false')
-#             # logging.info(f'updated {sn}')
+#             # logger.info(f'updated {sn}')
 #         except TwythonError:
-#             logging.exception(f'exception for {sn}')
-#     # logging.info(f'Sleeping for {sleep_seconds} seconds')
+#             logger.exception(f'exception for {sn}')
+#     # logger.info(f'Sleeping for {sleep_seconds} seconds')
 #     sleep(sleep_seconds)

@@ -92,17 +92,23 @@ def count_syllables(
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f'    Subtoken: {subtoken}')
 
-        if subtoken.replace('.', '').isdigit() or subtoken.replace(',', '').isdigit():
+        if subtoken.replace(',', '').replace('.', '').isdigit():
             # split a string that looks like a year
             if len(subtoken) == 4:
-                if (subtoken[:2] == '18') or (subtoken[:2] == '19'):
-                    subtoken = f'{subtoken[:2]} {subtoken[2:]}'
+                if subtoken.isdigit():
+                    if (int(subtoken[:2]) % 10 == 0) and (int(subtoken[2:]) < 10):
+                        subtoken = inflect_p.number_to_words(subtoken, andword='')
+                    else:
+                        subtoken = f'{subtoken[:2]} {subtoken[2:]}'
                 else:
                     subtoken = inflect_p.number_to_words(subtoken, andword='')
             elif len(subtoken) == 2:
-                # pronounce zero as "oh"
-                if (subtoken[0] == '0') and subtoken[1].isdigit():
-                    subtoken = f'oh {subtoken[1]}'
+                if subtoken.isdigit():
+                    # pronounce zero as "oh"
+                    if (subtoken[0] == '0'):
+                        subtoken = f'oh {subtoken[1]}'
+                    else:
+                        subtoken = inflect_p.number_to_words(subtoken, andword='')
                 else:
                     subtoken = inflect_p.number_to_words(subtoken, andword='')
             else:

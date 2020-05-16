@@ -6,8 +6,7 @@ from typing import List, Dict
 from text_utils import remove_repeat_last_letter, text_might_contain_acronym
 from data_tweets_haiku import db_update_haiku_deleted
 
-logging.basicConfig(format='{asctime} : {levelname} : {message}', level=logging.INFO, style='{')
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("haikulogger")
 
 # keep letters and apostrophes for contractions, and commas and periods for numbers
 punct_to_keep = ["'", ',', '.']

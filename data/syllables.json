@@ -283,6 +283,16 @@
         "pronunciation": "couldn't",
         "syllables": 2
     },
+    "cpop": {
+        "alt": [],
+        "pronunciation": "c pop",
+        "syllables": 2
+    },
+    "cringeworthy": {
+        "alt": [],
+        "pronunciation": "cringe worthy",
+        "syllables": 3
+    },
     "CSPAN": {
         "alt": [],
         "pronunciation": "C SPAN",
@@ -460,6 +470,11 @@
     "facebook": {
         "alt": [],
         "pronunciation": "facebook",
+        "syllables": 2
+    },
+    "facetime": {
+        "alt": [],
+        "pronunciation": "face time",
         "syllables": 2
     },
     "fam": {
@@ -940,6 +955,11 @@
         "pronunciation": "know",
         "syllables": 1
     },
+    "kpop": {
+        "alt": [],
+        "pronunciation": "k pop",
+        "syllables": 2
+    },
     "kthnxbye": {
         "alt": [],
         "pronunciation": "k thanks bye",
@@ -1169,6 +1189,11 @@
         "pronunciation": "M M A",
         "syllables": 3
     },
+    "MOTD": {
+        "alt": [],
+        "pronunciation": "message of the day",
+        "syllables": 5
+    },
     "MSNBC": {
         "alt": [],
         "pronunciation": "M S N B C",
@@ -1369,6 +1394,11 @@
         "pronunciation": "Q E D",
         "syllables": 3
     },
+    "qotd": {
+        "alt": [],
+        "pronunciation": "quote of the day",
+        "syllables": 4
+    },
     "rly": {
         "alt": [],
         "pronunciation": "really",
@@ -1428,6 +1458,11 @@
         "alt": [],
         "pronunciation": "shouldn't",
         "syllables": 2
+    },
+    "sh": {
+        "alt": [],
+        "pronunciation": "sh",
+        "syllables": 1
     },
     "sht": {
         "alt": [],

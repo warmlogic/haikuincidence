@@ -1,16 +1,9 @@
-gain follow
-retweet follow
-gain list
-porn
-bot
-ngga
-nggr
-nigha
 abbo
 abo
 beeyotch
 biatch
 bitch
+bot
 chinaman
 chinamen
 chink
@@ -33,6 +26,9 @@ fag
 faggot
 fatass
 fatso
+gain follow
+gain follower
+gain list
 gash
 gimp
 golliwog
@@ -70,16 +66,22 @@ nig-nog
 nigga
 nigger
 nigguh
+nigha
+ngga
+nggr
 nip
 pajeet
 paki
 pickaninnie
 pickaninny
+porn
 prostitute
 pussie
 pussy
 raghead
 retard
+retweet follow
+retweet follower
 sambo
 shemale
 skank
@@ -92,8 +94,9 @@ spook
 squaw
 street-shitter
 tard
-tits
-titt
+tit
+tittie
+titty
 trannie
 tranny
 twat

@@ -157,7 +157,7 @@ for sn in to_follow:
         except TwythonError as e:
             logger.exception(f'exception for {sn}')
             # remove the screenname from the list if it matches a valid reason
-            if any([er in e for er in exclude_reasons]):
+            if any([er in str(e) for er in exclude_reasons]):
                 do_not_follow.append(sn)
 
     logger.info(f'Sleeping for {sleep_seconds} seconds')

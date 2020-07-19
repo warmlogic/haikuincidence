@@ -29,7 +29,7 @@ inflect_p = inflect.engine()
 # Use the CMU dictionary to count syllables
 pronounce_dict = cmudict.dict()
 
-guess_syl_method = 'mean'
+guess_syl_method = 'min'
 
 
 if __name__ == '__main__':

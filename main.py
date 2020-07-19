@@ -63,7 +63,7 @@ OAUTH_TOKEN_SECRET = os.getenv("ACCESS_TOKEN_SECRET", default="")
 DATABASE_URL = os.getenv("DATABASE_URL", default="")
 MY_SCREEN_NAME = os.getenv("MY_SCREEN_NAME", default="twitter")
 LANGUAGE = os.getenv("LANGUAGE", default="en")
-GUESS_SYL_METHOD = os.getenv("GUESS_SYL_METHOD", default="mean")
+GUESS_SYL_METHOD = os.getenv("GUESS_SYL_METHOD", default="min")
 
 
 class MyTwitterClient(Twython):

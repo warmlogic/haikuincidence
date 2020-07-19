@@ -10,22 +10,24 @@ Hey, that's a haiku! ✌️
 
 ## Setup
 
-### Credentials and other configuration variables
-
-1. Copy the (hidden) `.env_template.ini` file to `.env`
-1. Edit `.env` to include your credentials
-
-### Additional setup
+### Data setup
 
 1. Add phrases to `data/track.txt` to only search for tweets that contain any of the exact strings, one string per line (see [the documentation about `track`](https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters) for more info)
     1. If file does not exist or is empty, gets tweets from the [sample stream](https://developer.twitter.com/en/docs/tweets/sample-realtime/api-reference/get-statuses-sample)
-1. Add phrases to `data/ignore.txt` to ignore tweets that contain tokens from any of these strings, one string per line. Uses `AND` and `OR` logic like the track list, but tokens for `AND` (a single line) can match anywhere. Matches substrings (e.g., `dogs` in `ignore.txt` will match `dogs` in a tweet's text).
-    1. Whether or not this file exists, by default this program ignores tweets with words read in the `get_ignore_list` function (in `data_utils.py`)
-1. Add additional pre-defined syllable counts to `data/syllables.json`
+1. Add phrases to `data/ignore.txt` to ignore tweets that contain tokens from any of these strings, one string per line. Uses `AND` and `OR` logic like the track list, but tokens for `AND` (a single line) can match anywhere. Also matches basic plural versions of words (e.g., `dog` in `data/ignore.txt` will match `dogs` in a tweet's text). See the function `text_contains_ignore_list` (in `utils/text_utils.py`) for more info.
+    1. Whether or not this file exists, by default this program ignores tweets with words read in the `get_ignore_list` function (in `utils/data_utils.py`)
+1. Add pre-defined syllable counts to `data/syllables.json`
+
+### Credentials and other variables
+
+If running the app on Heroku (see below), `.env` is not needed but it may still be convenient to fill in the environment variables.
+
+1. Copy the (hidden) `.env_template.ini` file to `.env`
+1. Edit `.env` to include your credentials (don't commit this file)
 
 ## Database setup
 
-- If running the app on Heroku, you can easily provision a database for your app by installing the Postgres add-on (described below).
+- If running the app on Heroku, you can easily provision a database for your app by installing the Postgres add-on (see below).
   - Your database credentials will automatically be added to your app's Config Vars.
 - If not running the app on Heroku, you'll need to set up your own database.
   - Add your database credentials to `.env`
@@ -38,7 +40,7 @@ Hey, that's a haiku! ✌️
 1. Create add-ons for:
    1. [Papertrail](https://elements.heroku.com/addons/papertrail)
    1. [Postgres](https://elements.heroku.com/addons/heroku-postgresql)
-1. Add the required environment variables as Config Vars to your app via the web-based dashboard
+1. Heroku does not use the `.env` file. Instead, add the environment variables as Config Vars to your app via the web-based dashboard.
 
 #### Heroku logs
 

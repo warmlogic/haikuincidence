@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.pool import NullPool
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from data_tweets_haiku import Haiku
+from utils.data_tweets_haiku import Haiku
 
 
 def session_factory(DATABASE_URL: str):

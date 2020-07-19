@@ -136,9 +136,14 @@ poets = list(set([sn for sn in poets if sn]))
 # https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/post-friendships-create
 # update notification settings
 # https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/post-friendships-update
-followed = []
-to_follow = list(set([sn for sn in poets if sn and (sn not in i_follow) and (sn not in followed)]))
+followed = []  # don't overwrite this
+do_not_follow = []  # don't overwrite this
+to_follow = list(set([sn for sn in poets if sn and (sn not in i_follow) and (sn not in followed) and (sn not in do_not_follow)]))
 sleep_seconds = 5
+exclude_reasons = [
+    'Cannot find specified user',
+    'You have been blocked from following',
+]
 for sn in to_follow:
     if sn:
         try:
@@ -149,7 +154,13 @@ for sn in to_follow:
             # device='false' means turn off notifications
             # result = twitter.update_friendship(screen_name=sn, device='false')
             # logger.info(f'updated {len(followed)} / {len(to_follow)}: {sn}')
-        except TwythonError:
+        except TwythonError as e:
             logger.exception(f'exception for {sn}')
+            # remove the screenname from the list if it matches a valid reason
+            if any([er in e for er in exclude_reasons]):
+                do_not_follow.append(sn)
+
     logger.info(f'Sleeping for {sleep_seconds} seconds')
     sleep(sleep_seconds)
+
+to_follow = [sn for sn in to_follow if sn not in do_not_follow]

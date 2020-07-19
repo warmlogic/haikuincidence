@@ -208,6 +208,7 @@ inflect_p = inflect.engine()
 pronounce_dict = cmudict.dict()
 
 # Establish connection to Twitter
+# Uses OAuth1 ("user auth") for authentication
 twitter = MyTwitterClient(
     initial_time=INITIAL_TIME,
     app_key=APP_KEY,

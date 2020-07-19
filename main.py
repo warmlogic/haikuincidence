@@ -11,13 +11,13 @@ from nltk.corpus import cmudict
 from twython import Twython, TwythonError
 from twython import TwythonStreamer
 
-from data_utils import get_track_str, get_ignore_list, get_syllable_dict, get_emoticons_list
-from text_utils import date_string_to_datetime, check_tweet, clean_text, check_text_wrapper
-from haiku_utils import get_haiku, get_best_haiku
+from utils.data_utils import get_track_str, get_ignore_list, get_syllable_dict, get_emoticons_list
+from utils.text_utils import date_string_to_datetime, check_tweet, clean_text, check_text_wrapper
+from utils.haiku_utils import get_haiku, get_best_haiku
 
-from data_base import session_factory
-from data_tweets_haiku import Haiku, db_add_haiku, db_get_haikus_unposted_timedelta
-from data_tweets_haiku import db_update_haiku_posted, db_delete_haikus_unposted_timedelta, db_delete_haikus_posted_timedelta
+from utils.data_base import session_factory
+from utils.data_tweets_haiku import Haiku, db_add_haiku, db_get_haikus_unposted_timedelta
+from utils.data_tweets_haiku import db_update_haiku_posted, db_delete_haikus_unposted_timedelta, db_delete_haikus_posted_timedelta
 
 # I'm a poet and I didn't even know it. Hey, that's a haiku!
 
@@ -62,6 +62,7 @@ OAUTH_TOKEN = os.getenv("ACCESS_TOKEN", default="")
 OAUTH_TOKEN_SECRET = os.getenv("ACCESS_TOKEN_SECRET", default="")
 DATABASE_URL = os.getenv("DATABASE_URL", default="")
 MY_SCREEN_NAME = os.getenv("MY_SCREEN_NAME", default="twitter")
+LANGUAGE = os.getenv("LANGUAGE", default="en")
 
 
 class MyTwitterClient(Twython):
@@ -92,7 +93,7 @@ class MyTwitterClient(Twython):
 
 class MyStreamer(TwythonStreamer):
     def on_success(self, status):
-        if 'text' in status and check_tweet(status, ignore_list):
+        if 'text' in status and check_tweet(status, ignore_list, language=LANGUAGE):
             # print(status['text'])
             text = clean_text(status['text'])
             if check_text_wrapper(text, ignore_list):

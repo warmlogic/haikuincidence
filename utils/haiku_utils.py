@@ -71,6 +71,7 @@ def count_syllables(
     pronounce_dict: Dict,
     syllable_dict: Dict,
     emoticons_list: List,
+    guess_syl_method: str,
 ) -> int:
     if token in emoticons_list:
         return 0
@@ -143,7 +144,7 @@ def count_syllables(
             # it's not a "real" word
             if re.findall(r"[^\w']", subtoken):
                 # there are some non-letter characters remaining (shouldn't be possible); run it through again
-                subtoken_syl = count_syllables(subtoken, inflect_p, pronounce_dict, syllable_dict, emoticons_list)
+                subtoken_syl = count_syllables(subtoken, inflect_p, pronounce_dict, syllable_dict, emoticons_list, guess_syl_method)
                 source = 'Non-letter chars'
                 subsyllable_count += subtoken_syl
             else:
@@ -151,25 +152,25 @@ def count_syllables(
                     # contains an apostrophe
                     if subtoken.rsplit("'")[-1] in contraction_ends:
                         # ends with one of the contraction endings; make a guess
-                        subtoken_syl = guess_syllables(subtoken)[0]
+                        subtoken_syl = guess_syllables(subtoken, guess_syl_method)
                         source = 'Guess'
                         subsyllable_count += subtoken_syl
                     else:
                         # doesn't end with a contraction ending; count each chunk between apostrophes
                         for subsubtoken in subtoken.rsplit("'"):
-                            subtoken_syl = count_syllables(subsubtoken, inflect_p, pronounce_dict, syllable_dict, emoticons_list)
+                            subtoken_syl = count_syllables(subsubtoken, inflect_p, pronounce_dict, syllable_dict, emoticons_list, guess_syl_method)
                             source = 'Multiple apostrophes'
                             subsyllable_count += subtoken_syl
                 else:
                     # no apostrophes;
                     # might be an acronym, split the letters apart and run it through again
                     if text_might_contain_acronym(subtoken_orig):
-                        subtoken_syl = count_syllables(' '.join(subtoken), inflect_p, pronounce_dict, syllable_dict, emoticons_list)
+                        subtoken_syl = count_syllables(' '.join(subtoken), inflect_p, pronounce_dict, syllable_dict, emoticons_list, guess_syl_method)
                         source = 'Acronym'
                         subsyllable_count += subtoken_syl
                     else:
                         # make a guess
-                        subtoken_syl = guess_syllables(subtoken)[0]
+                        subtoken_syl = guess_syllables(subtoken, guess_syl_method)
                         source = 'Guess'
                         subsyllable_count += subtoken_syl
         if logger.isEnabledFor(logging.DEBUG):
@@ -178,14 +179,17 @@ def count_syllables(
     return subsyllable_count
 
 
-def guess_syllables(word: str) -> (int, int):
+def guess_syllables(word: str, method: str = 'mean') -> int:
     '''Guess the number of syllables in a string.
-    Returns minimum and maximum guesses. Minimum is usually good enough.
+    Returned value depends on the method used. Minimum is usually good enough.
 
     A diphthong is two vowel sounds in a single syllable (e.g., pie, boy, cow)
 
     Adapted from https://github.com/akkana/scripts/blob/master/countsyl
     '''
+    assert method in ['min', 'max', 'mean']
+    logger.debug(f'Guessing syllable count with method: {method}')
+
     vowels = ['a', 'e', 'i', 'o', 'u']
 
     on_vowel = False
@@ -207,25 +211,25 @@ def guess_syllables(word: str) -> (int, int):
                 is_vowel = not on_vowel
 
             if is_vowel:
-                logger.debug(f'{c} is a vowel')
+                logger.debug(f'vowel: {c}')
                 if not on_vowel:
                     # We weren't on a vowel before.
                     # Seeing a new vowel bumps the syllable count.
-                    logger.debug('new syllable')
                     minsyl += 1
                     maxsyl += 1
+                    logger.debug(f'new syllable: min syl {minsyl}, max syl {maxsyl}')
                 elif on_vowel and not in_diphthong and c != lastchar:
                     # We were already in a vowel.
                     # Don't increment anything except the max count,
                     # and only do that once per diphthong.
-                    logger.debug(f'{c} is a diphthong')
                     in_diphthong = True
                     maxsyl += 1
+                    logger.debug(f'diphthong: {c}: min syl {minsyl}, max syl {maxsyl}')
             else:
                 if re.findall(r'[\w]', c):
-                    logger.debug('[consonant]')
+                    logger.debug(f'consonant: {c}')
                 else:
-                    logger.debug('[other]')
+                    logger.debug(f'other: {c}')
 
             on_vowel = is_vowel
             lastchar = c
@@ -233,11 +237,11 @@ def guess_syllables(word: str) -> (int, int):
         # Some special cases: ends in e, or past tense, may have counted too many
         if len(word) >= 2 and (word[-2:] not in ['ie', 'be']) and ((word[-1] == 'e') or (word[-2:] == 'ed')):
             minsyl -= 1
-            logger.debug(f'Removing a syllable for word: {word}')
+            logger.debug(f'Removing a syllable for "{word}": min syl {minsyl}, max syl {maxsyl}')
         # if it ended with a consonant followed by y, count that as a syllable.
         if word[-1] == 'y' and not on_vowel:
             maxsyl += 1
-            logger.debug(f'Adding a syllable for word: {word}')
+            logger.debug(f'Adding a syllable for "{word}": min syl {minsyl}, max syl {maxsyl}')
 
         # if found no syllables but there's at least one letter,
         # count as one syllable
@@ -247,7 +251,15 @@ def guess_syllables(word: str) -> (int, int):
             if not maxsyl:
                 maxsyl = 1
 
-    return minsyl, maxsyl
+    if method == 'min':
+        syl = minsyl
+    elif method == 'max':
+        syl = maxsyl
+    elif method == 'mean':
+        # Average and round down
+        syl = (minsyl + maxsyl) // 2
+
+    return syl
 
 
 def get_haiku(
@@ -256,6 +268,7 @@ def get_haiku(
     pronounce_dict: Dict,
     syllable_dict: Dict,
     emoticons_list: List,
+    guess_syl_method: str,
 ) -> str:
     '''Attempt to turn a string into a haiku.
     Returns haiku if able, otherwise returns empty string.
@@ -275,7 +288,7 @@ def get_haiku(
             logger.debug(f'Original token: {token}')
         # Add tokens with no syllables (punctuation, emoji)) to the end of the
         # previous line instead of the start of the current line
-        if (re.findall(r"[^\w']", token) and (count_syllables(token, inflect_p, pronounce_dict, syllable_dict, emoticons_list) == 0)):
+        if (re.findall(r"[^\w']", token) and (count_syllables(token, inflect_p, pronounce_dict, syllable_dict, emoticons_list, guess_syl_method) == 0)):
             if haiku_line_prev == haiku_line:
                 haiku[haiku_line].append(token)
             else:
@@ -288,14 +301,14 @@ def get_haiku(
             haiku_line_prev = haiku_line
 
         # Count number of syllables for this token
-        syllable_count += count_syllables(token, inflect_p, pronounce_dict, syllable_dict, emoticons_list)
+        syllable_count += count_syllables(token, inflect_p, pronounce_dict, syllable_dict, emoticons_list, guess_syl_method)
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f'{syllable_count} syllables counted total')
 
         if syllable_count == haiku_form[haiku_line]:
             # Reached exactly the number of syllables for this line, go to next line
             haiku_line += 1
-        if i < len(text_split) - 1 and haiku_line >= len(haiku_form) and (count_syllables(' '.join(text_split[i + 1:]), inflect_p, pronounce_dict, syllable_dict, emoticons_list) > 0):
+        if i < len(text_split) - 1 and haiku_line >= len(haiku_form) and (count_syllables(' '.join(text_split[i + 1:]), inflect_p, pronounce_dict, syllable_dict, emoticons_list, guess_syl_method) > 0):
             # There are syllables in the remaining tokens to check, but have reached the number of lines in a haiku.
             # Therefore not a haiku coincidence!
             if logger.isEnabledFor(logging.DEBUG):

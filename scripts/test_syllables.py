@@ -29,6 +29,8 @@ inflect_p = inflect.engine()
 # Use the CMU dictionary to count syllables
 pronounce_dict = cmudict.dict()
 
+guess_syl_method = 'mean'
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process text and count syllables.')
@@ -37,13 +39,13 @@ if __name__ == '__main__':
 
     text = args.text
 
-    logger.debug(f'Original text: {text}')
+    logger.debug(f'Original text:\n{text}')
 
     text = clean_text(text)
-    logger.debug(f'Cleaned text: {text}')
+    logger.debug(f'Cleaned text:\n{text}')
 
     logger.debug(f'Passes check_text_wrapper: {check_text_wrapper(text, ignore_list)}')
 
-    haiku = get_haiku(text, inflect_p, pronounce_dict, syllable_dict, emoticons_list)
+    haiku = get_haiku(text, inflect_p, pronounce_dict, syllable_dict, emoticons_list, guess_syl_method)
 
-    logger.debug(f'Resulting haiku: {haiku}')
+    logger.debug(f'Resulting haiku:\n{haiku}')

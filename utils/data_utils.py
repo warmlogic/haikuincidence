@@ -42,7 +42,6 @@ def get_syllable_dict(filepath: Path = None) -> Dict:
     '''specify syllables for certain acronyms or abbreviations
     '''
     filepath = filepath or Path(__file__).parent.parent / 'data' / 'syllables.json'
-    logger.info(filepath)
     if filepath.exists():
         logger.info(f'Reading syllable list: {filepath}')
         with open(filepath, 'r') as fp:

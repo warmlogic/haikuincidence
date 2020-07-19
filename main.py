@@ -63,6 +63,7 @@ OAUTH_TOKEN_SECRET = os.getenv("ACCESS_TOKEN_SECRET", default="")
 DATABASE_URL = os.getenv("DATABASE_URL", default="")
 MY_SCREEN_NAME = os.getenv("MY_SCREEN_NAME", default="twitter")
 LANGUAGE = os.getenv("LANGUAGE", default="en")
+GUESS_SYL_METHOD = os.getenv("GUESS_SYL_METHOD", default="mean")
 
 
 class MyTwitterClient(Twython):
@@ -97,7 +98,7 @@ class MyStreamer(TwythonStreamer):
             # print(status['text'])
             text = clean_text(status['text'])
             if check_text_wrapper(text, ignore_list):
-                haiku = get_haiku(text, inflect_p, pronounce_dict, syllable_dict, emoticons_list)
+                haiku = get_haiku(text, inflect_p, pronounce_dict, syllable_dict, emoticons_list, GUESS_SYL_METHOD)
                 if haiku:
                     # add tweet to database
                     tweet_haiku = Haiku(

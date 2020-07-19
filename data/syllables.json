@@ -785,6 +785,11 @@
         "pronunciation": "I am not a lawyer",
         "syllables": 6
     },
+    "ichthyosaur": {
+        "alt": [],
+        "pronunciation": "ichthyosaur",
+        "syllables": 4
+    },
     "icymi": {
         "alt": [],
         "pronunciation": "in case you missed it",
@@ -1329,6 +1334,11 @@
         "pronunciation": "oompa",
         "syllables": 2
     },
+    "op": {
+        "alt": [],
+        "pronunciation": "O P",
+        "syllables": 2
+    },
     "our": {
         "alt": [],
         "pronunciation": "our",
@@ -1469,6 +1479,11 @@
         "pronunciation": "shit",
         "syllables": 1
     },
+    "sjw": {
+        "alt": [],
+        "pronunciation": "social justice warrior",
+        "syllables": 7
+    },
     "smdh": {
         "alt": [
             {
@@ -1523,6 +1538,11 @@
         "alt": [],
         "pronunciation": "someone",
         "syllables": 2
+    },
+    "SWers": {
+        "alt": [],
+        "pronunciation": "sex workers",
+        "syllables": 3
     },
     "szn": {
         "alt": [],
@@ -1693,6 +1713,11 @@
         "alt": [],
         "pronunciation": "vid",
         "syllables": 1
+    },
+    "visuals": {
+        "alt": [],
+        "pronunciation": "visuals",
+        "syllables": 3
     },
     "voy": {
         "alt": [],

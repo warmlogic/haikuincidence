@@ -1,3 +1,5 @@
+# Run from the scripts folder like: python test_syllables.py --text "my text here"
+
 import argparse
 import logging
 import sys

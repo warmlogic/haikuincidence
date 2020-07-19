@@ -13,7 +13,7 @@ logger.setLevel(logging.DEBUG)
 IS_PROD = os.getenv("IS_PROD", default=None)
 
 if IS_PROD is None:
-    env_path = Path.cwd() / ".env"
+    env_path = Path.cwd().parent / ".env"
     if env_path.exists():
         load_dotenv(dotenv_path=env_path)
     else:
@@ -25,6 +25,7 @@ OAUTH_TOKEN = os.getenv("ACCESS_TOKEN", default="")
 OAUTH_TOKEN_SECRET = os.getenv("ACCESS_TOKEN_SECRET", default="")
 MY_SCREEN_NAME = os.getenv("MY_SCREEN_NAME", default="haikuincidence")
 
+# Uses OAuth1 ("user auth") for authentication
 twitter = Twython(
     app_key=APP_KEY,
     app_secret=APP_SECRET,
@@ -35,7 +36,7 @@ twitter = Twython(
 # https://twython.readthedocs.io/en/latest/api.html
 
 # get the screen names I follow
-# can only make 15 requests in a 15-minute window
+# can only make 15 requests in a 15-minute window (1 per minute)
 # https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-friends-list
 sleep_seconds = 65
 cursor_if = -1
@@ -63,7 +64,7 @@ i_follow = list(set([sn for sn in i_follow if sn]))
 
 
 # get the screen names that follow me
-# can only make 15 requests in a 15-minute window
+# can only make 15 requests in a 15-minute window (1 per minute)
 # https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-followers-list
 sleep_seconds = 65
 cursor_fm = -1
@@ -105,15 +106,16 @@ for sn in to_unfollow:
 
 
 # get the screen names I have replied to
-# can only make 1500 requests in a 15-minute window (100 per minute)
-# limited to the most recent 3200 tweets
+# with user auth, can only make 900 requests in a 15-minute window (60 per minute)
+# if instead was using app auth, could make 1500 requests in a 15-minute window (100 per minute)
+# Twitter's API limits this to the most recent 3200 tweets, there's no way around this limit
 # https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline
 counter = 1
 poets = []
 mytweets = twitter.get_user_timeline(screen_name=MY_SCREEN_NAME, count=200, exclude_replies='false', include_rts='true')
 poets.extend([tweet['in_reply_to_screen_name'] for tweet in mytweets])
 max_id = mytweets[-1]['id_str']
-sleep_seconds = 1
+sleep_seconds = 1.1
 while True:
     logger.info(f'Query {counter}, Tweet max id: {max_id}')
     mytweets = twitter.get_user_timeline(screen_name=MY_SCREEN_NAME, count=200, exclude_replies='false', include_rts='true', max_id=max_id)
@@ -133,17 +135,21 @@ poets = list(set([sn for sn in poets if sn]))
 
 
 # follow accounts I have replied to but not followed
+# can only make 400 requests in a 24-hour window, also seems to require waiting a bit between requests
 # https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/post-friendships-create
 # update notification settings
 # https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/post-friendships-update
 followed = []  # don't overwrite this
 do_not_follow = []  # don't overwrite this
 to_follow = list(set([sn for sn in poets if sn and (sn not in i_follow) and (sn not in followed) and (sn not in do_not_follow)]))
-sleep_seconds = 5
-exclude_reasons = [
-    'Cannot find specified user',
-    'You have been blocked from following',
+stop_reasons = [
+    "You are unable to follow more people at this time",
 ]
+exclude_reasons = [
+    "Cannot find specified user",
+    "You have been blocked from following",
+]
+sleep_seconds = 5
 for sn in to_follow:
     if sn:
         try:
@@ -157,8 +163,10 @@ for sn in to_follow:
         except TwythonError as e:
             logger.exception(f'exception for {sn}')
             # remove the screenname from the list if it matches a valid reason
-            if any([er in str(e) for er in exclude_reasons]):
+            if any([reason in str(e) for reason in exclude_reasons]):
                 do_not_follow.append(sn)
+            elif any([reason in str(e) for reason in stop_reasons]):
+                break
 
     logger.info(f'Sleeping for {sleep_seconds} seconds')
     sleep(sleep_seconds)

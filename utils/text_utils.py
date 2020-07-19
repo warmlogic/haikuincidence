@@ -88,13 +88,22 @@ def text_contains_url(text: str) -> bool:
 
 
 def text_contains_ignore_list(text: str, ignore_list: List[str]) -> bool:
-    '''Return True if anything from the ignore_list is in the text.
-    All tokens from one ignore_list line must be somewhere in the text (AND logic),
-    and each line is considered separately (OR logic).
-    Matches substrings from ignore_list lines (e.g., if ignore_list line is 'god dog', will match 'dogs are gods')
+    '''Return True if anything from the ignore list is in the text.
+    Each ignore list line is considered separately (OR logic).
+    All tokens from one ignore list line must be somewhere in the text (AND logic).
+    Each token in the ignore list line is also augmented to consider some basic plural forms,
+    e.g., if ignore_list line is 'god dog', will match 'dogs are gods' but not 'doggies are godly'.
     '''
     # found all of the subtokens from one ignore line in the status
-    return any([all([ip in text.lower() for ip in ignore_line.split()]) for ignore_line in ignore_list])
+    return any(
+        [
+            all(
+                [
+                    any([it in text.lower().split() for it in [itok, f'{itok}s', f'{itok}z', f'{itok}es']]) for itok in ignore_line.split()
+                ]
+            ) for ignore_line in ignore_list
+        ]
+    )
 
 
 def text_has_chars_digits_together(text: str) -> bool:

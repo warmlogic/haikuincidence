@@ -172,7 +172,9 @@ for sn in to_follow:
             # remove the screenname from the list if it matches a valid reason
             if any([reason in str(e) for reason in exclude_reasons]):
                 do_not_follow.append(sn)
+                logger.info(f'Adding {sn} to do not follow list')
             elif any([reason in str(e) for reason in stop_reasons]):
+                logger.info('Hit rate limit. Stopping.')
                 break
 
     logger.info(f'Sleeping for {sleep_seconds} seconds')

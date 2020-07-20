@@ -38,9 +38,9 @@ twitter = Twython(
 # get the screen names I follow
 # can only make 15 requests in a 15-minute window (1 per minute)
 # https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-friends-list
-sleep_seconds = 65
-cursor_if = -1
 i_follow = []
+cursor_if = -1
+sleep_seconds = 65
 counter = 1
 while True:
     logger.info(f'Query {counter}, I follow cursor: {cursor_if}')
@@ -61,14 +61,15 @@ while True:
     sleep(sleep_seconds)
 
 i_follow = list(set([sn for sn in i_follow if sn]))
+logger.info(f'Found {len(i_follow)} users who I follow')
 
 
 # get the screen names that follow me
 # can only make 15 requests in a 15-minute window (1 per minute)
 # https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-followers-list
-sleep_seconds = 65
-cursor_fm = -1
 follows_me = []
+cursor_fm = -1
+sleep_seconds = 65
 counter = 1
 while True:
     logger.info(f'Query {counter}, Follow me cursor: {cursor_fm}')
@@ -85,6 +86,7 @@ while True:
     sleep(sleep_seconds)
 
 follows_me = list(set([sn for sn in follows_me if sn]))
+logger.info(f'Found {len(follows_me)} users who follow me')
 
 
 # unfollow people I follow who do not follow me, to make room for following more new poets
@@ -104,18 +106,20 @@ for sn in to_unfollow:
     # logger.info(f'Sleeping for {sleep_seconds} seconds')
     sleep(sleep_seconds)
 
+logger.info(f'Unfollowed {len(unfollowed)} users who do not follow me')
+
 
 # get the screen names I have replied to
 # with user auth, can only make 900 requests in a 15-minute window (60 per minute)
 # if instead was using app auth, could make 1500 requests in a 15-minute window (100 per minute)
 # Twitter's API limits this to the most recent 3200 tweets, there's no way around this limit
 # https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline
-counter = 1
 poets = []
 mytweets = twitter.get_user_timeline(screen_name=MY_SCREEN_NAME, count=200, exclude_replies='false', include_rts='true')
 poets.extend([tweet['in_reply_to_screen_name'] for tweet in mytweets])
 max_id = mytweets[-1]['id_str']
 sleep_seconds = 1.1
+counter = 1
 while True:
     logger.info(f'Query {counter}, Tweet max id: {max_id}')
     mytweets = twitter.get_user_timeline(screen_name=MY_SCREEN_NAME, count=200, exclude_replies='false', include_rts='true', max_id=max_id)
@@ -132,6 +136,7 @@ while True:
     sleep(sleep_seconds)
 
 poets = list(set([sn for sn in poets if sn]))
+logger.info(f'Found {len(poets)} poets who I have replied to')
 
 
 # follow accounts I have replied to but not followed
@@ -141,7 +146,6 @@ poets = list(set([sn for sn in poets if sn]))
 # https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/post-friendships-update
 followed = []  # don't overwrite this
 do_not_follow = []  # don't overwrite this
-to_follow = list(set([sn for sn in poets if sn and (sn not in i_follow) and (sn not in followed) and (sn not in do_not_follow)]))
 stop_reasons = [
     "You are unable to follow more people at this time",
 ]
@@ -150,16 +154,19 @@ exclude_reasons = [
     "You have been blocked from following",
 ]
 sleep_seconds = 5
+to_follow = list(set([sn for sn in poets if sn and (sn not in i_follow) and (sn not in followed) and (sn not in do_not_follow)]))
+counter = 0
 for sn in to_follow:
     if sn:
         try:
             # follow='false' means don't turn on notifications
             result = twitter.create_friendship(screen_name=sn, follow='false')
             followed.append(sn)
-            logger.info(f'followed {len(followed)} / {len(to_follow)}: {sn}')
+            counter += 1
+            logger.info(f'followed {counter} / {len(to_follow)}: {sn}')
             # device='false' means turn off notifications
             # result = twitter.update_friendship(screen_name=sn, device='false')
-            # logger.info(f'updated {len(followed)} / {len(to_follow)}: {sn}')
+            # logger.info(f'updated {counter} / {len(to_follow)}: {sn}')
         except TwythonError as e:
             logger.exception(f'exception for {sn}')
             # remove the screenname from the list if it matches a valid reason
@@ -171,4 +178,4 @@ for sn in to_follow:
     logger.info(f'Sleeping for {sleep_seconds} seconds')
     sleep(sleep_seconds)
 
-to_follow = [sn for sn in to_follow if sn not in do_not_follow]
+logger.info(f'Followed {len(followed)} users who I have replied to')

@@ -52,7 +52,7 @@ def check_tweet(status, ignore_list: List[str], language: str = 'en') -> bool:
         (status['user']['friends_count'] > 10),  # following
         (status['user']['followers_count'] > 100),  # followers
         # (status['user']['verified']),
-        # '(media' not in status['entities']),
+        # ('media' not in status['entities']),
         (len(status['text']) >= 17),
     ])
 

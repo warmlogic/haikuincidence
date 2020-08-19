@@ -92,7 +92,7 @@ def db_get_haikus_unposted_timedelta(session, td_seconds: int = None) -> List:
     '''
     if td_seconds is None:
         td_seconds = 3600
-    filter_td = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=td_seconds)
+    filter_td = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(seconds=td_seconds)
     haiku_query = session.query(Haiku).filter(
         Haiku.created_at > filter_td).filter(
             Haiku.date_posted == None).filter(Haiku.date_deleted == None)  # noqa: E711
@@ -105,7 +105,7 @@ def db_update_haiku_posted(session, status_id_str: str):
     try:
         session.query(Haiku).filter(
             Haiku.status_id_str == status_id_str).update(
-                {'date_posted': datetime.now().replace(tzinfo=pytz.UTC)})
+                {'date_posted': datetime.utcnow().replace(tzinfo=pytz.UTC)})
         session.commit()
     except Exception:
         logger.exception('Exception when updating haiku as posted')
@@ -131,7 +131,7 @@ def db_update_haiku_deleted(session, status_id_str: str):
     try:
         session.query(Haiku).filter(
             Haiku.status_id_str == status_id_str).update(
-                {'date_deleted': datetime.now().replace(tzinfo=pytz.UTC)})
+                {'date_deleted': datetime.utcnow().replace(tzinfo=pytz.UTC)})
         session.commit()
     except Exception:
         logger.exception('Exception when updating haiku as deleted')
@@ -155,7 +155,7 @@ def db_delete_haikus_unposted_timedelta(session, td_days: int = None) -> List:
     '''Delete all unposted records older than N days
     '''
     if td_days:
-        filter_td = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(days=td_days)
+        filter_td = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(days=td_days)
         try:
             delete_q = Haiku.__table__.delete().where(
                 Haiku.created_at <= filter_td).where(
@@ -172,7 +172,7 @@ def db_delete_haikus_posted_timedelta(session, td_days: int = None) -> List:
     '''Delete all posted records older than N days
     '''
     if td_days:
-        filter_td = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(days=td_days)
+        filter_td = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(days=td_days)
         try:
             delete_q = Haiku.__table__.delete().where(
                 Haiku.created_at <= filter_td).where(

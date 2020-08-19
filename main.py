@@ -45,7 +45,7 @@ if DEBUG_RUN:
     FOLLOW_POET = False
     EVERY_N_SECONDS = 1
     DELETE_OLDER_THAN_DAYS = None
-    INITIAL_TIME = datetime(1970, 1, 1)
+    INITIAL_TIME = datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)
 else:
     logger.setLevel(logging.INFO)
     POST_HAIKU = os.getenv("POST_HAIKU", default="False") == "True"
@@ -54,7 +54,7 @@ else:
     EVERY_N_SECONDS = int(os.getenv("EVERY_N_SECONDS", default="3600"))
     DELETE_OLDER_THAN_DAYS = int(os.getenv("DELETE_OLDER_THAN_DAYS", default="45"))
     # Wait half the rate limit time before making first post
-    INITIAL_TIME = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=EVERY_N_SECONDS // 2)
+    INITIAL_TIME = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(seconds=EVERY_N_SECONDS // 2)
 
 APP_KEY = os.getenv("API_KEY", default="")
 APP_SECRET = os.getenv("API_SECRET", default="")
@@ -74,11 +74,11 @@ class MyTwitterClient(Twython):
         super(MyTwitterClient, self).__init__(*args, **kwargs)
         if initial_time is None:
             # Wait half the rate limit time before making first post
-            initial_time = datetime.now().replace(tzinfo=pytz.UTC) - timedelta(seconds=EVERY_N_SECONDS // 2)
+            initial_time = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(seconds=EVERY_N_SECONDS // 2)
         self.last_post_time = initial_time
 
     def update_status_check_rate(self, *args, **kwargs):
-        current_time = datetime.now().replace(tzinfo=pytz.UTC)
+        current_time = datetime.utcnow().replace(tzinfo=pytz.UTC)
         logger.info(f'Current time: {current_time}')
         logger.info(f'Previous post time: {self.last_post_time}')
         logger.info(f'Difference: {current_time - self.last_post_time}')

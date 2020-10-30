@@ -24,7 +24,7 @@ def get_track_str(filepath: Path = None) -> str:
 def get_ignore_list(filepath: Path = None) -> List:
     '''filter out likely oppressive/offensive tweets using this word list
     '''
-    filepath = filepath or Path(__file__).parent.parent / 'data' / 'ignore.txt'
+    filepath = filepath or Path(__file__).parent.parent / 'data' / 'ignore_tweet.txt'
     if filepath.exists():
         logger.info(f'Reading ignore list: {filepath}')
         with open(filepath, 'r') as fp:

@@ -11,8 +11,8 @@ from nltk.corpus import cmudict
 from twython import Twython, TwythonError
 from twython import TwythonStreamer
 
-from utils.data_utils import get_track_str, get_ignore_tweet_list, get_syllable_dict, get_emoticons_list
-from utils.text_utils import date_string_to_datetime, check_tweet, clean_text, check_text_wrapper
+from utils.data_utils import get_track_str, get_ignore_tweet_list, get_ignore_profile_list, get_syllable_dict, get_emoticons_list
+from utils.text_utils import date_string_to_datetime, check_tweet, clean_text, check_text_wrapper, check_profile
 from utils.haiku_utils import get_haiku, get_best_haiku
 
 from utils.data_base import session_factory
@@ -94,7 +94,7 @@ class MyTwitterClient(Twython):
 
 class MyStreamer(TwythonStreamer):
     def on_success(self, status):
-        if 'text' in status and check_tweet(status, ignore_tweet_list, language=LANGUAGE):
+        if 'text' in status and check_tweet(status, ignore_tweet_list, language=LANGUAGE) and check_profile(status, ignore_profile_list):
             # print(status['text'])
             text = clean_text(status['text'])
             if check_text_wrapper(text, ignore_tweet_list):
@@ -199,6 +199,7 @@ logger.info('Initializing dependencies...')
 # get data to use for dealing with tweets
 track_str = get_track_str()
 ignore_tweet_list = get_ignore_tweet_list()
+ignore_profile_list = get_ignore_profile_list()
 syllable_dict = get_syllable_dict()
 emoticons_list = get_emoticons_list()
 

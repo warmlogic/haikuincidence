@@ -7,8 +7,6 @@ from typing import List
 from unidecode import unidecode
 from ftfy import fix_text
 
-from .haiku_utils import clean_token
-
 logger = logging.getLogger("haikulogger")
 
 # Regex to look for All URLs https://gist.github.com/gruber/249502
@@ -154,6 +152,56 @@ def text_is_all_uppercase(text: str) -> bool:
     Excludes punctuation, spaces, and digits.
     '''
     return all([char.isupper() for char in re.sub(r'[^A-Za-z]', '', text)])
+
+
+def clean_token(token: str) -> str:
+    # remove space before some punctuation if preceded by a letter or number
+    # ("hello ,how are you ? doing")
+    token = re.sub(r'(\w)\s([.,;!?](?=\s|$)?)', r'\1\2', token)
+
+    # put space after some punctuation if followed by a letter or number ("cat,dog")
+    token = re.sub(r'(?<=[;!?])(?=[\w])', r' ', token)
+
+    # put space after period if followed by a letter ("good.What")
+    token = re.sub(r'(?<=[.,])(?=[A-Za-z])', r' ', token)
+
+    # remove spaces around apostrophe if letter-space-apostrophe-space-letter
+    token = re.sub(r"(\w)\s(['])[?=\s\w]", r"\1\2", token)
+
+    # add space around some punctuation if letters on both sides
+    token = re.sub(r'([\w])([#@&%=+/×\-](?=[\w]))', r'\1 \2 ', token)
+
+    # try to replace a missing vowel with "u"
+    token = re.sub(r'([\w])[\*]((?=[\w]))', r'\1u\2', token)
+
+    # put a space after some punctuation that precedes a letter
+    token = re.sub(r'([#@&%=+/×])((?=[\w]))', r'\1 \2', token)
+
+    # put a space before some punctuation that follows a letter
+    token = re.sub(r'([\w])([#@&%=+/×])', r'\1 \2', token)
+
+    # special cases
+    token = re.sub(r'\bb / c\b', 'because', token, flags=re.IGNORECASE)
+    token = re.sub(r'\bb / t\b', 'between', token, flags=re.IGNORECASE)
+    token = re.sub(r'\bw / o\b', 'without', token, flags=re.IGNORECASE)
+    token = re.sub(r'\bw /\s\b', 'with ', token, flags=re.IGNORECASE)
+    token = re.sub(r'\bw /\b', 'with', token, flags=re.IGNORECASE)
+    token = re.sub(r'\ba\b\*', 'a star', token, flags=re.IGNORECASE)
+
+    # replace some punctuation with words
+    token = token.replace('@', 'at')
+    token = token.replace('&', 'and')
+    token = token.replace('%', 'percent')
+    token = token.replace('=', 'equals')
+    token = token.replace('×', 'times')
+    token = token.replace('+', 'plus')
+    # token = token.replace('*', 'star')
+    # token = token.replace('/', 'slash')
+
+    # keep the following punctuation: letters, apostrophes, commas, periods
+    token_clean = re.sub(r"[^\w',\.]", ' ', token).strip()
+
+    return token_clean
 
 
 # def split_acronym(token: str) -> List[str]:

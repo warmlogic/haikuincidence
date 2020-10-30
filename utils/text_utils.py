@@ -28,18 +28,18 @@ def clean_text(text: str) -> str:
 def check_text_wrapper(text: str, ignore_list: List[str]) -> bool:
     return all([
         (not text_contains_url(text)),
-        (not text_contains_ignore_list(text, ignore_list)),
+        (not text_contains_ignore_list_plural(text, ignore_list)),
         (not text_has_chars_digits_together(text)),
         (not text_is_all_uppercase(text)),
         # (text_is_all_alpha(text)),
     ])
 
 
-def check_tweet(status, ignore_list: List[str], language: str = 'en') -> bool:
+def check_tweet(status, ignore_tweet_list: List[str], language: str = 'en') -> bool:
     '''Return True if tweet satisfies specific criteria
     '''
     return all([
-        check_text_wrapper(status['text'], ignore_list),
+        check_text_wrapper(status['text'], ignore_tweet_list),
         (status['lang'] == language),
         (not status['entities']['hashtags']),
         (not status['entities']['urls']),
@@ -87,14 +87,14 @@ def text_contains_url(text: str) -> bool:
     return len(url_all_re.findall(text)) > 0
 
 
-def text_contains_ignore_list(text: str, ignore_list: List[str]) -> bool:
+def text_contains_ignore_list_plural(text: str, ignore_list: List[str]) -> bool:
     '''Return True if anything from the ignore list is in the text.
     Each ignore list line is considered separately (OR logic).
     All tokens from one ignore list line must be somewhere in the text (AND logic).
     Each token in the ignore list line is also augmented to consider some basic plural forms,
     e.g., if ignore_list line is 'god dog', will match 'dogs are gods' but not 'doggies are godly'.
     '''
-    # found all of the subtokens from one ignore line in the status
+    # found all of the subtokens from one ignore line in the text
     return any(
         [
             all(

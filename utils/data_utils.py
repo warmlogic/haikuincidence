@@ -21,21 +21,21 @@ def get_track_str(filepath: Path = None) -> str:
     return track_str
 
 
-def get_ignore_list(filepath: Path = None) -> List:
+def get_ignore_tweet_list(filepath: Path = None) -> List:
     '''filter out likely oppressive/offensive tweets using this word list
     '''
     filepath = filepath or Path(__file__).parent.parent / 'data' / 'ignore_tweet.txt'
     if filepath.exists():
         logger.info(f'Reading ignore list: {filepath}')
         with open(filepath, 'r') as fp:
-            ignore_list = fp.read().splitlines()
+            ignore_tweet_list = fp.read().splitlines()
         # ensure lowercase
-        ignore_list = list(set(x.lower() for x in ignore_list))
+        ignore_tweet_list = list(set(x.lower() for x in ignore_tweet_list))
     else:
         logger.info(f'No ignore list found at: {filepath}')
-        ignore_list = []
+        ignore_tweet_list = []
 
-    return ignore_list
+    return ignore_tweet_list
 
 
 def get_syllable_dict(filepath: Path = None) -> Dict:

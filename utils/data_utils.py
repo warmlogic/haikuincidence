@@ -26,7 +26,7 @@ def get_ignore_tweet_list(filepath: Path = None) -> List:
     '''
     filepath = filepath or Path(__file__).parent.parent / 'data' / 'ignore_tweet.txt'
     if filepath.exists():
-        logger.info(f'Reading ignore list: {filepath}')
+        logger.info(f'Reading ignore tweet list: {filepath}')
         with open(filepath, 'r') as fp:
             ignore_tweet_list = fp.read().splitlines()
         # ensure lowercase
@@ -36,6 +36,23 @@ def get_ignore_tweet_list(filepath: Path = None) -> List:
         ignore_tweet_list = []
 
     return ignore_tweet_list
+
+
+def get_ignore_profile_list(filepath: Path = None) -> List:
+    '''filter out tweets based on contents of user profile
+    '''
+    filepath = filepath or Path(__file__).parent.parent / 'data' / 'ignore_profile.txt'
+    if filepath.exists():
+        logger.info(f'Reading ignore profile list: {filepath}')
+        with open(filepath, 'r') as fp:
+            ignore_profile_list = fp.read().splitlines()
+        # ensure lowercase
+        ignore_profile_list = list(set(x.lower() for x in ignore_profile_list))
+    else:
+        logger.info(f'No ignore list found at: {filepath}')
+        ignore_profile_list = []
+
+    return ignore_profile_list
 
 
 def get_syllable_dict(filepath: Path = None) -> Dict:

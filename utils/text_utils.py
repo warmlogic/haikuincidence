@@ -7,6 +7,8 @@ from typing import List
 from unidecode import unidecode
 from ftfy import fix_text
 
+from .haiku_utils import clean_token
+
 logger = logging.getLogger("haikulogger")
 
 # Regex to look for All URLs https://gist.github.com/gruber/249502
@@ -25,10 +27,16 @@ def clean_text(text: str) -> str:
                     else letter for letter in word]) for word in fix_text(text).split()])
 
 
+def check_profile(status, ignore_profile_list: List[str]) -> bool:
+    return all([
+        (not text_contains_ignore_list(clean_token(clean_text(status['user']['description'])), ignore_profile_list)),
+    ])
+
+
 def check_text_wrapper(text: str, ignore_list: List[str]) -> bool:
     return all([
         (not text_contains_url(text)),
-        (not text_contains_ignore_list_plural(text, ignore_list)),
+        (not text_contains_ignore_list_plural(clean_token(text), ignore_list)),
         (not text_has_chars_digits_together(text)),
         (not text_is_all_uppercase(text)),
         # (text_is_all_alpha(text)),
@@ -95,15 +103,36 @@ def text_contains_ignore_list_plural(text: str, ignore_list: List[str]) -> bool:
     e.g., if ignore_list line is 'god dog', will match 'dogs are gods' but not 'doggies are godly'.
     '''
     # found all of the subtokens from one ignore line in the text
-    return any(
-        [
-            all(
-                [
-                    any([it in text.lower().split() for it in [itok, f'{itok}s', f'{itok}z', f'{itok}es']]) for itok in ignore_line.split()
-                ]
-            ) for ignore_line in ignore_list
-        ]
-    )
+    if text:
+        return any(
+            [
+                all(
+                    [
+                        any([it in text.lower().split() for it in [itok, f'{itok}s', f'{itok}z', f'{itok}es']]) for itok in ignore_line.split()
+                    ]
+                ) for ignore_line in ignore_list
+            ]
+        )
+    else:
+        return False
+
+
+def text_contains_ignore_list(text: str, ignore_list: List[str]) -> bool:
+    '''Return True if anything from the ignore list is in the text.
+    Each ignore list line is considered separately (OR logic).
+    All tokens from one ignore list line must be somewhere in the text (AND logic).
+    '''
+    # found all of the subtokens from one ignore line in the text
+    if text:
+        return any(
+            [
+                all(
+                    [itok in text.lower().split() for itok in ignore_line.split()]
+                ) for ignore_line in ignore_list
+            ]
+        )
+    else:
+        return False
 
 
 def text_has_chars_digits_together(text: str) -> bool:

@@ -196,8 +196,6 @@ class MyStreamer(TwythonStreamer):
                     logger.info(f"Failed check_text_wrapper: {text}")
             else:
                 logger.info(f"Failed check_profile: {status['user']['description']}")
-        else:
-            logger.info("Failed check_tweet")
 
     def on_error(self, status_code, status):
         logger.error(f'{status_code}, {status}')

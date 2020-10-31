@@ -94,101 +94,110 @@ class MyTwitterClient(Twython):
 
 class MyStreamer(TwythonStreamer):
     def on_success(self, status):
-        if 'text' in status and check_tweet(status, ignore_tweet_list, language=LANGUAGE) and check_profile(status, ignore_profile_list):
+        if 'text' in status and check_tweet(status, ignore_tweet_list, language=LANGUAGE):
             # print(status['text'])
-            text = clean_text(status['text'])
-            if check_text_wrapper(text, ignore_tweet_list):
-                haiku = get_haiku(text, inflect_p, pronounce_dict, syllable_dict, emoticons_list, GUESS_SYL_METHOD)
-                if haiku:
-                    # add tweet to database
-                    tweet_haiku = Haiku(
-                        status['id_str'],
-                        status['user']['screen_name'],
-                        status['user']['id_str'],
-                        status['user']['verified'],
-                        date_string_to_datetime(status['created_at']),
-                        status['text'],
-                        text,
-                        haiku,
-                        None,
-                        None,
-                    )
-                    if not DEBUG_RUN:
-                        # Add it to the database
-                        db_add_haiku(session, tweet_haiku)
-                    logger.info('=' * 50)
-                    logger.info(f"Found new haiku:\n{tweet_haiku.haiku}")
+            if check_profile(status, ignore_profile_list):
+                text = clean_text(status['text'])
+                if check_text_wrapper(text, ignore_tweet_list):
+                    haiku = get_haiku(text, inflect_p, pronounce_dict, syllable_dict, emoticons_list, GUESS_SYL_METHOD)
+                    if haiku:
+                        # add tweet to database
+                        tweet_haiku = Haiku(
+                            status['id_str'],
+                            status['user']['screen_name'],
+                            status['user']['id_str'],
+                            status['user']['verified'],
+                            date_string_to_datetime(status['created_at']),
+                            status['text'],
+                            text,
+                            haiku,
+                            None,
+                            None,
+                        )
+                        if not DEBUG_RUN:
+                            # Add it to the database
+                            db_add_haiku(session, tweet_haiku)
+                        logger.info('=' * 50)
+                        logger.info(f"Found new haiku:\n{tweet_haiku.haiku}")
 
-                    if not DEBUG_RUN:
-                        # Get haikus from the last hour
-                        haikus = db_get_haikus_unposted_timedelta(session, td_seconds=EVERY_N_SECONDS)
-                        # Prune old haikus
-                        db_delete_haikus_unposted_timedelta(session, td_days=DELETE_OLDER_THAN_DAYS)
-                        db_delete_haikus_posted_timedelta(session, td_days=DELETE_OLDER_THAN_DAYS)
-                    else:
-                        # Use the current haiku
-                        haikus = [tweet_haiku]
+                        if not DEBUG_RUN:
+                            # Get haikus from the last hour
+                            haikus = db_get_haikus_unposted_timedelta(session, td_seconds=EVERY_N_SECONDS)
+                            # Prune old haikus
+                            db_delete_haikus_unposted_timedelta(session, td_days=DELETE_OLDER_THAN_DAYS)
+                            db_delete_haikus_posted_timedelta(session, td_days=DELETE_OLDER_THAN_DAYS)
+                        else:
+                            # Use the current haiku
+                            haikus = [tweet_haiku]
 
-                    # # Get all unposted haikus
-                    # haikus = db_get_haikus_unposted(session)
+                        # # Get all unposted haikus
+                        # haikus = db_get_haikus_unposted(session)
 
-                    if len(haikus) > 0:
-                        # Get the haiku to post
-                        haiku_to_post = get_best_haiku(haikus, twitter, session)
-                        if haiku_to_post['status_id_str'] != '':
-                            status = twitter.show_status(id=haiku_to_post['status_id_str'])
+                        if len(haikus) > 0:
+                            # Get the haiku to post
+                            haiku_to_post = get_best_haiku(haikus, twitter, session)
+                            if haiku_to_post['status_id_str'] != '':
+                                status = twitter.show_status(id=haiku_to_post['status_id_str'])
 
-                            # Format the haiku with attribution
-                            haiku_attributed = f"{haiku_to_post['haiku']}\n\nA haiku by @{status['user']['screen_name']}"
+                                # Format the haiku with attribution
+                                haiku_attributed = f"{haiku_to_post['haiku']}\n\nA haiku by @{status['user']['screen_name']}"
 
-                            tweet_url = f"https://twitter.com/{status['user']['screen_name']}/status/{status['id_str']}"
+                                tweet_url = f"https://twitter.com/{status['user']['screen_name']}/status/{status['id_str']}"
 
-                            logger.info('=' * 50)
-                            if logger.isEnabledFor(logging.DEBUG):
-                                logger.debug(pformat(status))
-                                logger.debug(tweet_url)
-                                logger.debug(f"Original: {haiku_to_post['text_original']}")
-                                logger.debug(f"Cleaned:  {haiku_to_post['text_clean']}")
-                            logger.info(f"Haiku to post:\n{haiku_attributed}")
+                                logger.info('=' * 50)
+                                if logger.isEnabledFor(logging.DEBUG):
+                                    logger.debug(pformat(status))
+                                    logger.debug(tweet_url)
+                                    logger.debug(f"Original: {haiku_to_post['text_original']}")
+                                    logger.debug(f"Cleaned:  {haiku_to_post['text_clean']}")
+                                logger.info(f"Haiku to post:\n{haiku_attributed}")
 
-                            # Try to post haiku (client checks rate limit time internally)
-                            if POST_HAIKU:
-                                if POST_AS_REPLY:
-                                    logger.info('Attempting to post haiku as reply...')
-                                    # Post a tweet, sending as a reply to the coincidental haiku
-                                    posted_status = twitter.update_status_check_rate(
-                                        status=haiku_attributed,
-                                        in_reply_to_status_id=status['id_str'],
-                                        attachment_url=tweet_url,
-                                    )
+                                # Try to post haiku (client checks rate limit time internally)
+                                if POST_HAIKU:
+                                    if POST_AS_REPLY:
+                                        logger.info('Attempting to post haiku as reply...')
+                                        # Post a tweet, sending as a reply to the coincidental haiku
+                                        posted_status = twitter.update_status_check_rate(
+                                            status=haiku_attributed,
+                                            in_reply_to_status_id=status['id_str'],
+                                            attachment_url=tweet_url,
+                                        )
+                                    else:
+                                        logger.info('Attempting to post haiku, but not as reply...')
+                                        # Post a tweet, but not as a reply to the coincidental haiku
+                                        # The user will not get a notification
+                                        posted_status = twitter.update_status_check_rate(
+                                            status=haiku_attributed,
+                                            attachment_url=tweet_url,
+                                        )
+                                    if posted_status:
+                                        logger.info('Attempting to follow this poet...')
+                                        db_update_haiku_posted(session, haiku_to_post['status_id_str'])
+
+                                        # follow the user
+                                        if FOLLOW_POET:
+                                            try:
+                                                followed = twitter.create_friendship(
+                                                    screen_name=haiku_to_post['user_screen_name'], follow='false')
+                                                if followed['following']:
+                                                    logger.info('Success')
+                                                else:
+                                                    logger.info('Could not follow')
+                                            except TwythonError as e:
+                                                logger.info(e)
+
                                 else:
-                                    logger.info('Attempting to post haiku, but not as reply...')
-                                    # Post a tweet, but not as a reply to the coincidental haiku
-                                    # The user will not get a notification
-                                    posted_status = twitter.update_status_check_rate(
-                                        status=haiku_attributed,
-                                        attachment_url=tweet_url,
-                                    )
-                                if posted_status:
-                                    logger.info('Attempting to follow this poet...')
-                                    db_update_haiku_posted(session, haiku_to_post['status_id_str'])
-
-                                    # follow the user
-                                    if FOLLOW_POET:
-                                        try:
-                                            followed = twitter.create_friendship(
-                                                screen_name=haiku_to_post['user_screen_name'], follow='false')
-                                            if followed['following']:
-                                                logger.info('Success')
-                                            else:
-                                                logger.info('Could not follow')
-                                        except TwythonError as e:
-                                            logger.info(e)
-
-                            else:
-                                logger.debug('Found haiku but did not post')
+                                    logger.debug('Found haiku but did not post')
+                        else:
+                            logger.info('No haikus to choose from')
                     else:
-                        logger.info('No haikus to choose from')
+                        logger.info(f"Not a haiku: {text}")
+                else:
+                    logger.info(f"Failed check_text_wrapper: {text}")
+            else:
+                logger.info(f"Failed check_profile: {status['user']['description']}")
+        else:
+            logger.info("Failed check_tweet")
 
     def on_error(self, status_code, status):
         logger.error(f'{status_code}, {status}')

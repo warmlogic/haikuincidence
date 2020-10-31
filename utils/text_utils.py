@@ -30,7 +30,7 @@ def clean_text(text: str) -> str:
 
 def check_profile(status, ignore_profile_list: List[str]) -> bool:
     return all([
-        (not text_contains_ignore_list(clean_token(clean_text(status['user']['description'])), ignore_profile_list)),
+        (not text_contains_ignore_list(clean_token(clean_text(status['user']['description'])), ignore_profile_list, match_substring=True)),
     ])
 
 
@@ -99,7 +99,7 @@ def text_contains_url(text: str) -> bool:
     return len(url_all_re.findall(text)) > 0
 
 
-def text_contains_ignore_list_plural(text: str, ignore_list: List[str]) -> bool:
+def text_contains_ignore_list_plural(text: str, ignore_list: List[str], match_substring: bool = False) -> bool:
     '''Return True if anything from the ignore list is in the text.
     Each ignore list line is considered separately (OR logic).
     All tokens from one ignore list line must be somewhere in the text (AND logic).
@@ -110,18 +110,23 @@ def text_contains_ignore_list_plural(text: str, ignore_list: List[str]) -> bool:
     if text is None:
         return text
 
+    if match_substring:
+        text_compare = text.lower()
+    else:
+        text_compare = text.lower().split()
+
     return any(
         [
             all(
                 [
-                    any([it in text.lower().split() for it in [itok, f'{itok}s', f'{itok}z', f'{itok}es']]) for itok in ignore_line.split()
+                    any([it in text_compare for it in [itok, f'{itok}s', f'{itok}z', f'{itok}es']]) for itok in ignore_line.split()
                 ]
             ) for ignore_line in ignore_list
         ]
     )
 
 
-def text_contains_ignore_list(text: str, ignore_list: List[str]) -> bool:
+def text_contains_ignore_list(text: str, ignore_list: List[str], match_substring: bool = False) -> bool:
     '''Return True if anything from the ignore list is in the text.
     Each ignore list line is considered separately (OR logic).
     All tokens from one ignore list line must be somewhere in the text (AND logic).
@@ -130,10 +135,15 @@ def text_contains_ignore_list(text: str, ignore_list: List[str]) -> bool:
     if text is None:
         return text
 
+    if match_substring:
+        text_compare = text.lower()
+    else:
+        text_compare = text.lower().split()
+
     return any(
         [
             all(
-                [itok in text.lower().split() for itok in ignore_line.split()]
+                [itok in text_compare for itok in ignore_line.lower().split()]
             ) for ignore_line in ignore_list
         ]
     )

@@ -21,6 +21,9 @@ def clean_text(text: str) -> str:
     '''
     # fix wonky characters, but keep emojis
     # split on whitespace and rejoin; removes multiple spaces and newlines
+    if text is None:
+        return text
+
     return ' '.join([''.join([unidecode(letter) if (str(letter.encode('unicode-escape'))[2] != '\\')
                     else letter for letter in word]) for word in fix_text(text).split()])
 
@@ -76,10 +79,13 @@ def remove_repeat_last_letter(text: str) -> str:
     the same string with only one instance of that letter.
     wtfffff = wtf. lmaoooo = lmao. stuff = stuf.
     '''
-    if text:
-        return re.sub(rf'({text[-1]})\1+$', r'\1', text)
-    else:
-        return ''
+    if text is None:
+        return text
+
+    if len(set(text)) == 1:
+        return text
+
+    return re.sub(rf'({text[-1]})\1+$', r'\1', text)
 
 
 def text_might_contain_acronym(text: str) -> bool:
@@ -101,18 +107,18 @@ def text_contains_ignore_list_plural(text: str, ignore_list: List[str]) -> bool:
     e.g., if ignore_list line is 'god dog', will match 'dogs are gods' but not 'doggies are godly'.
     '''
     # found all of the subtokens from one ignore line in the text
-    if text:
-        return any(
-            [
-                all(
-                    [
-                        any([it in text.lower().split() for it in [itok, f'{itok}s', f'{itok}z', f'{itok}es']]) for itok in ignore_line.split()
-                    ]
-                ) for ignore_line in ignore_list
-            ]
-        )
-    else:
-        return False
+    if text is None:
+        return text
+
+    return any(
+        [
+            all(
+                [
+                    any([it in text.lower().split() for it in [itok, f'{itok}s', f'{itok}z', f'{itok}es']]) for itok in ignore_line.split()
+                ]
+            ) for ignore_line in ignore_list
+        ]
+    )
 
 
 def text_contains_ignore_list(text: str, ignore_list: List[str]) -> bool:
@@ -121,16 +127,16 @@ def text_contains_ignore_list(text: str, ignore_list: List[str]) -> bool:
     All tokens from one ignore list line must be somewhere in the text (AND logic).
     '''
     # found all of the subtokens from one ignore line in the text
-    if text:
-        return any(
-            [
-                all(
-                    [itok in text.lower().split() for itok in ignore_line.split()]
-                ) for ignore_line in ignore_list
-            ]
-        )
-    else:
-        return False
+    if text is None:
+        return text
+
+    return any(
+        [
+            all(
+                [itok in text.lower().split() for itok in ignore_line.split()]
+            ) for ignore_line in ignore_list
+        ]
+    )
 
 
 def text_has_chars_digits_together(text: str) -> bool:
@@ -155,6 +161,9 @@ def text_is_all_uppercase(text: str) -> bool:
 
 
 def clean_token(token: str) -> str:
+    if token is None:
+        return token
+
     # remove space before some punctuation if preceded by a letter or number
     # ("hello ,how are you ? doing")
     token = re.sub(r'(\w)\s([.,;!?](?=\s|$)?)', r'\1\2', token)

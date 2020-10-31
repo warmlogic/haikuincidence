@@ -273,6 +273,11 @@
         "pronunciation": "by the way",
         "syllables": 3
     },
+    "cmon": {
+        "alt": [],
+        "pronunciation": "come on",
+        "syllables": 2
+    },
     "CNBC": {
         "alt": [],
         "pronunciation": "C N B C",
@@ -405,6 +410,11 @@
     "doesnt": {
         "alt": [],
         "pronunciation": "doesn't",
+        "syllables": 2
+    },
+    "doin": {
+        "alt": [],
+        "pronunciation": "doing",
         "syllables": 2
     },
     "dnt": {
@@ -644,6 +654,11 @@
         "alt": [],
         "pronunciation": "gah",
         "syllables": 1
+    },
+    "gargle": {
+        "alt": [],
+        "pronunciation": "gargle",
+        "syllables": 2
     },
     "gb": {
         "alt": [],
@@ -1349,6 +1364,11 @@
         "pronunciation": "our",
         "syllables": 1
     },
+    "phd": {
+        "alt": [],
+        "pronunciation": "p h d",
+        "syllables": 3
+    },
     "pls": {
         "alt": [],
         "pronunciation": "please",
@@ -1684,6 +1704,11 @@
         "pronunciation": "tweet",
         "syllables": 1
     },
+    "tweeted": {
+        "alt": [],
+        "pronunciation": "tweeted",
+        "syllables": 2
+    },
     "twtter": {
         "alt": [],
         "pronunciation": "twitter",
@@ -1729,15 +1754,20 @@
         "pronunciation": "voy",
         "syllables": 1
     },
+    "vr": {
+        "alt": [],
+        "pronunciation": "V R",
+        "syllables": 2
+    },
     "vs": {
         "alt": [],
         "pronunciation": "versus",
         "syllables": 2
     },
-    "vr": {
+    "vu": {
         "alt": [],
-        "pronunciation": "V R",
-        "syllables": 2
+        "pronunciation": "vu",
+        "syllables": 1
     },
     "w": {
         "alt": [],
@@ -1753,6 +1783,11 @@
         "alt": [],
         "pronunciation": "whatever",
         "syllables": 3
+    },
+    "wdym": {
+        "alt": [],
+        "pronunciation": "what do you mean",
+        "syllables": 4
     },
     "weeknd": {
         "alt": [],

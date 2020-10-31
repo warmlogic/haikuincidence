@@ -82,7 +82,7 @@ def remove_repeat_last_letter(text: str) -> str:
     if text is None:
         return text
 
-    if len(set(text)) == 1:
+    if len(set(text)) <= 1:
         return text
 
     return re.sub(rf'({text[-1]})\1+$', r'\1', text)

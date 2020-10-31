@@ -190,12 +190,10 @@ class MyStreamer(TwythonStreamer):
                                     logger.debug('Found haiku but did not post')
                         else:
                             logger.info('No haikus to choose from')
-                    else:
-                        logger.info(f"Not a haiku: {text}")
                 else:
                     logger.info(f"Failed check_text_wrapper: {text}")
             else:
-                logger.info(f"Failed check_profile: {status['user']['description']}")
+                logger.info(f"Failed check_profile: {status['user']['screen_name']}: {status['user']['description']}")
 
     def on_error(self, status_code, status):
         logger.error(f'{status_code}, {status}')

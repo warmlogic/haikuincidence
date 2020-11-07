@@ -78,11 +78,12 @@ def remove_repeat_last_letter(text: str) -> str:
     '''Turn a string that has a repeated last letter into
     the same string with only one instance of that letter.
     wtfffff = wtf. lmaoooo = lmao. stuff = stuf.
+    If the entire text is the same letter and not a vowel, keep the letters (MMM = em em em)
     '''
     if text is None:
         return text
 
-    if len(set(text)) <= 1:
+    if len(set(text)) <= 1 and set(text) not in ['a', 'e', 'i', 'o', 'u', 'y']:
         return text
 
     return re.sub(rf'({text[-1]})\1+$', r'\1', text)

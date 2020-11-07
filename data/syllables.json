@@ -84,15 +84,15 @@
         "pronunciation": "as far as I know",
         "syllables": 5
     },
-    "aged": {
-        "alt": [],
-        "pronunciation": "aged",
-        "syllables": 1
-    },
     "afk": {
         "alt": [],
         "pronunciation": "A F K",
         "syllables": 3
+    },
+    "aged": {
+        "alt": [],
+        "pronunciation": "aged",
+        "syllables": 1
     },
     "ain": {
         "alt": [],
@@ -146,7 +146,7 @@
     },
     "autotune": {
         "alt": [],
-        "pronunciation": "autotune",
+        "pronunciation": "auto tune",
         "syllables": 3
     },
     "awol": {
@@ -181,7 +181,7 @@
     },
     "bday": {
         "alt": [],
-        "pronunciation": "b day",
+        "pronunciation": "birthday",
         "syllables": 2
     },
     "bdrm": {
@@ -212,6 +212,11 @@
     "bf": {
         "alt": [],
         "pronunciation": "boyfriend",
+        "syllables": 2
+    },
+    "bfs": {
+        "alt": [],
+        "pronunciation": "boyfriends",
         "syllables": 2
     },
     "bff": {
@@ -392,6 +397,11 @@
         "pronunciation": "D M",
         "syllables": 2
     },
+    "dms": {
+        "alt": [],
+        "pronunciation": "D Ms",
+        "syllables": 2
+    },
     "dm'd": {
         "alt": [],
         "pronunciation": "D M'd",
@@ -427,6 +437,11 @@
         "pronunciation": "doctor",
         "syllables": 2
     },
+    "drs": {
+        "alt": [],
+        "pronunciation": "doctors",
+        "syllables": 2
+    },
     "dya": {
         "alt": [],
         "pronunciation": "do you",
@@ -455,6 +470,11 @@
     "EQ": {
         "alt": [],
         "pronunciation": "E Q",
+        "syllables": 2
+    },
+    "EQs": {
+        "alt": [],
+        "pronunciation": "E Qs",
         "syllables": 2
     },
     "ESPN": {
@@ -847,12 +867,12 @@
     },
     "i'ma": {
         "alt": [],
-        "pronunciation": "ima",
+        "pronunciation": "imma",
         "syllables": 2
     },
     "ima": {
         "alt": [],
-        "pronunciation": "ima",
+        "pronunciation": "imma",
         "syllables": 2
     },
     "i'mma": {
@@ -912,12 +932,12 @@
     },
     "jeje": {
         "alt": [],
-        "pronunciation": "jeje",
+        "pronunciation": "je je",
         "syllables": 2
     },
     "jejeje": {
         "alt": [],
-        "pronunciation": "jejeje",
+        "pronunciation": "je je je",
         "syllables": 3
     },
     "jfc": {
@@ -974,6 +994,11 @@
         "alt": [],
         "pronunciation": "K K",
         "syllables": 2
+    },
+    "kkk": {
+        "alt": [],
+        "pronunciation": "K K K",
+        "syllables": 3
     },
     "kno": {
         "alt": [],
@@ -1167,6 +1192,11 @@
             }
         ],
         "pronunciation": "motherfucker",
+        "syllables": 4
+    },
+    "mfs": {
+        "alt": [],
+        "pronunciation": "motherfuckers",
         "syllables": 4
     },
     "mfer": {
@@ -1710,11 +1740,6 @@
         "syllables": 2
     },
     "twtter": {
-        "alt": [],
-        "pronunciation": "twitter",
-        "syllables": 2
-    },
-    "twitter": {
         "alt": [],
         "pronunciation": "twitter",
         "syllables": 2

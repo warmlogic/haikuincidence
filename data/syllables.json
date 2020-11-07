@@ -54,6 +54,16 @@
         "pronunciation": "dec",
         "syllables": 1
     },
+    "AA": {
+        "alt": [],
+        "pronunciation": "A A",
+        "syllables": 2
+    },
+    "AAA": {
+        "alt": [],
+        "pronunciation": "A A A",
+        "syllables": 3
+    },
     "ABC": {
         "alt": [],
         "pronunciation": "A B C",
@@ -293,9 +303,19 @@
         "pronunciation": "C N N",
         "syllables": 3
     },
+    "Cornelius": {
+        "alt": [],
+        "pronunciation": "Cor nel i us",
+        "syllables": 4
+    },
     "couldnt": {
         "alt": [],
         "pronunciation": "couldn't",
+        "syllables": 2
+    },
+    "COVID": {
+        "alt": [],
+        "pronunciation": "co vid",
         "syllables": 2
     },
     "cpop": {

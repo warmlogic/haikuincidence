@@ -13,6 +13,9 @@ logger = logging.getLogger("haikulogger")
 url_all_re = re.compile(r'(?i)\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))')
 # Web only version: https://gist.github.com/gruber/8891611
 
+# Letters that can be pronoucned as a single syllable when repeated (aaaaaaa)
+PRONOUNCED_LETTERS = ['a', 'e', 'f', 'h', 'i', 'l', 'm', 'n', 'o', 'r', 's', 'u', 'v', 'w', 'y', 'z']
+
 
 def clean_text(text: str) -> str:
     '''Process text so it's ready for syllable counting
@@ -78,12 +81,15 @@ def remove_repeat_last_letter(text: str) -> str:
     '''Turn a string that has a repeated last letter into
     the same string with only one instance of that letter.
     wtfffff = wtf. lmaoooo = lmao. stuff = stuf.
-    If the entire text is the same letter and not a vowel, keep the letters (MMM = em em em)
+    If the entire text is the same letter and not one that can be pronounced,
+    keep the letters.
     '''
     if text is None:
         return text
 
-    if len(set(text)) <= 1 and set(text) not in ['a', 'e', 'i', 'o', 'u', 'y']:
+    # If it's a single letter that can be pronounced, return the full token
+    # Set intersection is the letter if it's in the special list, else empty
+    if (len(set(text)) <= 1) and (set(text) & set(PRONOUNCED_LETTERS)):
         return text
 
     return re.sub(rf'({text[-1]})\1+$', r'\1', text)
@@ -91,6 +97,11 @@ def remove_repeat_last_letter(text: str) -> str:
 
 def text_might_contain_acronym(text: str) -> bool:
     '''True if text satisfies acronym criteria. One option for all caps, one for lowercase.'''
+    # If it's a single letter that can be pronounced, don't try to make it an acronym
+    # Set intersection is the letter if it's in the special list, else empty
+    if (len(set(text)) <= 1) and (set(text) & set(PRONOUNCED_LETTERS)):
+        return False
+
     return ((len(text) <= 5 and re.findall(r'\b[A-Z\.]{2,}s?\b', text)) or
             (len(text) <= 3 and re.findall(r'\b[a-z\.]{2,}s?\b', text)))
 

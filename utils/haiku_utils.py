@@ -167,14 +167,14 @@ def guess_syllables(word: str, method: str = 'min') -> int:
                     # Seeing a new vowel bumps the syllable count.
                     minsyl += 1
                     maxsyl += 1
-                    logger.debug(f'new syllable: min syl {minsyl}, max syl {maxsyl}')
+                    logger.debug(f'new syllable: min syl {minsyl}, mean syl {(minsyl + maxsyl) // 2}, max syl {maxsyl}')
                 elif on_vowel and not in_diphthong and c != lastchar:
                     # We were already in a vowel.
                     # Don't increment anything except the max count,
                     # and only do that once per diphthong.
                     in_diphthong = True
                     maxsyl += 1
-                    logger.debug(f'diphthong: {c}: min syl {minsyl}, max syl {maxsyl}')
+                    logger.debug(f'diphthong: {c}: min syl {minsyl}, mean syl {(minsyl + maxsyl) // 2}, max syl {maxsyl}')
             else:
                 if re.findall(r'[\w]', c):
                     logger.debug(f'consonant: {c}')
@@ -187,11 +187,11 @@ def guess_syllables(word: str, method: str = 'min') -> int:
         # Some special cases: ends in e, or past tense, may have counted too many
         if len(word) >= 2 and (word[-2:] not in ['ie', 'be']) and ((word[-1] == 'e') or (word[-2:] == 'ed')):
             minsyl -= 1
-            logger.debug(f'Removing a syllable for "{word}": min syl {minsyl}, max syl {maxsyl}')
+            logger.debug(f'Removing a syllable for "{word}": min syl {minsyl}, mean syl {(minsyl + maxsyl) // 2}, max syl {maxsyl}')
         # if it ended with a consonant followed by y, count that as a syllable.
         if word[-1] == 'y' and not on_vowel:
             maxsyl += 1
-            logger.debug(f'Adding a syllable for "{word}": min syl {minsyl}, max syl {maxsyl}')
+            logger.debug(f'Adding a syllable for "{word}": min syl {minsyl}, mean syl {(minsyl + maxsyl) // 2}, max syl {maxsyl}')
 
         # if found no syllables but there's at least one letter,
         # count as one syllable
@@ -203,11 +203,11 @@ def guess_syllables(word: str, method: str = 'min') -> int:
 
     if method == 'min':
         syl = minsyl
-    elif method == 'max':
-        syl = maxsyl
     elif method == 'mean':
         # Average and round down
         syl = (minsyl + maxsyl) // 2
+    elif method == 'max':
+        syl = maxsyl
 
     return syl
 

@@ -16,19 +16,37 @@ url_all_re = re.compile(r'(?i)\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[
 # Letters that can be pronoucned as a single syllable when repeated (aaaaaaa)
 PRONOUNCED_LETTERS = ['a', 'e', 'f', 'h', 'i', 'l', 'm', 'n', 'o', 'r', 's', 'u', 'v', 'w', 'y', 'z']
 
+UNICODE_IGNORE = [
+    '\\u3164',  # Hangul Filler
+]
+
 
 def clean_text(text: str) -> str:
     '''Process text so it's ready for syllable counting
 
     If this doesn't properly handle emojis, try https://stackoverflow.com/a/49930688/2592858
     '''
-    # fix wonky characters, but keep emojis
+    # change some characters that are difficult to count syllables for, but keep emojis
     # split on whitespace and rejoin; removes multiple spaces and newlines
     if text is None:
         return text
 
-    return ' '.join([''.join([unidecode(letter) if (str(letter.encode('unicode-escape'))[2] != '\\')
-                    else letter for letter in word]) for word in fix_text(text).split()])
+    # Remove some unicode letters
+    text_cleaned = ' '.join(
+        [''.join(
+            [letter for letter in word if letter.encode('unicode-escape').decode() not in UNICODE_IGNORE]
+        ) for word in fix_text(text).split()]
+    )
+
+    # Decode unicode letters and keep emojis
+    text_cleaned = ' '.join(
+        [''.join(
+            [unidecode(letter) if (str(letter.encode('unicode-escape'))[2] != '\\')
+                else letter for letter in word]
+        ) for word in text_cleaned.split()]
+    )
+
+    return text_cleaned
 
 
 def check_profile(status, ignore_profile_list: List[str]) -> bool:

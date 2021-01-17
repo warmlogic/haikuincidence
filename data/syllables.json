@@ -114,6 +114,11 @@
         "pronunciation": "ain't",
         "syllables": 1
     },
+    "airbnb": {
+        "alt": [],
+        "pronunciation": "air b n b",
+        "syllables": 4
+    },
     "aka": {
         "alt": [],
         "pronunciation": "A K A",
@@ -302,6 +307,11 @@
         "alt": [],
         "pronunciation": "C N N",
         "syllables": 3
+    },
+    "colossians": {
+        "alt": [],
+        "pronunciation": "co loss i ans",
+        "syllables": 4
     },
     "Cornelius": {
         "alt": [],
@@ -745,9 +755,19 @@
         "pronunciation": "gon",
         "syllables": 1
     },
+    "google": {
+        "alt": [],
+        "pronunciation": "goo gle",
+        "syllables": 2
+    },
     "gn": {
         "alt": [],
         "pronunciation": "goodnight",
+        "syllables": 2
+    },
+    "gna": {
+        "alt": [],
+        "pronunciation": "gonna",
         "syllables": 2
     },
     "grindr": {
@@ -775,6 +795,11 @@
         "pronunciation": "ha",
         "syllables": 1
     },
+    "hab": {
+        "alt": [],
+        "pronunciation": "hab",
+        "syllables": 1
+    },
     "hasnt": {
         "alt": [],
         "pronunciation": "hasn't",
@@ -794,6 +819,11 @@
         "alt": [],
         "pronunciation": "hehehe",
         "syllables": 3
+    },
+    "het": {
+        "alt": [],
+        "pronunciation": "het",
+        "syllables": 1
     },
     "hm": {
         "alt": [],
@@ -1095,6 +1125,11 @@
         "pronunciation": "L G B T Q",
         "syllables": 5
     },
+    "lgtm": {
+        "alt": [],
+        "pronunciation": "looks good to me",
+        "syllables": 4
+    },
     "livetweet": {
         "alt": [],
         "pronunciation": "live tweet",
@@ -1264,6 +1299,11 @@
         "pronunciation": "M M A",
         "syllables": 3
     },
+    "moodle": {
+        "alt": [],
+        "pronunciation": "moo dle",
+        "syllables": 2
+    },
     "MOTD": {
         "alt": [],
         "pronunciation": "message of the day",
@@ -1404,6 +1444,11 @@
         "pronunciation": "oompa",
         "syllables": 2
     },
+    "ooo": {
+        "alt": [],
+        "pronunciation": "out of office",
+        "syllables": 4
+    },
     "op": {
         "alt": [],
         "pronunciation": "O P",
@@ -1483,6 +1528,11 @@
         "alt": [],
         "pronunciation": "quote of the day",
         "syllables": 4
+    },
+    "reallly": {
+        "alt": [],
+        "pronunciation": "really",
+        "syllables": 2
     },
     "rly": {
         "alt": [],
@@ -1769,6 +1819,26 @@
         "pronunciation": "thank you so much",
         "syllables": 4
     },
+    "uhm": {
+        "alt": [],
+        "pronunciation": "um",
+        "syllables": 1
+    },
+    "unbuckle": {
+        "alt": [],
+        "pronunciation": "un buckle",
+        "syllables": 3
+    },
+    "upload": {
+        "alt": [],
+        "pronunciation": "up load",
+        "syllables": 2
+    },
+    "uploaded": {
+        "alt": [],
+        "pronunciation": "up loaded",
+        "syllables": 3
+    },
     "ur": {
         "alt": [],
         "pronunciation": "your",
@@ -1954,6 +2024,11 @@
         "pronunciation": "yolo",
         "syllables": 2
     },
+    "youngbae": {
+        "alt": [],
+        "pronunciation": "youngbae",
+        "syllables": 2
+    },
     "yr": {
         "alt": [],
         "pronunciation": "your",
@@ -1962,6 +2037,11 @@
     "yrs": {
         "alt": [],
         "pronunciation": "years",
+        "syllables": 1
+    },
+    "yuge": {
+        "alt": [],
+        "pronunciation": "huge",
         "syllables": 1
     }
 }

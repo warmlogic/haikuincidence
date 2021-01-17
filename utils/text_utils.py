@@ -102,7 +102,7 @@ def remove_repeat_last_letter(text: str) -> str:
     If the entire text is the same letter and not one that can be pronounced,
     keep the letters.
     '''
-    if text is None:
+    if (text is None) or (not text):
         return text
 
     # If it's a single letter that can be pronounced, return the full token

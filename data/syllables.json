@@ -124,6 +124,11 @@
         "pronunciation": "A K A",
         "syllables": 3
     },
+    "AKC": {
+        "alt": [],
+        "pronunciation": "A K C",
+        "syllables": 3
+    },
     "am": {
         "alt": [],
         "pronunciation": "am",
@@ -138,6 +143,16 @@
         "alt": [],
         "pronunciation": "appointment",
         "syllables": 3
+    },
+    "arent": {
+        "alt": [],
+        "pronunciation": "aren't",
+        "syllables": 1
+    },
+    "aren't": {
+        "alt": [],
+        "pronunciation": "aren't",
+        "syllables": 1
     },
     "ARMYS": {
         "alt": [],
@@ -190,6 +205,11 @@
         "syllables": 2
     },
     "bc": {
+        "alt": [],
+        "pronunciation": "because",
+        "syllables": 2
+    },
+    "bcos": {
         "alt": [],
         "pronunciation": "because",
         "syllables": 2
@@ -714,6 +734,11 @@
         "alt": [],
         "pronunciation": "gigabyte",
         "syllables": 3
+    },
+    "gcash": {
+        "alt": [],
+        "pronunciation": "g cash",
+        "syllables": 2
     },
     "geaux": {
         "alt": [],
@@ -1359,6 +1384,11 @@
         "pronunciation": "N H L",
         "syllables": 3
     },
+    "nm": {
+        "alt": [],
+        "pronunciation": "nevermind",
+        "syllables": 3
+    },
     "nsa": {
         "alt": [],
         "pronunciation": "N S A",
@@ -1373,6 +1403,11 @@
         "alt": [],
         "pronunciation": "not safe for work",
         "syllables": 4
+    },
+    "nvm": {
+        "alt": [],
+        "pronunciation": "nevermind",
+        "syllables": 3
     },
     "ny": {
         "alt": [],
@@ -1454,10 +1489,20 @@
         "pronunciation": "O P",
         "syllables": 2
     },
+    "opp": {
+        "alt": [],
+        "pronunciation": "opp",
+        "syllables": 1
+    },
     "our": {
         "alt": [],
         "pronunciation": "our",
         "syllables": 1
+    },
+    "paella": {
+        "alt": [],
+        "pronunciation": "paella",
+        "syllables": 3
     },
     "phd": {
         "alt": [],
@@ -1908,6 +1953,16 @@
         "alt": [],
         "pronunciation": "weekend",
         "syllables": 2
+    },
+    "werent": {
+        "alt": [],
+        "pronunciation": "weren't",
+        "syllables": 1
+    },
+    "weren't": {
+        "alt": [],
+        "pronunciation": "weren't",
+        "syllables": 1
     },
     "wfh": {
         "alt": [],

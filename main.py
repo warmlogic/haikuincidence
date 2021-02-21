@@ -42,7 +42,7 @@ if DEBUG_RUN:
     POST_AS_REPLY = False
     FOLLOW_POET = False
     EVERY_N_SECONDS = 1
-    # DELETE_OLDER_THAN_DAYS = None
+    DELETE_OLDER_THAN_DAYS = None
     ROWS_TO_KEEP = None
     INITIAL_TIME = datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)
 else:
@@ -52,8 +52,10 @@ else:
     POST_AS_REPLY = os.getenv("POST_AS_REPLY", default="False") == "True"
     FOLLOW_POET = os.getenv("FOLLOW_POET", default="False") == "True"
     EVERY_N_SECONDS = int(os.getenv("EVERY_N_SECONDS", default="3600"))
-    # DELETE_OLDER_THAN_DAYS = int(os.getenv("DELETE_OLDER_THAN_DAYS", default="45"))
-    ROWS_TO_KEEP = int(os.getenv("ROWS_TO_KEEP", default="9500"))
+    DELETE_OLDER_THAN_DAYS = os.getenv("DELETE_OLDER_THAN_DAYS", default=None)
+    DELETE_OLDER_THAN_DAYS = float(DELETE_OLDER_THAN_DAYS) if DELETE_OLDER_THAN_DAYS else None
+    ROWS_TO_KEEP = os.getenv("ROWS_TO_KEEP", default=None)
+    ROWS_TO_KEEP = int(ROWS_TO_KEEP) if ROWS_TO_KEEP else None
     # Wait half the rate limit time before making first post
     INITIAL_TIME = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(seconds=EVERY_N_SECONDS // 2)
 
@@ -114,9 +116,9 @@ class MyStreamer(TwythonStreamer):
                             # Delete old data by row count
                             Haiku.keep_haikus_n_rows(session, n=ROWS_TO_KEEP)
 
-                            # # Delete old data by timestamp
-                            # Haiku.delete_haikus_unposted_timedelta(session, td_days=DELETE_OLDER_THAN_DAYS)
-                            # Haiku.delete_haikus_posted_timedelta(session, td_days=DELETE_OLDER_THAN_DAYS)
+                            # Delete old data by timestamp
+                            Haiku.delete_haikus_unposted_timedelta(session, days=DELETE_OLDER_THAN_DAYS)
+                            Haiku.delete_haikus_posted_timedelta(session, days=DELETE_OLDER_THAN_DAYS)
                         else:
                             # Use the current haiku
                             haikus = [tweet_haiku]

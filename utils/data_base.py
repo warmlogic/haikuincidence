@@ -162,37 +162,39 @@ class Haiku(Base):
             session.rollback()
 
     @classmethod
-    def delete_haikus_unposted_timedelta(cls, session, td_days: int = None) -> List:
+    def delete_haikus_unposted_timedelta(cls, session, days: float = None) -> List:
         '''Delete all unposted records older than N days
         '''
-        if td_days:
-            filter_td = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(days=td_days)
+        if days is not None:
+            ts_end = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(days=days)
             try:
+                logger.info(f'Deleting unposted haikus older than {days} days')
                 delete_q = cls.__table__.delete().where(
-                    cls.created_at <= filter_td).where(
+                    cls.created_at < ts_end).where(
                         cls.date_posted == None)  # noqa: E711
 
                 session.execute(delete_q)
                 session.commit()
             except Exception:
-                logger.exception(f'Exception when deleting unposted haikus older than {td_days} days')
+                logger.exception(f'Exception when deleting unposted haikus older than {days} days')
                 session.rollback()
 
     @classmethod
-    def delete_haikus_posted_timedelta(cls, session, td_days: int = None) -> List:
+    def delete_haikus_posted_timedelta(cls, session, days: float = None) -> List:
         '''Delete all posted records older than N days
         '''
-        if td_days:
-            filter_td = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(days=td_days)
+        if days is not None:
+            ts_end = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(days=days)
             try:
+                logger.info(f'Deleting posted haikus older than {days} days')
                 delete_q = cls.__table__.delete().where(
-                    cls.created_at <= filter_td).where(
+                    cls.created_at < ts_end).where(
                         cls.date_posted != None)  # noqa: E711
 
                 session.execute(delete_q)
                 session.commit()
             except Exception:
-                logger.exception(f'Exception when deleting posted haikus older than {td_days} days')
+                logger.exception(f'Exception when deleting posted haikus older than {days} days')
                 session.rollback()
 
     @classmethod

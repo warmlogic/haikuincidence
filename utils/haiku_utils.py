@@ -4,7 +4,7 @@ import re
 from typing import List, Dict
 
 from utils.text_utils import clean_token, remove_repeat_last_letter, text_might_contain_acronym
-from utils.data_tweets_haiku import db_update_haiku_deleted
+from utils.data_base import Haiku
 
 logger = logging.getLogger("haikulogger")
 
@@ -311,7 +311,7 @@ def get_best_haiku(haikus, twitter, session) -> Dict:
             # Tweet no longer exists
             this_status = {}
             # soft delete
-            db_update_haiku_deleted(session, h.status_id_str)
+            Haiku.update_haiku_deleted(session, h.status_id_str)
         if this_status:
             if this_status['user']['verified']:
                 haiku_to_post = construct_haiku_to_post(h, this_status)
@@ -331,12 +331,12 @@ def get_best_haiku(haikus, twitter, session) -> Dict:
             try:
                 this_status = twitter.show_status(id=h.status_id_str)
             except Exception:
-                logger.exception(f'Exception when getting best status (2)')
+                logger.exception('Exception when getting best status (2)')
                 logger.info(f'{h.user_screen_name}/status/{h.status_id_str}')
                 # Tweet no longer exists, not going to post a haiku this time
                 this_status = {}
                 # soft delete
-                db_update_haiku_deleted(session, h.status_id_str)
+                Haiku.update_haiku_deleted(session, h.status_id_str)
             if this_status:
                 haiku_to_post = construct_haiku_to_post(h, this_status)
                 break

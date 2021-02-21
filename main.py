@@ -11,13 +11,10 @@ from nltk.corpus import cmudict
 from twython import Twython, TwythonError
 from twython import TwythonStreamer
 
+from utils.data_base import session_factory, Haiku
 from utils.data_utils import get_track_str, get_ignore_tweet_list, get_ignore_profile_list, get_syllable_dict, get_emoticons_list
 from utils.text_utils import date_string_to_datetime, check_tweet, clean_text, check_text_wrapper, check_profile
 from utils.haiku_utils import get_haiku, get_best_haiku
-
-from utils.data_base import session_factory
-from utils.data_tweets_haiku import Haiku, db_add_haiku, db_get_haikus_unposted_timedelta
-from utils.data_tweets_haiku import db_update_haiku_posted, db_delete_haikus_unposted_timedelta, db_delete_haikus_posted_timedelta
 
 # I'm a poet and I didn't even know it. Hey, that's a haiku!
 
@@ -40,19 +37,23 @@ DEBUG_RUN = DEBUG_RUN == "True"
 
 if DEBUG_RUN:
     logger.setLevel(logging.DEBUG)
+    LOG_HAIKU = False
     POST_HAIKU = False
     POST_AS_REPLY = False
     FOLLOW_POET = False
     EVERY_N_SECONDS = 1
-    DELETE_OLDER_THAN_DAYS = None
+    # DELETE_OLDER_THAN_DAYS = None
+    ROWS_TO_KEEP = None
     INITIAL_TIME = datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)
 else:
     logger.setLevel(logging.INFO)
+    LOG_HAIKU = True
     POST_HAIKU = os.getenv("POST_HAIKU", default="False") == "True"
     POST_AS_REPLY = os.getenv("POST_AS_REPLY", default="False") == "True"
     FOLLOW_POET = os.getenv("FOLLOW_POET", default="False") == "True"
     EVERY_N_SECONDS = int(os.getenv("EVERY_N_SECONDS", default="3600"))
-    DELETE_OLDER_THAN_DAYS = int(os.getenv("DELETE_OLDER_THAN_DAYS", default="45"))
+    # DELETE_OLDER_THAN_DAYS = int(os.getenv("DELETE_OLDER_THAN_DAYS", default="45"))
+    ROWS_TO_KEEP = int(os.getenv("ROWS_TO_KEEP", default="9500"))
     # Wait half the rate limit time before making first post
     INITIAL_TIME = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(seconds=EVERY_N_SECONDS // 2)
 
@@ -101,37 +102,27 @@ class MyStreamer(TwythonStreamer):
                 if check_text_wrapper(text, ignore_tweet_list):
                     haiku = get_haiku(text, inflect_p, pronounce_dict, syllable_dict, emoticons_list, GUESS_SYL_METHOD)
                     if haiku:
-                        # add tweet to database
-                        tweet_haiku = Haiku(
-                            status['id_str'],
-                            status['user']['screen_name'],
-                            status['user']['id_str'],
-                            status['user']['verified'],
-                            date_string_to_datetime(status['created_at']),
-                            status['text'],
-                            text,
-                            haiku,
-                            None,
-                            None,
-                        )
-                        if not DEBUG_RUN:
-                            # Add it to the database
-                            db_add_haiku(session, tweet_haiku)
+                        # Add it to the database
+                        tweet_haiku = Haiku.add_haiku(session, status, text, haiku, log_haiku=LOG_HAIKU)
                         logger.info('=' * 50)
                         logger.info(f"Found new haiku:\n{tweet_haiku.haiku}")
 
                         if not DEBUG_RUN:
                             # Get haikus from the last hour
-                            haikus = db_get_haikus_unposted_timedelta(session, td_seconds=EVERY_N_SECONDS)
-                            # Prune old haikus
-                            db_delete_haikus_unposted_timedelta(session, td_days=DELETE_OLDER_THAN_DAYS)
-                            db_delete_haikus_posted_timedelta(session, td_days=DELETE_OLDER_THAN_DAYS)
+                            haikus = Haiku.get_haikus_unposted_timedelta(session, td_seconds=EVERY_N_SECONDS)
+
+                            # Delete old data by row count
+                            Haiku.keep_haikus_n_rows(session, n=ROWS_TO_KEEP)
+
+                            # # Delete old data by timestamp
+                            # Haiku.delete_haikus_unposted_timedelta(session, td_days=DELETE_OLDER_THAN_DAYS)
+                            # Haiku.delete_haikus_posted_timedelta(session, td_days=DELETE_OLDER_THAN_DAYS)
                         else:
                             # Use the current haiku
                             haikus = [tweet_haiku]
 
                         # # Get all unposted haikus
-                        # haikus = db_get_haikus_unposted(session)
+                        # haikus = Haiku.get_haikus_unposted(session)
 
                         if len(haikus) > 0:
                             # Get the haiku to post
@@ -172,7 +163,7 @@ class MyStreamer(TwythonStreamer):
                                         )
                                     if posted_status:
                                         logger.info('Attempting to follow this poet...')
-                                        db_update_haiku_posted(session, haiku_to_post['status_id_str'])
+                                        Haiku.update_haiku_posted(session, haiku_to_post['status_id_str'])
 
                                         # follow the user
                                         if FOLLOW_POET:

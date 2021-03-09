@@ -129,6 +129,11 @@
         "pronunciation": "A K C",
         "syllables": 3
     },
+    "AliExpress": {
+        "alt": [],
+        "pronunciation": "Ali Express",
+        "syllables": 4
+    },
     "am": {
         "alt": [],
         "pronunciation": "am",
@@ -268,6 +273,11 @@
         "alt": [],
         "pronunciation": "best friends for life",
         "syllables": 4
+    },
+    "blockheaded": {
+        "alt": [],
+        "pronunciation": "block head ed",
+        "syllables": 3
     },
     "BMW": {
         "alt": [],
@@ -597,17 +607,97 @@
         "pronunciation": "fuck",
         "syllables": 1
     },
-    "fcken": {
-        "alt": [],
-        "pronunciation": "fucking",
-        "syllables": 2
-    },
     "fckn": {
         "alt": [],
         "pronunciation": "fucking",
         "syllables": 2
     },
+    "fcken": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "fckin": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
     "fcking": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "f@ck": {
+        "alt": [],
+        "pronunciation": "fuck",
+        "syllables": 1
+    },
+    "f@ckn": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "f@cken": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "f@ckin": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "f@cking": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "fk": {
+        "alt": [],
+        "pronunciation": "fuck",
+        "syllables": 1
+    },
+    "fkn": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "fken": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "fkin": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "fking": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "fn": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "fxck": {
+        "alt": [],
+        "pronunciation": "fuck",
+        "syllables": 1
+    },
+    "fxcken": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "fxckin": {
+        "alt": [],
+        "pronunciation": "fucking",
+        "syllables": 2
+    },
+    "fxcking": {
         "alt": [],
         "pronunciation": "fucking",
         "syllables": 2
@@ -636,11 +726,6 @@
         "alt": [],
         "pronunciation": "fuck my life",
         "syllables": 3
-    },
-    "fn": {
-        "alt": [],
-        "pronunciation": "fucking",
-        "syllables": 2
     },
     "fomo": {
         "alt": [],
@@ -689,26 +774,6 @@
         ],
         "pronunciation": "fuck with you",
         "syllables": 3
-    },
-    "fxck": {
-        "alt": [],
-        "pronunciation": "fuck",
-        "syllables": 1
-    },
-    "fxcken": {
-        "alt": [],
-        "pronunciation": "fucking",
-        "syllables": 2
-    },
-    "fxckin": {
-        "alt": [],
-        "pronunciation": "fucking",
-        "syllables": 2
-    },
-    "fxcking": {
-        "alt": [],
-        "pronunciation": "fucking",
-        "syllables": 2
     },
     "fyi": {
         "alt": [
@@ -939,6 +1004,11 @@
         "alt": [],
         "pronunciation": "I love you",
         "syllables": 3
+    },
+    "ilysm": {
+        "alt": [],
+        "pronunciation": "I love you so much",
+        "syllables": 5
     },
     "i'ma": {
         "alt": [],
@@ -1314,6 +1384,11 @@
         "pronunciation": "mightn't",
         "syllables": 2
     },
+    "minecraft": {
+        "alt": [],
+        "pronunciation": "mine craft",
+        "syllables": 2
+    },
     "MLB": {
         "alt": [],
         "pronunciation": "M L B",
@@ -1534,6 +1609,16 @@
         "pronunciation": "ping",
         "syllables": 1
     },
+    "pokemon": {
+        "alt": [],
+        "pronunciation": "po ke mon",
+        "syllables": 3
+    },
+    "pokémon": {
+        "alt": [],
+        "pronunciation": "po ke mon",
+        "syllables": 3
+    },
     "ppl": {
         "alt": [],
         "pronunciation": "people",
@@ -1553,6 +1638,11 @@
         ],
         "pronunciation": "P S A",
         "syllables": 3
+    },
+    "ptsd": {
+        "alt": [],
+        "pronunciation": "P T S D",
+        "syllables": 4
     },
     "pyt": {
         "alt": [
@@ -1649,6 +1739,11 @@
         "pronunciation": "shit",
         "syllables": 1
     },
+    "sh!t": {
+        "alt": [],
+        "pronunciation": "shit",
+        "syllables": 1
+    },
     "sjw": {
         "alt": [],
         "pronunciation": "social justice warrior",
@@ -1679,10 +1774,20 @@
         "pronunciation": "S O S",
         "syllables": 3
     },
+    "soulmate": {
+        "alt": [],
+        "pronunciation": "soul mate",
+        "syllables": 2
+    },
     "Spongebob": {
         "alt": [],
         "pronunciation": "Sponge bob",
         "syllables": 2
+    },
+    "spring": {
+        "alt": [],
+        "pronunciation": "spring",
+        "syllables": 1
     },
     "sr": {
         "alt": [],
@@ -1853,6 +1958,11 @@
         "alt": [],
         "pronunciation": "tweeted",
         "syllables": 2
+    },
+    "twt": {
+        "alt": [],
+        "pronunciation": "twit",
+        "syllables": 1
     },
     "twtter": {
         "alt": [],

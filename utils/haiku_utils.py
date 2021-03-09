@@ -26,6 +26,14 @@ def count_syllables(
     if token in emoticons_list:
         return 0
 
+    # find whether the token is an exact match to a dictionary entry
+    if token in syllable_dict:
+        token_syl = syllable_dict[token]['syllables']
+        source = 'Dict'
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f"    {source}: {token}: {token_syl}")
+        return token_syl
+
     token_clean = clean_token(token)
 
     subsyllable_count = 0
@@ -150,7 +158,7 @@ def guess_syllables(word: str, method: str = 'min') -> int:
 
     if word:
         word = word.lower()
-        for c in word:
+        for i, c in enumerate(word):
             is_vowel = c in vowels
 
             if on_vowel is None:
@@ -180,6 +188,12 @@ def guess_syllables(word: str, method: str = 'min') -> int:
                     logger.debug(f'consonant: {c}')
                 else:
                     logger.debug(f'other: {c}')
+
+            # if len(word[i:]) >= 2 and not any([x in vowels + ['y'] for x in word[i:]]):
+            #     minsyl += 1
+            #     maxsyl += 1
+            #     logger.debug(f'remaining letters are all consonants: {word[i:]}. add 1: min syl {minsyl}, mean syl {(minsyl + maxsyl) // 2}, max syl {maxsyl}')
+            #     break
 
             on_vowel = is_vowel
             lastchar = c

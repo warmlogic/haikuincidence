@@ -3,11 +3,12 @@ import logging
 import os
 from pathlib import Path
 from pprint import pformat
-import pytz
+from time import sleep
 
 from dotenv import load_dotenv
 import inflect
 from nltk.corpus import cmudict
+import pytz
 from twython import Twython, TwythonError
 from twython import TwythonStreamer
 
@@ -96,6 +97,11 @@ class MyTwitterClient(Twython):
 
 
 class MyStreamer(TwythonStreamer):
+    def __init__(self, *args, **kwargs):
+        super(MyStreamer, self).__init__(*args, **kwargs)
+        self.sleep_seconds = 2
+        self.sleep_exponent = 0
+
     def on_success(self, status):
         if 'text' in status and check_tweet(status, ignore_tweet_list, language=LANGUAGE):
             # print(status['text'])
@@ -188,8 +194,27 @@ class MyStreamer(TwythonStreamer):
             else:
                 logger.info(f"Failed check_profile: {status['user']['screen_name']}: {status['user']['description']}")
 
-    def on_error(self, status_code, status):
-        logger.error(f'{status_code}, {status}')
+    def on_error(self, status_code, content, headers=None):
+        logger.info('Error while streaming.')
+        logger.info(f'status_code: {status_code}')
+        logger.info(f'content: {content}')
+        logger.info(f'headers: {headers}')
+        content = content.decode().strip() if isinstance(content, bytes) else content.strip()
+        if 'Server overloaded, try again in a few seconds'.lower() in content.lower():
+            seconds = self.sleep_seconds ** self.sleep_exponent
+            logger.warning(f'Server overloaded. Sleeping for {seconds} seconds.')
+            sleep(seconds)
+            self.sleep_exponent += 1
+        elif 'Exceeded connection limit for user'.lower() in content.lower():
+            seconds = self.sleep_seconds ** self.sleep_exponent
+            logger.warning(f'Exceeded connection limit. Sleeping for {seconds} seconds.')
+            sleep(seconds)
+            self.sleep_exponent += 1
+        else:
+            seconds = self.sleep_seconds ** self.sleep_exponent
+            logger.warning(f'Some other error occurred. Sleeping for {seconds} seconds.')
+            sleep(seconds)
+            self.sleep_exponent += 1
 
 
 logger.info('Initializing dependencies...')

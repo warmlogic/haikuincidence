@@ -1319,6 +1319,11 @@
         "pronunciation": "love",
         "syllables": 1
     },
+    "lyf": {
+        "alt": [],
+        "pronunciation": "life",
+        "syllables": 1
+    },
     "lyin": {
         "alt": [],
         "pronunciation": "lying",
@@ -1578,6 +1583,11 @@
         "alt": [],
         "pronunciation": "paella",
         "syllables": 3
+    },
+    "Pepé": {
+        "alt": [],
+        "pronunciation": "Pepe",
+        "syllables": 2
     },
     "phd": {
         "alt": [],

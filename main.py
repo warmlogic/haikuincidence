@@ -103,6 +103,9 @@ class MyStreamer(TwythonStreamer):
         self.sleep_exponent = 0
 
     def on_success(self, status):
+        # Reset sleep seconds exponent
+        self.sleep_exponent = 0
+
         if 'text' in status and check_tweet(status, ignore_tweet_list, language=LANGUAGE):
             # print(status['text'])
             if check_profile(status, ignore_profile_list):

@@ -69,6 +69,11 @@ MY_SCREEN_NAME = os.getenv("MY_SCREEN_NAME", default="twitter")
 LANGUAGE = os.getenv("LANGUAGE", default="en")
 GUESS_SYL_METHOD = os.getenv("GUESS_SYL_METHOD", default="min")
 
+IGNORE_USER_SCREEN_NAMES = os.getenv("IGNORE_USER_SCREEN_NAMES", default=None)
+IGNORE_USER_SCREEN_NAMES = [x.strip() for x in IGNORE_USER_SCREEN_NAMES.split(',')] if IGNORE_USER_SCREEN_NAMES else []
+IGNORE_USER_ID_STR = os.getenv("IGNORE_USER_ID_STR", default=None)
+IGNORE_USER_ID_STR = [x.strip() for x in IGNORE_USER_ID_STR.split(',')] if IGNORE_USER_ID_STR else []
+
 
 class MyTwitterClient(Twython):
     '''Wrapper around the Twython Twitter client.
@@ -106,7 +111,13 @@ class MyStreamer(TwythonStreamer):
         # Reset sleep seconds exponent
         self.sleep_exponent = 0
 
-        if 'text' in status and check_tweet(status, ignore_tweet_list, language=LANGUAGE):
+        if 'text' in status and check_tweet(
+            status,
+            ignore_tweet_list=ignore_tweet_list,
+            language=LANGUAGE,
+            ignore_user_screen_names=IGNORE_USER_SCREEN_NAMES,
+            ignore_user_id_str=IGNORE_USER_ID_STR,
+        ):
             # print(status['text'])
             if check_profile(status, ignore_profile_list):
                 text = clean_text(status['text'])

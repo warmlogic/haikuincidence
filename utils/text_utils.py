@@ -65,7 +65,13 @@ def check_text_wrapper(text: str, ignore_list: List[str]) -> bool:
     ])
 
 
-def check_tweet(status, ignore_tweet_list: List[str], language: str = 'en') -> bool:
+def check_tweet(
+    status,
+    ignore_tweet_list: List[str],
+    language: str = 'en',
+    ignore_user_screen_names: List[str] = [],
+    ignore_user_id_str: List[str] = [],
+) -> bool:
     '''Return True if tweet satisfies specific criteria
     '''
     return all([
@@ -79,6 +85,8 @@ def check_tweet(status, ignore_tweet_list: List[str], language: str = 'en') -> b
         (not status['is_quote_status']),
         (not status['in_reply_to_status_id_str']),
         (not status['retweeted']),
+        (status['user']['screen_name'] not in ignore_user_screen_names),
+        (status['user']['id_str'] not in ignore_user_id_str),
         (status['user']['friends_count'] > 10),  # following
         (status['user']['followers_count'] > 100),  # followers
         # (status['user']['verified']),

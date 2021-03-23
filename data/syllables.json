@@ -702,6 +702,11 @@
         "pronunciation": "fucking",
         "syllables": 2
     },
+    "ffs": {
+        "alt": [],
+        "pronunciation": "for fuck's sake",
+        "syllables": 3
+    },
     "fiance": {
         "alt": [],
         "pronunciation": "fiancé",
@@ -1554,6 +1559,11 @@
         "pronunciation": "oof",
         "syllables": 1
     },
+    "oomf": {
+        "alt": [],
+        "pronunciation": "one of my friends",
+        "syllables": 4
+    },
     "oompa": {
         "alt": [],
         "pronunciation": "oompa",
@@ -1753,6 +1763,11 @@
         "alt": [],
         "pronunciation": "shit",
         "syllables": 1
+    },
+    "sia": {
+        "alt": [],
+        "pronunciation": "si a",
+        "syllables": 2
     },
     "sjw": {
         "alt": [],

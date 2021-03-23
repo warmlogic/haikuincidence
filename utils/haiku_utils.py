@@ -199,7 +199,7 @@ def guess_syllables(word: str, method: str = 'min') -> int:
             lastchar = c
 
         # Some special cases: ends in e, or past tense, may have counted too many
-        if len(word) >= 2 and (word[-2:] not in ['ie', 'be']) and ((word[-1] == 'e') or (word[-2:] == 'ed')):
+        if (len(word) >= 3) and (word[-2:] not in ['ie', 'be']) and ((word[-1] == 'e') or ((word[-2:] == 'ed') and (word[-3] not in ['d', 't']))):
             minsyl -= 1
             logger.debug(f'Removing a syllable for "{word}": min syl {minsyl}, mean syl {(minsyl + maxsyl) // 2}, max syl {maxsyl}')
         # if it ended with a consonant followed by y, count that as a syllable.

@@ -3,6 +3,7 @@ import logging
 import pytz
 import re
 from typing import List
+import unicodedata
 
 from unidecode import unidecode
 from ftfy import fix_text
@@ -211,6 +212,10 @@ def text_is_all_uppercase(text: str) -> bool:
 def clean_token(token: str) -> str:
     if token is None:
         return token
+
+    # Normalize unicode letters
+    # NFKD: decomposes, NFKC: composes pre-combined characters again
+    token = unicodedata.normalize('NFKD', token)
 
     # remove space before some punctuation if preceded by a letter or number
     # ("hello ,how are you ? doing")

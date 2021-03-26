@@ -16,7 +16,7 @@ from sqlalchemy.pool import NullPool
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from utils.text_utils import date_string_to_datetime
+from utils.text_utils import date_string_to_datetime, get_tweet_body
 
 logger = logging.getLogger("haikulogger")
 
@@ -57,7 +57,7 @@ class Haiku(Base):
             user_id_str=status['user']['id_str'],
             user_verified=status['user']['verified'],
             created_at=date_string_to_datetime(status['created_at']),
-            text_original=status['text'],
+            text_original=get_tweet_body(status),
             text_clean=text,
             haiku=haiku,
             date_posted=None,

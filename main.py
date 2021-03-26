@@ -14,7 +14,7 @@ from twython import TwythonStreamer
 
 from utils.data_base import session_factory, Haiku
 from utils.data_utils import get_track_str, get_ignore_tweet_list, get_ignore_profile_list, get_syllable_dict, get_emoticons_list
-from utils.text_utils import date_string_to_datetime, check_tweet, clean_text, check_text_wrapper, check_profile
+from utils.text_utils import date_string_to_datetime, check_tweet, get_tweet_body, clean_text, check_text_wrapper, check_profile
 from utils.haiku_utils import get_haiku, get_best_haiku
 
 # I'm a poet and I didn't even know it. Hey, that's a haiku!
@@ -111,16 +111,16 @@ class MyStreamer(TwythonStreamer):
         # Reset sleep seconds exponent
         self.sleep_exponent = 0
 
-        if 'text' in status and check_tweet(
+        if check_tweet(
             status,
             ignore_tweet_list=ignore_tweet_list,
             language=LANGUAGE,
             ignore_user_screen_names=IGNORE_USER_SCREEN_NAMES,
             ignore_user_id_str=IGNORE_USER_ID_STR,
         ):
-            # print(status['text'])
             if check_profile(status, ignore_profile_list):
-                text = clean_text(status['text'])
+                tweet_body = get_tweet_body(status)
+                text = clean_text(tweet_body)
                 if check_text_wrapper(text, ignore_tweet_list):
                     haiku = get_haiku(text, inflect_p, pronounce_dict, syllable_dict, emoticons_list, GUESS_SYL_METHOD)
                     if haiku:
@@ -284,6 +284,6 @@ if __name__ == '__main__':
             else:
                 # get samples from stream
                 stream.statuses.sample()
-        except Exception:
-            logger.exception('Exception when streaming tweets')
+        except Exception as e:
+            logger.info(f"Exception when streaming tweets: {e}")
             continue

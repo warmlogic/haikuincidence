@@ -66,6 +66,16 @@ def check_text_wrapper(text: str, ignore_list: List[str]) -> bool:
     ])
 
 
+def get_tweet_body(status):
+    if 'extended_tweet' in status:
+        tweet_body = status['extended_tweet']['full_text']
+    elif 'text' in status:
+        tweet_body = status['text']
+    else:
+        tweet_body = ''
+    return tweet_body
+
+
 def check_tweet(
     status,
     ignore_tweet_list: List[str],
@@ -75,8 +85,13 @@ def check_tweet(
 ) -> bool:
     '''Return True if tweet satisfies specific criteria
     '''
+    tweet_body = get_tweet_body(status)
+
+    if not tweet_body:
+        return False
+
     return all([
-        check_text_wrapper(status['text'], ignore_tweet_list),
+        check_text_wrapper(tweet_body, ignore_tweet_list),
         (status['lang'] == language),
         (not status['entities']['hashtags']),
         (not status['entities']['urls']),
@@ -92,7 +107,7 @@ def check_tweet(
         (status['user']['followers_count'] > 100),  # followers
         # (status['user']['verified']),
         # ('media' not in status['entities']),
-        (len(status['text']) >= 17),
+        (len(tweet_body) >= 17),
     ])
 
 

@@ -562,6 +562,11 @@
         "pronunciation": "ew",
         "syllables": 1
     },
+    "eyebag": {
+        "alt": [],
+        "pronunciation": "eye bag",
+        "syllables": 2
+    },
     "facebook": {
         "alt": [],
         "pronunciation": "facebook",
@@ -914,6 +919,11 @@
         "alt": [],
         "pronunciation": "hehehe",
         "syllables": 3
+    },
+    "hes": {
+        "alt": [],
+        "pronunciation": "he's",
+        "syllables": 1
     },
     "het": {
         "alt": [],
@@ -1474,6 +1484,11 @@
         "pronunciation": "nevermind",
         "syllables": 3
     },
+    "noone": {
+        "alt": [],
+        "pronunciation": "no one",
+        "syllables": 2
+    },
     "nsa": {
         "alt": [],
         "pronunciation": "N S A",
@@ -1754,6 +1769,11 @@
         "pronunciation": "sh",
         "syllables": 1
     },
+    "shes": {
+        "alt": [],
+        "pronunciation": "she's",
+        "syllables": 1
+    },
     "sht": {
         "alt": [],
         "pronunciation": "shit",
@@ -1982,6 +2002,11 @@
     "tweeted": {
         "alt": [],
         "pronunciation": "tweeted",
+        "syllables": 2
+    },
+    "tweeting": {
+        "alt": [],
+        "pronunciation": "tweeting",
         "syllables": 2
     },
     "twt": {

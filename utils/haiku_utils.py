@@ -164,7 +164,9 @@ def guess_syllables(word: str, method: str = 'min') -> int:
             if on_vowel is None:
                 on_vowel = is_vowel
 
-            # y is a special case
+            # y is a special case:
+            # serves as a vowel when the previous character was not a vowel,
+            # serves as a consonant when the previous character was a vowel
             if c == 'y':
                 is_vowel = not on_vowel
 
@@ -198,10 +200,26 @@ def guess_syllables(word: str, method: str = 'min') -> int:
             on_vowel = is_vowel
             lastchar = c
 
-        # Some special cases: ends in e, or past tense, may have counted too many
-        if (len(word) >= 3) and (word[-2:] not in ['ie', 'be']) and ((word[-1] == 'e') or ((word[-2:] == 'ed') and (word[-3] not in ['d', 't']))):
+        # May have counted too many syllables: word ends in e, or past tense (-ed)
+        if (
+            (len(word) >= 3) and
+            ((word[-1] == 'e') or (word[-2:] == 'ed')) and
+            (word[-2:] not in ['be', 'ie']) and
+            (word[-3] not in ['d', 't'])
+        ):
             minsyl -= 1
             logger.debug(f'Removing a syllable for "{word}": min syl {minsyl}, mean syl {(minsyl + maxsyl) // 2}, max syl {maxsyl}')
+
+        # Posessive with word ending in certain sounds may not get enough syllables
+        if (
+            (len(word) >= 3) and
+            (word[-2:] == "'s") and
+            (word[-3] in ['x'])
+        ):
+            minsyl += 1
+            maxsyl += 1
+            logger.debug(f'Adding a syllable for "{word}": min syl {minsyl}, mean syl {(minsyl + maxsyl) // 2}, max syl {maxsyl}')
+
         # if it ended with a consonant followed by y, count that as a syllable.
         if word[-1] == 'y' and not on_vowel:
             maxsyl += 1

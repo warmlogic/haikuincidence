@@ -101,8 +101,8 @@ for sn in to_unfollow:
             result = twitter.destroy_friendship(screen_name=sn)
             unfollowed.append(sn)
             logger.info(f'unfollowed {len(unfollowed)} / {len(to_unfollow)}: {sn}')
-        except TwythonError:
-            logger.exception(f'exception for {sn}')
+        except TwythonError as e:
+            logger.info(f'exception for {sn}: {e}')
     # logger.info(f'Sleeping for {sleep_seconds} seconds')
     sleep(sleep_seconds)
 
@@ -168,7 +168,7 @@ for sn in to_follow:
             # result = twitter.update_friendship(screen_name=sn, device='false')
             # logger.info(f'updated {counter} / {len(to_follow)}: {sn}')
         except TwythonError as e:
-            logger.exception(f'exception for {sn}')
+            logger.info(f'exception for {sn}: {e}')
             # remove the screenname from the list if it matches a valid reason
             if any([reason in str(e) for reason in exclude_reasons]):
                 do_not_follow.append(sn)

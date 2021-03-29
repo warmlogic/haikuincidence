@@ -68,8 +68,8 @@ class Haiku(Base):
             session.add(tweet_haiku)
             try:
                 session.commit()
-            except Exception:
-                logger.exception('Exception when adding haiku')
+            except Exception as e:
+                logger.warning(f'Exception when adding haiku: {e}')
                 session.rollback()
 
         return tweet_haiku
@@ -118,8 +118,8 @@ class Haiku(Base):
                 cls.status_id_str == status_id_str).update(
                     {'date_posted': datetime.utcnow().replace(tzinfo=pytz.UTC)})
             session.commit()
-        except Exception:
-            logger.exception('Exception when updating haiku as posted')
+        except Exception as e:
+            logger.warning(f'Exception when updating haiku as posted: {e}')
             session.rollback()
 
     @classmethod
@@ -131,8 +131,8 @@ class Haiku(Base):
                 cls.status_id_str == status_id_str).update(
                     {'date_posted': None})
             session.commit()
-        except Exception:
-            logger.exception('Exception when updating haiku as unposted')
+        except Exception as e:
+            logger.warning(f'Exception when updating haiku as unposted: {e}')
             session.rollback()
 
     @classmethod
@@ -144,8 +144,8 @@ class Haiku(Base):
                 cls.status_id_str == status_id_str).update(
                     {'date_deleted': datetime.utcnow().replace(tzinfo=pytz.UTC)})
             session.commit()
-        except Exception:
-            logger.exception('Exception when updating haiku as deleted')
+        except Exception as e:
+            logger.warning(f'Exception when updating haiku as deleted: {e}')
             session.rollback()
 
     @classmethod
@@ -157,8 +157,8 @@ class Haiku(Base):
                 cls.status_id_str == status_id_str).update(
                     {'date_deleted': None})
             session.commit()
-        except Exception:
-            logger.exception('Exception when updating haiku as undeleted')
+        except Exception as e:
+            logger.warning(f'Exception when updating haiku as undeleted: {e}')
             session.rollback()
 
     @classmethod
@@ -175,8 +175,8 @@ class Haiku(Base):
 
                 session.execute(delete_q)
                 session.commit()
-            except Exception:
-                logger.exception(f'Exception when deleting unposted haikus older than {days} days')
+            except Exception as e:
+                logger.warning(f'Exception when deleting unposted haikus older than {days} days: {e}')
                 session.rollback()
 
     @classmethod
@@ -193,8 +193,8 @@ class Haiku(Base):
 
                 session.execute(delete_q)
                 session.commit()
-            except Exception:
-                logger.exception(f'Exception when deleting posted haikus older than {days} days')
+            except Exception as e:
+                logger.warning(f'Exception when deleting posted haikus older than {days} days: {e}')
                 session.rollback()
 
     @classmethod
@@ -212,6 +212,6 @@ class Haiku(Base):
 
                     session.execute(delete_q)
                     session.commit()
-                except Exception:
-                    logger.exception(f'Exception when keeping most recent {n} rows of haikus')
+                except Exception as e:
+                    logger.warning(f'Exception when keeping most recent {n} rows of haikus: {e}')
                     session.rollback()

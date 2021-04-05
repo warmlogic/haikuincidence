@@ -37,5 +37,6 @@ poetry-install:
 	| pip install -r /dev/stdin \
 	&& poetry debug
 
+.PHONY: nltk-resources
 nltk-resources:
 	python -m nltk.downloader cmudict

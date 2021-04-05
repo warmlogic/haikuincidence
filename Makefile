@@ -39,10 +39,3 @@ poetry-install:
 
 nltk-resources:
 	python -m nltk.downloader cmudict
-
-# build-app-heroku:
-# 	poetry export -f requirements.txt -o requirements.txt
-# 	docker build -t registry.heroku.com/$(HEROKU_APP_NAME)/$(HEROKU_PROCESS_TYPE) .
-
-# push-app-heroku:
-# 	docker push registry.heroku.com/${HEROKU_APP_NAME}/$(HEROKU_PROCESS_TYPE):latest

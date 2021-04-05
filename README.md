@@ -46,30 +46,6 @@ If running the app on Heroku (see below), `.env` is not needed but it may still 
 
 1. View the logs via the [Heroku CLI](https://devcenter.heroku.com/articles/logging#view-logs) or on Papertrail
 
-### As a `systemd` service
-
-1. Install required packages
-   1. Run the following command to install [Miniconda (Python 3)](https://conda.io/miniconda.html) and the required libraries (installed in the `base` conda environment):
-
-        ```bash
-        ./python_env_setup.sh
-        ```
-
-   1. Log out and back in to ensure the `base` conda environment is active
-1. `sudo cp haikuincidence.service /etc/systemd/system/haikuincidence.service`
-   1. Update the user name and repo path as necessary (e.g., the user will be `ubuntu` if using an AWS EC2 instance)
-1. `sudo systemctl daemon-reload`
-1. `sudo systemctl enable haikuincidence`
-1. `sudo systemctl start haikuincidence`
-1. To stop completely:
-   1. `sudo systemctl stop haikuincidence`
-   1. `sudo systemctl disable haikuincidence`
-
-#### `systemd` logs
-
-- To read `systemd`'s logs (includes log messages from Python): `sudo journalctl -u haikuincidence`
-- To follow `systemd`'s logs (includes log messages from Python): `sudo journalctl -f -u haikuincidence`
-
 ## Attribution
 
 I borrowed and adapted code from these nice resources. Thank you!

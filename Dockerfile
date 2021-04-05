@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM python:3.9-slim-buster
 
 # Create the user that will run the app
 RUN adduser --disabled-password --gecos '' app-user

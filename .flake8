@@ -1,0 +1,6 @@
+[flake8]
+# E203 warns about whitespace before colon, but is used here due to isort
+# W503 warns about line break before binary operator
+extend-ignore = E203, W503
+max-line-length = 110
+max-complexity = 18

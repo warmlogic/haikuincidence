@@ -1,0 +1,46 @@
+name: Code Quality
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Lint, Format, and Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - name: Cache linter dependencies
+        id: cache-linter-deps
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip
+          restore-keys: ${{ runner.os }}-pip
+
+      - name: Install dependencies
+        run: |
+            python -m pip install --upgrade pip
+            python -m pip install -r requirements-dev.txt
+
+      - name: Check formatting
+        run: black --check .
+
+      - name: Check imports
+        run: isort --check --profile black .
+
+      - name: Lint code
+        run: flake8 .
+
+      # - name: Typecheck
+      #   run: mypy .

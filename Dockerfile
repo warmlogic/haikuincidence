@@ -1,5 +1,7 @@
 FROM python:3.9-slim-buster
 
+RUN apt-get update && apt-get install build-essential -y
+
 # Create the user that will run the app
 RUN adduser --disabled-password --gecos '' app-user
 

@@ -28,3 +28,15 @@ fix:
 	make sort
 	make lint
 	# make typecheck
+
+.PHONY: poetry-install
+poetry-install:
+	poetry config virtualenvs.create false \
+	&& poetry lock \
+	&& poetry export --without-hashes -f requirements.txt --dev \
+	| pip install -r /dev/stdin \
+	&& poetry debug
+
+.PHONY: nltk-resources
+nltk-resources:
+	python -m nltk.downloader cmudict

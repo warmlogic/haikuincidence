@@ -20,6 +20,7 @@ RUN apt-get update && apt-get upgrade -y \
   && apt-get install --no-install-recommends -y \
     bash \
     curl \
+    libpq-dev \
     # Define build-time-only dependencies
     $BUILD_ONLY_PACKAGES \
   && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - \

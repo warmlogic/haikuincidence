@@ -258,6 +258,7 @@ class MyStreamer(TwythonStreamer):
                                                     screen_name=haiku_to_post[
                                                         "user_screen_name"
                                                     ],
+                                                    # follow: enable notifications
                                                     follow="false",
                                                 )
                                                 if followed["following"]:
@@ -266,7 +267,6 @@ class MyStreamer(TwythonStreamer):
                                                     logger.info("Could not follow")
                                             except TwythonError as e:
                                                 logger.info(e)
-
                                 else:
                                     logger.debug("Found haiku but did not post")
                         else:

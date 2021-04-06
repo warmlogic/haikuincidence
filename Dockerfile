@@ -17,8 +17,19 @@ ENV APP_ENV=${APP_ENV} \
 
 # System dependencies
 RUN apt update && apt upgrade -y \
+  && apt install --no-install-recommends -y \
+    bash \
+    build-essential \
+    curl \
+    # Defining build-time-only dependencies:
+    $BUILD_ONLY_PACKAGES \
   && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - \
-  && poetry --version
+  && poetry --version \
+  # Removing build-time-only dependencies:
+  && apt remove -y $BUILD_ONLY_PACKAGES \
+  # Cleaning cache:
+  && apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  && apt clean -y && rm -rf /var/lib/apt/lists/*
 
 # Create the user that will run the app
 RUN adduser --disabled-password --gecos '' appuser

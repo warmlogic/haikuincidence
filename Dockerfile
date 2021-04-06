@@ -18,7 +18,11 @@ ENV APP_ENV=${APP_ENV} \
 # System dependencies
 RUN apt-get update && apt-get upgrade -y \
   && apt-get install --no-install-recommends -y \
+    bash \
+    # For poetry
     curl \
+    # For psycopg2
+    libpq-dev \
     # Define build-time-only dependencies
     $BUILD_ONLY_PACKAGES \
   && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - \
@@ -45,9 +49,9 @@ RUN poetry install --no-root --no-interaction --no-ansi \
   && rm -rf "$POETRY_CACHE_DIR"
 
 # Additional downloads
-RUN poetry run python -c "import nltk; nltk.download('cmudict')"
+RUN poetry run python -c "import nltk; nltk.download('cmudict', download_dir='./nltk_data')"
 
-COPY . /app
+COPY --chown=web:web . /app
 
 # Run as non-root user
 USER web

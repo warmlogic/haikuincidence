@@ -13,7 +13,7 @@ ENV APP_ENV=${APP_ENV} \
   POETRY_NO_INTERACTION=1 \
   POETRY_VIRTUALENVS_CREATE=false \
   POETRY_CACHE_DIR='/var/cache/pypoetry' \
-  PATH="$PATH:/root/.poetry/bin"
+  PATH="$PATH:/root/.local/bin"
 
 # System dependencies
 RUN apt update && apt upgrade -y \
@@ -44,7 +44,9 @@ RUN chmod +x run.sh \
 COPY --chown=appuser:appuser ./poetry.lock ./pyproject.toml /app/
 
 # Project initialization
-RUN poetry install --no-dev --no-root --no-interaction --no-ansi
+RUN poetry install --no-dev --no-root --no-interaction --no-ansi \
+  # Clean poetry installation's cache
+  && rm -rf "$POETRY_CACHE_DIR"
 
 # Additional downloads
 RUN python -c "import nltk; nltk.download('cmudict')"

@@ -18,6 +18,7 @@ ENV APP_ENV=${APP_ENV} \
 # System dependencies
 RUN apt-get update && apt-get upgrade -y \
   && apt-get install --no-install-recommends -y \
+    bash \
     curl \
     # Define build-time-only dependencies
     $BUILD_ONLY_PACKAGES \
@@ -47,7 +48,14 @@ RUN poetry install --no-root --no-interaction --no-ansi \
 # Additional downloads
 RUN poetry run python -c "import nltk; nltk.download('cmudict')"
 
-COPY . /app
+COPY --chown=web:web . /app
+
+COPY --chown=web:web . /app/nltk_data/
+
+RUN pwd
+RUN ls
+RUN ls /app
+RUN ls /app/nltk_data
 
 # Run as non-root user
 USER web

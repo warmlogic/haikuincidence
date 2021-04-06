@@ -19,7 +19,9 @@ ENV APP_ENV=${APP_ENV} \
 RUN apt-get update && apt-get upgrade -y \
   && apt-get install --no-install-recommends -y \
     bash \
+    # For poetry
     curl \
+    # For psycopg2
     libpq-dev \
     # Define build-time-only dependencies
     $BUILD_ONLY_PACKAGES \
@@ -50,15 +52,6 @@ RUN poetry install --no-root --no-interaction --no-ansi \
 RUN poetry run python -c "import nltk; nltk.download('cmudict', download_dir='./nltk_data')"
 
 COPY --chown=web:web . /app
-
-# COPY --chown=web:web /root/nltk_data /app/nltk_data
-
-RUN pwd
-RUN ls /root
-# RUN ls /root/nltk_data
-RUN ls
-RUN ls /app
-RUN ls /app/nltk_data
 
 # Run as non-root user
 USER web

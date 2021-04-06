@@ -2,8 +2,8 @@ name: Build and deploy
 
 on:
   push:
-    # branches:
-    #   - main
+    branches:
+      - main
 
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
         run: docker login --username=_ --password=${HEROKU_API_KEY} registry.heroku.com
       - name: Build
         run: docker build -t registry.heroku.com/${HEROKU_APP_NAME}/${HEROKU_PROCESS_TYPE} .
-      # - name: Push
-      #   run: docker push registry.heroku.com/${HEROKU_APP_NAME}/${HEROKU_PROCESS_TYPE}:latest
-      # - name: Release
-      #   run: heroku container:release -a ${HEROKU_APP_NAME} ${HEROKU_PROCESS_TYPE}
+      - name: Push
+        run: docker push registry.heroku.com/${HEROKU_APP_NAME}/${HEROKU_PROCESS_TYPE}:latest
+      - name: Release
+        run: heroku container:release -a ${HEROKU_APP_NAME} ${HEROKU_PROCESS_TYPE}

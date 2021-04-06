@@ -33,11 +33,8 @@ RUN apt-get update && apt-get upgrade -y \
 
 WORKDIR /app
 
-COPY ./run.sh /run.sh
-
 # Set up permissions
-RUN chmod +x '/run.sh' \
-  && groupadd -r web && useradd -d /app -r -g web web \
+RUN groupadd -r web && useradd -d /app -r -g web web \
   && chown -R web:web /app
 
 # Copy only requirements to cache them in docker layer
@@ -49,11 +46,11 @@ RUN poetry install --no-dev --no-interaction --no-ansi \
   && rm -rf "$POETRY_CACHE_DIR"
 
 # Additional downloads
-RUN python -c "import nltk; nltk.download('cmudict')"
+RUN poetry run python -c "import nltk; nltk.download('cmudict')"
 
 COPY . /app
 
 # Running as non-root user
 USER web
 
-ENTRYPOINT ["bash", "./run.sh"]
+ENTRYPOINT ["poetry", "run", "python", "./app.py"]

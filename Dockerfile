@@ -21,13 +21,13 @@ RUN apt-get update && apt-get upgrade -y \
     # bash \
     # build-essential \
     curl \
-    # Defining build-time-only dependencies:
+    # Define build-time-only dependencies:
     $BUILD_ONLY_PACKAGES \
   && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - \
   && poetry --version \
-  # Removing build-time-only dependencies:
+  # Remove build-time-only dependencies:
   && apt-get remove -y $BUILD_ONLY_PACKAGES \
-  # Cleaning cache:
+  # Cleane cache:
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
@@ -41,7 +41,7 @@ RUN groupadd -r web && useradd -d /app -r -g web web \
 COPY --chown=web:web ./poetry.lock ./pyproject.toml /app/
 
 # Project initialization
-RUN poetry install --no-dev --no-root --no-interaction --no-ansi \
+RUN poetry install --no-root --no-interaction --no-ansi \
   # Clean poetry installation's cache
   && rm -rf "$POETRY_CACHE_DIR"
 
@@ -50,7 +50,7 @@ RUN poetry run python -c "import nltk; nltk.download('cmudict')"
 
 COPY . /app
 
-# Running as non-root user
+# Run as non-root user
 USER web
 
 ENTRYPOINT ["poetry", "run", "python", "./app.py"]

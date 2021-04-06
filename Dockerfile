@@ -47,15 +47,15 @@ RUN poetry install --no-root --no-interaction --no-ansi \
   && rm -rf "$POETRY_CACHE_DIR"
 
 # Additional downloads
-RUN poetry run python -c "import nltk; nltk.download('cmudict')"
+RUN poetry run python -c "import nltk; nltk.download('cmudict', download_dir='./nltk_data')"
 
 COPY --chown=web:web . /app
 
-COPY --chown=web:web /nltk_data /app/nltk_data
+# COPY --chown=web:web /root/nltk_data /app/nltk_data
 
 RUN pwd
 RUN ls /root
-RUN ls /root/nltk_data
+# RUN ls /root/nltk_data
 RUN ls
 RUN ls /app
 RUN ls /app/nltk_data

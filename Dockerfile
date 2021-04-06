@@ -16,8 +16,8 @@ ENV APP_ENV=${APP_ENV} \
   PATH="$PATH:/root/.local/bin"
 
 # System dependencies
-RUN apt update && apt upgrade -y \
-  && apt install --no-install-recommends -y \
+RUN apt-get update && apt-get upgrade -y \
+  && apt-get install --no-install-recommends -y \
     bash \
     build-essential \
     curl \
@@ -26,22 +26,22 @@ RUN apt update && apt upgrade -y \
   && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - \
   && poetry --version \
   # Removing build-time-only dependencies:
-  && apt remove -y $BUILD_ONLY_PACKAGES \
+  && apt-get remove -y $BUILD_ONLY_PACKAGES \
   # Cleaning cache:
-  && apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-  && apt clean -y && rm -rf /var/lib/apt/lists/*
-
-# Create the user that will run the app
-RUN adduser --disabled-password --gecos '' appuser
+  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
+COPY ./run.sh /run.sh
+
 # Set up permissions
-RUN chmod +x run.sh \
-  && chown -R appuser:appuser /app
+RUN chmod +x '/run.sh' \
+  && groupadd -r web && useradd -d /app -r -g web web \
+  && chown -R web:web /app
 
 # Copy only requirements to cache them in docker layer
-COPY --chown=appuser:appuser ./poetry.lock ./pyproject.toml /app/
+COPY --chown=web:web ./poetry.lock ./pyproject.toml /app/
 
 # Project initialization
 RUN poetry install --no-dev --no-root --no-interaction --no-ansi \
@@ -54,6 +54,6 @@ RUN python -c "import nltk; nltk.download('cmudict')"
 COPY . /app
 
 # Running as non-root user
-USER appuser
+USER web
 
 ENTRYPOINT ["bash", "./run.sh"]

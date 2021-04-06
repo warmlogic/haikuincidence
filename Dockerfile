@@ -1,25 +1,46 @@
 FROM python:3.9-slim-buster
 
-RUN apt-get update && apt-get install build-essential -y
+ARG APP_ENV
+
+ENV APP_ENV=${APP_ENV} \
+  PYTHONFAULTHANDLER=1 \
+  PYTHONUNBUFFERED=1 \
+  PYTHONHASHSEED=random \
+  PIP_NO_CACHE_DIR=off \
+  PIP_DISABLE_PIP_VERSION_CHECK=on \
+  PIP_DEFAULT_TIMEOUT=100 \
+  POETRY_VERSION=1.1.5 \
+  POETRY_NO_INTERACTION=1 \
+  POETRY_VIRTUALENVS_CREATE=false \
+  POETRY_CACHE_DIR='/var/cache/pypoetry' \
+  PATH="$PATH:/root/.poetry/bin"
+
+# System dependencies
+RUN apt update && apt upgrade -y \
+  && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - \
+  && poetry --version
 
 # Create the user that will run the app
-RUN adduser --disabled-password --gecos '' app-user
+RUN adduser --disabled-password --gecos '' appuser
 
 WORKDIR /app
 
-ENV NLTK_DATA /app/nltk_data/
+# Set up permissions
+RUN chmod +x run.sh \
+  && chown -R appuser:appuser /app
 
-ADD . /app
-ADD . $NLTK_DATA
+# Copy only requirements to cache them in docker layer
+COPY --chown=appuser:appuser ./poetry.lock ./pyproject.toml /app/
 
-RUN python -m pip install --upgrade pip
-RUN python -m pip install poetry
-RUN make poetry-install
-RUN make nltk-resources
+# Project initialization
+RUN poetry install --no-dev --no-root --no-interaction --no-ansi
 
-RUN chmod +x run.sh
-RUN chown -R app-user:app-user ./
+# Additional downloads
+RUN python -c "import nltk; nltk.download('cmudict')"
 
-USER app-user
+COPY . /app
 
-CMD ["bash", "./run.sh"]
+# Running as non-root user
+USER appuser
+
+ENTRYPOINT ["bash", "./run.sh"]

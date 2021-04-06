@@ -323,6 +323,11 @@
         "pronunciation": "by the way",
         "syllables": 3
     },
+    "civ": {
+        "alt": [],
+        "pronunciation": "civ",
+        "syllables": 1
+    },
     "cmon": {
         "alt": [],
         "pronunciation": "come on",
@@ -2134,8 +2139,18 @@
         "pronunciation": "works for me",
         "syllables": 3
     },
-    "wi": {
+    "wht": {
         "alt": [],
+        "pronunciation": "what",
+        "syllables": 1
+    },
+    "wi": {
+        "alt": [
+            {
+                "pronunciation": "with",
+                "syllables": 1
+            }
+        ],
         "pronunciation": "what is",
         "syllables": 2
     },

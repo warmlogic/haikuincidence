@@ -18,16 +18,14 @@ ENV APP_ENV=${APP_ENV} \
 # System dependencies
 RUN apt-get update && apt-get upgrade -y \
   && apt-get install --no-install-recommends -y \
-    # bash \
-    # build-essential \
     curl \
-    # Define build-time-only dependencies:
+    # Define build-time-only dependencies
     $BUILD_ONLY_PACKAGES \
   && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - \
   && poetry --version \
-  # Remove build-time-only dependencies:
+  # Remove build-time-only dependencies
   && apt-get remove -y $BUILD_ONLY_PACKAGES \
-  # Cleane cache:
+  # Clean cache
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 

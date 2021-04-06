@@ -14,29 +14,16 @@ format:
 sort:
 	isort --profile black .
 
-.PHONY: lint
-lint:
+.PHONY: stylecheck
+stylecheck:
 	flake8 .
 
 .PHONY: typecheck
 typecheck:
 	mypy .
 
-.PHONY: fix
-fix:
+.PHONY: lint
+lint:
 	make format
 	make sort
-	make lint
-	# make typecheck
-
-.PHONY: poetry-install
-poetry-install:
-	poetry config virtualenvs.create false \
-	&& poetry lock \
-	&& poetry export --without-hashes -f requirements.txt --dev \
-	| pip install -r /dev/stdin \
-	&& poetry debug
-
-.PHONY: nltk-resources
-nltk-resources:
-	python -m nltk.downloader cmudict
+	make stylecheck

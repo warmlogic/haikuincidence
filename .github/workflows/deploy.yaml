@@ -12,14 +12,17 @@ jobs:
     env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+      HEROKU_PROCESS_TYPE: worker
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - name: Login to Heroku Container registry
-        run: heroku container:login
-      - name: Build and push
-        run: heroku container:push -a ${HEROKU_APP_NAME} worker
+      - name: Log in to Heroku Container registry
+        run: docker login --username=_ --password=${HEROKU_API_KEY} registry.heroku.com
+      - name: Build
+        run: docker build -t registry.heroku.com/${HEROKU_APP_NAME}/${HEROKU_PROCESS_TYPE} .
+      - name: Push
+        run: docker push registry.heroku.com/${HEROKU_APP_NAME}/${HEROKU_PROCESS_TYPE}:latest
       - name: Release
-        run: heroku container:release -a ${HEROKU_APP_NAME} worker
+        run: heroku container:release -a ${HEROKU_APP_NAME} ${HEROKU_PROCESS_TYPE}

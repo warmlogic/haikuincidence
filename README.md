@@ -36,11 +36,22 @@ If running the app on Heroku (see below), `.env` is not needed but it may still 
 
 ### As a Heroku app
 
-1. Follow the [instructions for creating a Heroku app](https://devcenter.heroku.com/articles/getting-started-with-python)
-1. Create add-ons for:
+These instructions use the Heroku CLI
+
+1. Fork this repo on GitHub and ensure you have a branch called `main`
+1. Create a new app on Heroku: `heroku create my-app-name`
+1. Install add-ons for:
    1. [Papertrail](https://elements.heroku.com/addons/papertrail)
+      1. `heroku addons:create papertrail -a my-app-name`
    1. [Postgres](https://elements.heroku.com/addons/heroku-postgresql)
-1. Heroku does not use the `.env` file. Instead, add the environment variables as Config Vars to your app via the web-based dashboard.
+      1. `heroku addons:create heroku-postgres -a my-app-name`
+1. Create a new token: `heroku authorizations:create -d "my cool token description"`
+   1. Add the token to your GitHub repo's Secrets under the name `HEROKU_API_KEY`
+1. Add your Heroku app's name to the GitHub repo's Secrets under the name `HEROKU_APP_NAME`
+1. Configure the application by adding environment variables as [Config Vars](https://devcenter.heroku.com/articles/config-vars)
+1. Commit and push to your GitHub repo's `main` branch
+   1. This can be through committing a change, merging a PR, or just running `git commit -m "empty commit" --allow-empty`
+   1. This will use GitHub Actions to build the app using Docker and deploy to Heroku
 
 #### Heroku logs
 

@@ -41,6 +41,7 @@ RUN groupadd -r web && useradd -d /app -r -g web web \
 COPY --chown=web:web ./poetry.lock ./pyproject.toml /app/
 
 # Project initialization
+# Can't run with --no-dev because of nltk download
 RUN poetry install --no-root --no-interaction --no-ansi \
   # Clean poetry installation's cache
   && rm -rf "$POETRY_CACHE_DIR"

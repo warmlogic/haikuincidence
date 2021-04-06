@@ -44,7 +44,7 @@ RUN chmod +x '/run.sh' \
 COPY --chown=web:web ./poetry.lock ./pyproject.toml /app/
 
 # Project initialization
-RUN poetry install --no-dev --no-root --no-interaction --no-ansi \
+RUN poetry install --no-dev --no-interaction --no-ansi \
   # Clean poetry installation's cache
   && rm -rf "$POETRY_CACHE_DIR"
 

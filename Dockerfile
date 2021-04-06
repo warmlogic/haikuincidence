@@ -51,9 +51,11 @@ RUN poetry run python -c "import nltk; nltk.download('cmudict')"
 
 COPY --chown=web:web . /app
 
-# COPY --chown=web:web /nltk_data /app/nltk_data
+COPY --chown=web:web /nltk_data /app/nltk_data
 
 RUN pwd
+RUN ls /root
+RUN ls /root/nltk_data
 RUN ls
 RUN ls /app
 RUN ls /app/nltk_data

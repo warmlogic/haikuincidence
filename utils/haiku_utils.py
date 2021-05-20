@@ -84,9 +84,7 @@ def count_syllables(
             source = "Dict"
             subsyllable_count += subtoken_syl
         elif remove_repeat_last_letter(subtoken) in syllable_dict:
-            subtoken_syl = syllable_dict[remove_repeat_last_letter(subtoken)][
-                "syllables"
-            ]
+            subtoken_syl = syllable_dict[remove_repeat_last_letter(subtoken)]["syllables"]
             source = "Dict (remove repeat)"
             subsyllable_count += subtoken_syl
         elif (
@@ -99,10 +97,7 @@ def count_syllables(
             subsyllable_count += subtoken_syl
         elif subtoken in pronounce_dict:
             subtoken_syl = max(
-                [
-                    len([y for y in x if y[-1].isdigit()])
-                    for x in pronounce_dict[subtoken]
-                ]
+                [len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]]
             )
             source = "CMU"
             subsyllable_count += subtoken_syl
@@ -121,17 +116,15 @@ def count_syllables(
             and not text_might_contain_acronym(subtoken_orig)
         ):
             subtoken_syl = max(
-                [
-                    len([y for y in x if y[-1].isdigit()])
-                    for x in pronounce_dict[subtoken[:-1]]
-                ]
+                [len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken[:-1]]]
             )
             source = "CMU (singular)"
             subsyllable_count += subtoken_syl
         else:
             # it's not a "real" word
             if re.findall(r"[^\w']", subtoken):
-                # there are some non-letter characters remaining (shouldn't be possible); run it through again
+                # there are some non-letter characters remaining (shouldn't be possible);
+                # run it through again
                 subtoken_syl = count_syllables(
                     subtoken,
                     inflect_p,
@@ -151,7 +144,8 @@ def count_syllables(
                         source = "Guess"
                         subsyllable_count += subtoken_syl
                     else:
-                        # doesn't end with a contraction ending; count each chunk between apostrophes
+                        # doesn't end with a contraction ending;
+                        # count each chunk between apostrophes
                         for subsubtoken in subtoken.rsplit("'"):
                             subtoken_syl = count_syllables(
                                 subsubtoken,
@@ -198,11 +192,7 @@ def guess_syllables(word: str, method: str = "min") -> int:
     """
 
     def get_syl_count_str(minsyl, maxsyl):
-        return (
-            f"min syl {minsyl},"
-            + f" mean syl {(minsyl + maxsyl) // 2},"
-            + f" max syl {maxsyl}"
-        )
+        return f"min syl {minsyl}," + f" mean syl {(minsyl + maxsyl) // 2}," + f" max syl {maxsyl}"
 
     assert method in ["min", "max", "mean"]
     logger.debug(f"Guessing syllable count with method: {method}")
@@ -270,24 +260,18 @@ def guess_syllables(word: str, method: str = "min") -> int:
             and (word[-3] not in ["d", "t"])
         ):
             minsyl -= 1
-            logger.debug(
-                f"Removing a syllable for '{word}': {get_syl_count_str(minsyl, maxsyl)}"
-            )
+            logger.debug(f"Removing a syllable for '{word}': {get_syl_count_str(minsyl, maxsyl)}")
 
         # Posessive with word ending in certain sounds may not get enough syllables
         if (len(word) >= 3) and (word[-2:] == "'s") and (word[-3] in ["x"]):
             minsyl += 1
             maxsyl += 1
-            logger.debug(
-                f"Adding a syllable for '{word}': {get_syl_count_str(minsyl, maxsyl)}"
-            )
+            logger.debug(f"Adding a syllable for '{word}': {get_syl_count_str(minsyl, maxsyl)}")
 
         # if it ended with a consonant followed by y, count that as a syllable.
         if word[-1] == "y" and not on_vowel:
             maxsyl += 1
-            logger.debug(
-                f"Adding a syllable for '{word}': {get_syl_count_str(minsyl, maxsyl)}"
-            )
+            logger.debug(f"Adding a syllable for '{word}': {get_syl_count_str(minsyl, maxsyl)}")
 
         # if found no syllables but there's at least one letter,
         # count as one syllable
@@ -450,10 +434,7 @@ def get_best_haiku(haikus, twitter, session) -> Dict:
                     haiku_to_post = construct_haiku_to_post(h, this_status)
                 elif this_status["retweet_count"] > haiku_to_post["retweet_count"]:
                     haiku_to_post = construct_haiku_to_post(h, this_status)
-                elif (
-                    this_status["user"]["followers_count"]
-                    > haiku_to_post["followers_count"]
-                ):
+                elif this_status["user"]["followers_count"] > haiku_to_post["followers_count"]:
                     haiku_to_post = construct_haiku_to_post(h, this_status)
 
     if haiku_to_post["status_id_str"] == "":

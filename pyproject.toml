@@ -27,6 +27,9 @@ isort = "^5.8.0"
 mypy = "^0.812"
 # pytest = "^6.2.3"
 
+[tool.black]
+line-length = 100
+
 [tool.isort]
 profile = "black"
 sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]

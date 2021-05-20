@@ -96,9 +96,7 @@ class Haiku(Base):
         """Get all unposted records from the last N seconds"""
         if td_seconds is None:
             td_seconds = 3600
-        filter_td = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(
-            seconds=td_seconds
-        )
+        filter_td = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(seconds=td_seconds)
         q = (
             session.query(cls)
             .filter(cls.created_at > filter_td)
@@ -192,9 +190,7 @@ class Haiku(Base):
                 session.execute(delete_q)
                 session.commit()
             except Exception as e:
-                logger.warning(
-                    f"Exception when deleting posted haikus older than {days} days: {e}"
-                )
+                logger.warning(f"Exception when deleting posted haikus older than {days} days: {e}")
                 session.rollback()
 
     @classmethod
@@ -212,7 +208,5 @@ class Haiku(Base):
                     session.execute(delete_q)
                     session.commit()
                 except Exception as e:
-                    logger.warning(
-                        f"Exception when keeping most recent {n} rows of haikus: {e}"
-                    )
+                    logger.warning(f"Exception when keeping most recent {n} rows of haikus: {e}")
                     session.rollback()

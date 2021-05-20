@@ -225,12 +225,7 @@ def text_contains_ignore_list_plural(
         [
             all(
                 [
-                    any(
-                        [
-                            it in text_compare
-                            for it in [itok, f"{itok}s", f"{itok}z", f"{itok}es"]
-                        ]
-                    )
+                    any([it in text_compare for it in [itok, f"{itok}s", f"{itok}z", f"{itok}es"]])
                     for itok in ignore_line.split()
                 ]
             )
@@ -270,13 +265,9 @@ def text_has_chars_digits_together(text: str) -> bool:
     # keep only letters and spaces
     text_split = re.sub(r"[^\w\s]", "", text).split()
     # count number of tokens that are solely digits
-    num_nums = sum(
-        sum(char.isdigit() for char in token) == len(token) for token in text_split
-    )
+    num_nums = sum(sum(char.isdigit() for char in token) == len(token) for token in text_split)
     # count number of tokens that are solely letters
-    num_words = sum(
-        sum(char.isalpha() for char in token) == len(token) for token in text_split
-    )
+    num_words = sum(sum(char.isalpha() for char in token) == len(token) for token in text_split)
     # are the counts above different from the length of tokens?
     return num_nums + num_words != len(text_split)
 
@@ -346,33 +337,43 @@ def clean_token(token: str) -> str:
 
 
 # def split_acronym(token: str) -> List[str]:
-#     '''Split short acronyms. One option for all caps, one for lowercase.
+#     """Split short acronyms. One option for all caps, one for lowercase.
 #     Otherwise return the token.
-#     '''
-#     token_clean = re.sub(r"[^\w']", ' ', token).strip()
+#     """
+#     token_clean = re.sub(r"[^\w']", " ", token).strip()
 #     if text_might_contain_acronym(token_clean):
-#         return ' '.join(token).split()
+#         return " ".join(token).split()
 #     else:
 #         return [token]
 
 
 # def all_tokens_are_real(text: str, pronounce_dict: Dict, syllable_dict: Dict) -> bool:
-#     '''Return True if all tokens are real words (in pronunciation dictionary or
+#     """Return True if all tokens are real words (in pronunciation dictionary or
 #     in syllable dictionary)
-#     '''
+#     """
 #     # Keep characters and apostrphes
 #     return all(
-#         (re.sub(r"[^\w']", '', token) and
-#             ((re.sub(r"[^\w']", '', token).lower() in pronounce_dict) or
-#                 (re.sub(r"[^\w']", '', token).lower() in syllable_dict) or
-#                 (remove_repeat_last_letter(re.sub(r"[^\w']", '', token).lower()) in pronounce_dict) or
-#                 (remove_repeat_last_letter(re.sub(r"[^\w']", '', token).lower()) in syllable_dict))
-#          ) for token in text.split()
+#         (
+#             re.sub(r"[^\w']", "", token)
+#             and (
+#                 (re.sub(r"[^\w']", "", token).lower() in pronounce_dict)
+#                 or (re.sub(r"[^\w']", "", token).lower() in syllable_dict)
+#                 or (
+#                     remove_repeat_last_letter(re.sub(r"[^\w']", "", token).lower())
+#                     in pronounce_dict
+#                 )
+#                 or (
+#                     remove_repeat_last_letter(re.sub(r"[^\w']", "", token).lower())
+#                     in syllable_dict
+#                 )
+#             )
+#         )
+#         for token in text.split()
 #     )
 
 
 # def text_is_all_alpha(text: str) -> bool:
-#     '''Return True if every character is a letter.
+#     """Return True if every character is a letter.
 #     Excludes punctuation and spaces.
-#     '''
-#     return all([char.isalpha() for char in re.sub(r'[^\w]', '', text)])
+#     """
+#     return all([char.isalpha() for char in re.sub(r"[^\w]", "", text)])

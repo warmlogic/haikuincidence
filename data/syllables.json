@@ -373,6 +373,11 @@
         "pronunciation": "cringe worthy",
         "syllables": 3
     },
+    "cryin": {
+        "alt": [],
+        "pronunciation": "crying",
+        "syllables": 2
+    },
     "CSPAN": {
         "alt": [],
         "pronunciation": "C SPAN",
@@ -462,6 +467,11 @@
         "pronunciation": "D M",
         "syllables": 2
     },
+    "dm's": {
+        "alt": [],
+        "pronunciation": "D Ms",
+        "syllables": 2
+    },
     "dms": {
         "alt": [],
         "pronunciation": "D Ms",
@@ -521,6 +531,11 @@
         ],
         "pronunciation": "E A F P",
         "syllables": 4
+    },
+    "el": {
+        "alt": [],
+        "pronunciation": "el",
+        "syllables": 1
     },
     "emotionally": {
         "alt": [],
@@ -800,6 +815,11 @@
         "pronunciation": "F Y I",
         "syllables": 3
     },
+    "fyp": {
+        "alt": [],
+        "pronunciation": "for you page",
+        "syllables": 3
+    },
     "gah": {
         "alt": [],
         "pronunciation": "gah",
@@ -934,6 +954,11 @@
         "alt": [],
         "pronunciation": "het",
         "syllables": 1
+    },
+    "heterophobia": {
+        "alt": [],
+        "pronunciation": "hetero phobia",
+        "syllables": 6
     },
     "hm": {
         "alt": [],
@@ -1205,6 +1230,10 @@
             {
                 "pronunciation": "los angeles",
                 "syllables": 4
+            },
+            {
+                "pronunciation": "la",
+                "syllables": 1
             }
         ],
         "pronunciation": "L A",
@@ -1219,6 +1248,11 @@
         ],
         "pronunciation": "laboratory",
         "syllables": 4
+    },
+    "las": {
+        "alt": [],
+        "pronunciation": "las",
+        "syllables": 1
     },
     "learned": {
         "alt": [],
@@ -1304,6 +1338,16 @@
         "pronunciation": "loompa",
         "syllables": 2
     },
+    "los": {
+        "alt": [],
+        "pronunciation": "los",
+        "syllables": 1
+    },
+    "lovegood": {
+        "alt": [],
+        "pronunciation": "love good",
+        "syllables": 2
+    },
     "lrt": {
         "alt": [],
         "pronunciation": "last retweet",
@@ -1338,6 +1382,11 @@
         "alt": [],
         "pronunciation": "love",
         "syllables": 1
+    },
+    "lvl": {
+        "alt": [],
+        "pronunciation": "level",
+        "syllables": 2
     },
     "lyf": {
         "alt": [],
@@ -1580,9 +1629,14 @@
         "syllables": 1
     },
     "oomf": {
-        "alt": [],
-        "pronunciation": "one of my friends",
-        "syllables": 4
+        "alt": [
+            {
+                "pronunciation": "oomf",
+                "syllables": 1
+            }
+        ],
+        "pronunciation": "one of my followers",
+        "syllables": 6
     },
     "oompa": {
         "alt": [],
@@ -1608,6 +1662,16 @@
         "alt": [],
         "pronunciation": "our",
         "syllables": 1
+    },
+    "ourself": {
+        "alt": [],
+        "pronunciation": "ourself",
+        "syllables": 2
+    },
+    "ourselves": {
+        "alt": [],
+        "pronunciation": "ourselves",
+        "syllables": 2
     },
     "paella": {
         "alt": [],
@@ -1663,6 +1727,16 @@
         "alt": [],
         "pronunciation": "people",
         "syllables": 2
+    },
+    "ppv": {
+        "alt": [],
+        "pronunciation": "pay per view",
+        "syllables": 3
+    },
+    "ppv2": {
+        "alt": [],
+        "pronunciation": "pay per views",
+        "syllables": 3
     },
     "presidente": {
         "alt": [],
@@ -1739,9 +1813,19 @@
         "pronunciation": "retweet",
         "syllables": 2
     },
+    "rt's": {
+        "alt": [],
+        "pronunciation": "retweets",
+        "syllables": 2
+    },
+    "rts": {
+        "alt": [],
+        "pronunciation": "retweets",
+        "syllables": 2
+    },
     "runescape": {
         "alt": [],
-        "pronunciation": "runescape",
+        "pronunciation": "rune scape",
         "syllables": 2
     },
     "ryu": {
@@ -1749,9 +1833,19 @@
         "pronunciation": "Ryu",
         "syllables": 2
     },
+    "scopophobia": {
+        "alt": [],
+        "pronunciation": "sco po pho bi a",
+        "syllables": 5
+    },
     "selfie": {
         "alt": [],
         "pronunciation": "selfie",
+        "syllables": 2
+    },
+    "sexc": {
+        "alt": [],
+        "pronunciation": "sexy",
         "syllables": 2
     },
     "sf": {
@@ -1903,6 +1997,11 @@
         "alt": [],
         "pronunciation": "the",
         "syllables": 1
+    },
+    "thot": {
+        "alt": [],
+        "pronunciation": "that ho over there",
+        "syllables": 5
     },
     "tfw": {
         "alt": [],
@@ -2239,6 +2338,11 @@
         "pronunciation": "y'all",
         "syllables": 1
     },
+    "yh": {
+        "alt": [],
+        "pronunciation": "yeah",
+        "syllables": 1
+    },
     "ymca": {
         "alt": [],
         "pronunciation": "Y M C A",
@@ -2269,9 +2373,19 @@
         "pronunciation": "years",
         "syllables": 1
     },
+    "yt": {
+        "alt": [],
+        "pronunciation": "white",
+        "syllables": 1
+    },
     "yuge": {
         "alt": [],
         "pronunciation": "huge",
+        "syllables": 1
+    },
+    "yuh": {
+        "alt": [],
+        "pronunciation": "yuh",
         "syllables": 1
     }
 }

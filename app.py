@@ -83,7 +83,7 @@ if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://")
 MY_SCREEN_NAME = os.getenv("MY_SCREEN_NAME", default="twitter")
 LANGUAGE = os.getenv("LANGUAGE", default="en")
-GUESS_SYL_METHOD = os.getenv("GUESS_SYL_METHOD", default="min")
+GUESS_SYL_METHOD = os.getenv("GUESS_SYL_METHOD", default="max")
 
 IGNORE_USER_SCREEN_NAMES = os.getenv("IGNORE_USER_SCREEN_NAMES", default=None)
 IGNORE_USER_SCREEN_NAMES = (

@@ -16,6 +16,7 @@ Hey, that's a haiku! ✌️
     1. If file does not exist or is empty, gets tweets from the [sample stream](https://developer.twitter.com/en/docs/tweets/sample-realtime/api-reference/get-statuses-sample)
 1. Add phrases to `data/ignore_tweet.txt` to ignore tweets that contain tokens from any of these strings, one string per line. Uses `AND` and `OR` logic like the track list, but tokens for `AND` (a single line) can match anywhere. Also matches basic plural versions of words (e.g., `dog` in `data/ignore_tweet.txt` will match `dogs` in a tweet's text). See the function `text_contains_ignore_list_plural` (in `utils/text_utils.py`) for more info.
     1. Whether or not this file exists, by default this program ignores tweets with words read in the `get_ignore_tweet_list` function (in `utils/data_utils.py`)
+1. Add phrases to `data/ignore_profile.txt` to ignore tweets from accounts whose descriptions contain any of these strings. `OR` logic only; matches substrings.
 1. Add pre-defined syllable counts to `data/syllables.json`
 
 ### Local Python environment

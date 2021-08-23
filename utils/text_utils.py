@@ -279,13 +279,13 @@ def text_is_all_uppercase(text: str) -> bool:
     return all([char.isupper() for char in re.sub(r"[^A-Za-z]", "", text)])
 
 
-def clean_token(token: str) -> str:
+def clean_token(token: str, unicode_normalize_form: str = "NFKC") -> str:
     if token is None:
         return token
 
     # Normalize unicode letters
     # NFKD: decomposes, NFKC: composes pre-combined characters again
-    token = unicodedata.normalize("NFKD", token)
+    token = unicodedata.normalize(unicode_normalize_form, token)
 
     # remove space before some punctuation if preceded by a letter or number
     # ("hello ,how are you ? doing")
@@ -303,7 +303,7 @@ def clean_token(token: str) -> str:
     # add space around some punctuation if letters on both sides
     token = re.sub(r"([\w])([#@&%=+/×\-](?=[\w]))", r"\1 \2 ", token)
 
-    # try to replace a missing vowel with "u"
+    # try to replace an asterisk (representing a missing vowel) with "u"
     token = re.sub(r"([\w])[\*]((?=[\w]))", r"\1u\2", token)
 
     # put a space after some punctuation that precedes a letter

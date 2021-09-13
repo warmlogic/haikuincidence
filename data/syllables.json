@@ -895,6 +895,11 @@
         "pronunciation": "gonna",
         "syllables": 2
     },
+    "gnna": {
+        "alt": [],
+        "pronunciation": "gonna",
+        "syllables": 2
+    },
     "grindr": {
         "alt": [],
         "pronunciation": "grinder",
@@ -1278,6 +1283,11 @@
         "alt": [],
         "pronunciation": "looks good to me",
         "syllables": 4
+    },
+    "livestream": {
+        "alt": [],
+        "pronunciation": "live stream",
+        "syllables": 2
     },
     "livetweet": {
         "alt": [],

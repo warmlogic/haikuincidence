@@ -178,7 +178,7 @@ def count_syllables(
     return subsyllable_count
 
 
-def guess_syllables(word: str, method: str = "max") -> int:
+def guess_syllables(word: str, method: str = "min") -> int:
     """Guess the number of syllables in a string.
     Returned value depends on the method used. Minimum is usually good enough.
 

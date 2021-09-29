@@ -87,10 +87,8 @@ def count_syllables(
             subtoken_syl = syllable_dict[remove_repeat_last_letter(subtoken)]["syllables"]
             source = "Dict (remove repeat)"
             subsyllable_count += subtoken_syl
-        elif (
-            (subtoken.endswith("s") or subtoken.endswith("z"))
-            and (subtoken[:-1] in syllable_dict)
-            and not text_might_contain_acronym(subtoken_orig)
+        elif (subtoken_orig.endswith("s") or subtoken_orig.endswith("z")) and (
+            subtoken[:-1] in syllable_dict
         ):
             subtoken_syl = syllable_dict[subtoken[:-1]]["syllables"]
             source = "Dict (singular)"
@@ -110,10 +108,8 @@ def count_syllables(
             )
             source = "CMU (remove repeat)"
             subsyllable_count += subtoken_syl
-        elif (
-            (subtoken.endswith("s") or subtoken.endswith("z"))
-            and (subtoken[:-1] in pronounce_dict)
-            and not text_might_contain_acronym(subtoken_orig)
+        elif (subtoken_orig.endswith("s") or subtoken_orig.endswith("z")) and (
+            subtoken[:-1] in pronounce_dict
         ):
             subtoken_syl = max(
                 [len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken[:-1]]]

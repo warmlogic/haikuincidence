@@ -1041,9 +1041,14 @@
         "syllables": 3
     },
     "ig": {
-        "alt": [],
-        "pronunciation": "instagram",
-        "syllables": 3
+        "alt": [
+            {
+                "pronunciation": "instagram",
+                "syllables": 3
+            }
+        ],
+        "pronunciation": "I guess",
+        "syllables": 2
     },
     "ik": {
         "alt": [],
@@ -1263,6 +1268,11 @@
         "alt": [],
         "pronunciation": "learned",
         "syllables": 1
+    },
+    "lesbianism": {
+        "alt": [],
+        "pronunciation": "lesbian ism",
+        "syllables": 5
     },
     "lgbt": {
         "alt": [],
@@ -1531,6 +1541,11 @@
     "NFL": {
         "alt": [],
         "pronunciation": "N F L",
+        "syllables": 3
+    },
+    "NFT": {
+        "alt": [],
+        "pronunciation": "N F T",
         "syllables": 3
     },
     "NGL": {
@@ -1978,6 +1993,11 @@
         "pronunciation": "season",
         "syllables": 2
     },
+    "taz": {
+        "alt": [],
+        "pronunciation": "taz",
+        "syllables": 1
+    },
     "tba": {
         "alt": [],
         "pronunciation": "T B A",
@@ -2098,6 +2118,11 @@
         "pronunciation": "talk to you later",
         "syllables": 5
     },
+    "tua": {
+        "alt": [],
+        "pronunciation": "tu a",
+        "syllables": 2
+    },
     "tumblr": {
         "alt": [],
         "pronunciation": "tumbler",
@@ -2161,6 +2186,11 @@
     "ur": {
         "alt": [],
         "pronunciation": "your",
+        "syllables": 1
+    },
+    "urs": {
+        "alt": [],
+        "pronunciation": "yours",
         "syllables": 1
     },
     "url": {

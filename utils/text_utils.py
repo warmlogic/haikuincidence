@@ -322,6 +322,7 @@ def clean_token(token: str, unicode_normalize_form: str = "NFKC") -> str:
 
     # replace some punctuation with words
     token = token.replace("@", "at")
+    token = token.replace("#", "number")
     token = token.replace("&", "and")
     token = token.replace("%", "percent")
     token = token.replace("=", "equals")

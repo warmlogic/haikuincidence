@@ -307,7 +307,7 @@ def clean_token(token: str, unicode_normalize_form: str = "NFKC") -> str:
     token = re.sub(r"([\w])[\*]((?=[\w]))", r"\1u\2", token)
 
     # put a space after some punctuation that precedes a letter
-    token = re.sub(r"([#@&%=+/×])((?=[\w]))", r"\1 \2", token)
+    token = re.sub(r"([#@&=+/×])((?=[\w]))", r"\1 \2", token)
 
     # put a space before some punctuation that follows a letter
     token = re.sub(r"([\w])([#@&%=+/×])", r"\1 \2", token)

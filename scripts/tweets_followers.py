@@ -40,7 +40,7 @@ twitter = Twython(
 # https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-friends-list
 i_follow = []
 cursor_if = -1
-sleep_seconds = 65
+sleep_seconds = 60
 counter = 1
 while True:
     logger.info(f"Query {counter}, I follow cursor: {cursor_if}")
@@ -71,7 +71,7 @@ logger.info(f"Found {len(i_follow)} users who I follow")
 # https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-followers-list
 follows_me = []
 cursor_fm = -1
-sleep_seconds = 65
+sleep_seconds = 60
 counter = 1
 while True:
     logger.info(f"Query {counter}, Follow me cursor: {cursor_fm}")
@@ -176,6 +176,7 @@ to_follow = list(
         ]
     )
 )
+logger.info(f"Will attempt to follow {len(to_follow)} poets")
 counter = 0
 for sn in to_follow:
     if sn:

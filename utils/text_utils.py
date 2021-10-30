@@ -106,7 +106,7 @@ def check_text_wrapper(text: str, ignore_list: List[str]) -> bool:
     return all(
         [
             (not text_contains_url(text)),
-            (not text_contains_ignore_list_plural(clean_token(text), ignore_list)),
+            (not text_contains_ignore_list_plural(clean_token(clean_text(text)), ignore_list)),
             (not text_has_chars_digits_together(text)),
             (not text_is_all_uppercase(text)),
             # (text_is_all_alpha(text)),
@@ -287,9 +287,9 @@ def clean_token(token: str, unicode_normalize_form: str = "NFKC") -> str:
     # NFKD: decomposes, NFKC: composes pre-combined characters again
     token = unicodedata.normalize(unicode_normalize_form, token)
 
-    # remove space before some punctuation if preceded by a letter or number
-    # ("hello ,how are you ? doing")
-    token = re.sub(r"(\w)\s([.,;!?](?=\s|$)?)", r"\1\2", token)
+    # # remove space before some punctuation if preceded by a letter or number
+    # # ("hello ,how are you ? doing")
+    # token = re.sub(r"(\w)\s([.,;!?](?=\s|$)?)", r"\1\2", token)
 
     # put space after some punctuation if followed by a letter or number ("cat,dog")
     token = re.sub(r"(?<=[;!?])(?=[\w])", r" ", token)

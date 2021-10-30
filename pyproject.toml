@@ -17,7 +17,7 @@ python-dotenv = "^0.17.0"
 pytz = "^2021.1"
 python = ">=3.9,<3.10"
 sqlalchemy = "^1.4.7"
-twython = "^3.8.2"
+twython = "^3.9.1"
 unidecode = "^1.2.0"
 
 [tool.poetry.dev-dependencies]

@@ -1,4 +1,5 @@
 import logging
+import math
 import re
 
 # import random
@@ -178,9 +179,9 @@ def count_syllables(
     return subsyllable_count
 
 
-def guess_syllables(word: str, method: str = "min") -> int:
+def guess_syllables(word: str, method: str = "mean") -> int:
     """Guess the number of syllables in a string.
-    Returned value depends on the method used. Minimum is usually good enough.
+    Returned value depends on the method used. Mean is usually good enough.
 
     A diphthong is two vowel sounds in a single syllable (e.g., pie, boy, cow)
 
@@ -188,7 +189,11 @@ def guess_syllables(word: str, method: str = "min") -> int:
     """
 
     def get_syl_count_str(minsyl, maxsyl):
-        return f"min syl {minsyl}," + f" mean syl {(minsyl + maxsyl) // 2}," + f" max syl {maxsyl}"
+        return (
+            f"min syl {minsyl},"
+            + f" mean syl {math.ceil((minsyl + maxsyl) / 2)},"
+            + f" max syl {maxsyl}"
+        )
 
     assert method in ["min", "max", "mean"]
     logger.debug(f"Guessing syllable count with method: {method}")
@@ -248,14 +253,20 @@ def guess_syllables(word: str, method: str = "min") -> int:
             on_vowel = is_vowel
             lastchar = c
 
-        # May have counted too many syllables: word ends in e, or past tense (-ed)
+        # May have counted too many syllables: If word ends in e, or past tense (-ed),
+        # run some checks.
         if (
             (len(word) >= 3)
-            and ((word[-1] == "e") or (word[-2:] == "ed"))
-            and (word[-2:] not in ["be", "ie"])
-            and (word[-3] not in ["d", "t"])
+            and (
+                ((word[-1] == "e") or (word[-2:] == "ed"))
+                and (word[-2:] not in ["be", "ie", "ee"])
+                and (word[-3] not in ["d", "t"])
+            )
+            and ((word[-2:] == "le") and (word[-3] in vowels))
+            and (word[-4:] != "ckle")
         ):
             minsyl -= 1
+            maxsyl -= 1
             logger.debug(f"Removing a syllable for '{word}': {get_syl_count_str(minsyl, maxsyl)}")
 
         # Posessive with word ending in certain sounds may not get enough syllables
@@ -280,8 +291,8 @@ def guess_syllables(word: str, method: str = "min") -> int:
     if method == "min":
         syl = minsyl
     elif method == "mean":
-        # Average and round down
-        syl = (minsyl + maxsyl) // 2
+        # Average and round up
+        syl = math.ceil((minsyl + maxsyl) / 2)
     elif method == "max":
         syl = maxsyl
 

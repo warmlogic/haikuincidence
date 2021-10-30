@@ -462,6 +462,16 @@
         "pronunciation": "difference",
         "syllables": 2
     },
+    "dj": {
+        "alt": [],
+        "pronunciation": "D J",
+        "syllables": 2
+    },
+    "dj's": {
+        "alt": [],
+        "pronunciation": "D Js",
+        "syllables": 2
+    },
     "dm": {
         "alt": [],
         "pronunciation": "D M",
@@ -1025,6 +1035,16 @@
         "pronunciation": "in case you missed it",
         "syllables": 5
     },
+    "id": {
+        "alt": [
+            {
+                "pronunciation": "I'd",
+                "syllables": 1
+            }
+        ],
+        "pronunciation": "I D",
+        "syllables": 2
+    },
     "idc": {
         "alt": [],
         "pronunciation": "i don't care",
@@ -1094,6 +1114,11 @@
         "alt": [],
         "pronunciation": "in my opinion",
         "syllables": 5
+    },
+    "insanely": {
+        "alt": [],
+        "pronunciation": "insane ly",
+        "syllables": 3
     },
     "iono": {
         "alt": [],
@@ -1643,6 +1668,11 @@
         "pronunciation": "oh my god",
         "syllables": 3
     },
+    "oml": {
+        "alt": [],
+        "pronunciation": "oh my lord",
+        "syllables": 3
+    },
     "omp": {
         "alt": [],
         "pronunciation": "on my phone",
@@ -1857,6 +1887,11 @@
         "alt": [],
         "pronunciation": "Ryu",
         "syllables": 2
+    },
+    "sci": {
+        "alt": [],
+        "pronunciation": "sci",
+        "syllables": 1
     },
     "scopophobia": {
         "alt": [],
@@ -2401,6 +2436,11 @@
     "youngbae": {
         "alt": [],
         "pronunciation": "youngbae",
+        "syllables": 2
+    },
+    "youtube": {
+        "alt": [],
+        "pronunciation": "you tube",
         "syllables": 2
     },
     "yr": {

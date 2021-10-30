@@ -1,4 +1,11 @@
-# Run from the scripts folder like: python test_syllables.py --text "my text here"
+"""
+Run from the scripts folder like: python test_syllables.py --text "my text here"
+
+Restopped
+Insanely
+DJ's
+sourdough
+"""
 
 import argparse
 import logging

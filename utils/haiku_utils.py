@@ -236,6 +236,7 @@ def guess_syllables(word: str, method: str = "mean") -> int:
                     maxsyl += 1
                     logger.debug(f"diphthong: {c}: {get_syl_count_str(minsyl, maxsyl)}")
             else:
+                in_diphthong = False
                 if re.findall(r"[\w]", c):
                     logger.debug(f"consonant: {c}")
                 else:

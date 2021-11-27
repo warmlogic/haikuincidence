@@ -7,7 +7,8 @@ from sqlalchemy import Boolean, Column, DateTime, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
-from utils.text_utils import date_string_to_datetime, get_tweet_body
+
+from .text_utils import date_string_to_datetime, get_tweet_body
 
 logger = logging.getLogger("haikulogger")
 

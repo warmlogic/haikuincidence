@@ -12,7 +12,7 @@ format:
 
 .PHONY: sort
 sort:
-	poetry run isort --profile black .
+	poetry run isort .
 
 .PHONY: stylecheck
 stylecheck:
@@ -27,3 +27,7 @@ lint:
 	make format
 	make sort
 	make stylecheck
+
+.PHONY: test
+lint:
+	poetry run pytest .

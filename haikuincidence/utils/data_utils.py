@@ -8,7 +8,7 @@ logger = logging.getLogger("haikulogger")
 
 def get_track_str(filepath: Path = None) -> str:
     """track tweets that contain any of these words"""
-    filepath = filepath or Path(__file__).parent.parent / "data" / "track.txt"
+    filepath = filepath or Path("data") / "track.txt"
     if filepath.exists():
         logger.info(f"Reading track list: {filepath}")
         with open(filepath, "r") as fp:
@@ -21,7 +21,7 @@ def get_track_str(filepath: Path = None) -> str:
 
 def get_ignore_tweet_list(filepath: Path = None) -> List:
     """filter out likely oppressive/offensive tweets using this word list"""
-    filepath = filepath or Path(__file__).parent.parent / "data" / "ignore_tweet.txt"
+    filepath = filepath or Path("data") / "ignore_tweet.txt"
     if filepath.exists():
         logger.info(f"Reading ignore tweet list: {filepath}")
         with open(filepath, "r") as fp:
@@ -37,7 +37,7 @@ def get_ignore_tweet_list(filepath: Path = None) -> List:
 
 def get_ignore_profile_list(filepath: Path = None) -> List:
     """filter out tweets based on contents of user profile"""
-    filepath = filepath or Path(__file__).parent.parent / "data" / "ignore_profile.txt"
+    filepath = filepath or Path("data") / "ignore_profile.txt"
     if filepath.exists():
         logger.info(f"Reading ignore profile list: {filepath}")
         with open(filepath, "r") as fp:
@@ -53,7 +53,7 @@ def get_ignore_profile_list(filepath: Path = None) -> List:
 
 def get_syllable_dict(filepath: Path = None) -> Dict:
     """specify syllables for certain acronyms or abbreviations"""
-    filepath = filepath or Path(__file__).parent.parent / "data" / "syllables.json"
+    filepath = filepath or Path("data") / "syllables.json"
     if filepath.exists():
         logger.info(f"Reading syllable list: {filepath}")
         with open(filepath, "r") as fp:
@@ -68,7 +68,7 @@ def get_syllable_dict(filepath: Path = None) -> Dict:
 
 def get_emoticons_list(filepath: Path = None) -> List:
     """text emoticons do not contribute to the syllable count"""
-    filepath = filepath or Path(__file__).parent.parent / "data" / "emoticons.txt"
+    filepath = filepath or Path("data") / "emoticons.txt"
     if filepath.exists():
         logger.info(f"Reading emoticon list: {filepath}")
         with open(filepath, "r") as fp:

@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  PYTHON_VERSION: 3.9
+
 jobs:
   lint:
     name: Lint and Format
@@ -15,18 +18,11 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Set up Python 3.9
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.9"
-
-      - name: Cache linter dependencies
-        id: cache-linter-deps
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip
-          restore-keys: ${{ runner.os }}-pip
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
 
       - name: Install dependencies
         run: |
@@ -37,7 +33,7 @@ jobs:
         run: black --check .
 
       - name: Check imports
-        run: isort --check --profile black .
+        run: isort --check .
 
       - name: Check code style
         run: flake8 .

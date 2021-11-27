@@ -5,8 +5,8 @@ import re
 # import random
 from typing import Dict, List
 
-from utils.data_base import Haiku
-from utils.text_utils import (
+from haikuincidence.utils.data_base import Haiku
+from haikuincidence.utils.text_utils import (
     clean_token,
     remove_repeat_last_letter,
     text_might_contain_acronym,

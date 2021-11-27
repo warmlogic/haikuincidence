@@ -10,16 +10,16 @@ import pytz
 from dotenv import load_dotenv
 from nltk.corpus import cmudict
 from twython import Twython, TwythonError, TwythonStreamer
-from utils.data_base import Haiku, session_factory
-from utils.data_utils import (
+from haikuincidence.utils.data_base import Haiku, session_factory
+from haikuincidence.utils.data_utils import (
     get_emoticons_list,
     get_ignore_profile_list,
     get_ignore_tweet_list,
     get_syllable_dict,
     get_track_str,
 )
-from utils.haiku_utils import get_best_haiku, get_haiku
-from utils.text_utils import (
+from haikuincidence.utils.haiku_utils import get_best_haiku, get_haiku
+from haikuincidence.utils.text_utils import (
     check_profile,
     check_text_wrapper,
     check_tweet,

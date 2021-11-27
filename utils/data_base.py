@@ -77,7 +77,7 @@ class Haiku(Base):
         q = (
             session.query(cls)
             .filter(cls.date_posted != None)  # noqa: E711
-            .filter(cls.date_deleted == None)
+            .filter(cls.date_deleted == None)  # noqa: E711
         )
         return q.all()
 
@@ -87,7 +87,7 @@ class Haiku(Base):
         q = (
             session.query(cls)
             .filter(cls.date_posted == None)  # noqa: E711
-            .filter(cls.date_deleted == None)
+            .filter(cls.date_deleted == None)  # noqa: E711
         )
         return q.all()
 
@@ -101,7 +101,7 @@ class Haiku(Base):
             session.query(cls)
             .filter(cls.created_at > filter_td)
             .filter(cls.date_posted == None)  # noqa: E711
-            .filter(cls.date_deleted == None)
+            .filter(cls.date_deleted == None)  # noqa: E711
         )
         return q.all()
 

@@ -1,5 +1,6 @@
 """
-Run from the scripts folder like: python test_syllables.py --text "my text here"
+Run from the top-level folder like:
+poetry run python scripts/check_syllables.py --text "my text here"
 
 Restopped
 Insanely

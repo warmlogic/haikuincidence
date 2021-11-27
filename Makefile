@@ -29,5 +29,5 @@ lint:
 	make stylecheck
 
 .PHONY: test
-lint:
+test:
 	poetry run pytest .

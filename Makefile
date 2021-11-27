@@ -30,4 +30,4 @@ lint:
 
 .PHONY: test
 test:
-	poetry run pytest .
+	poetry run pytest ./tests/

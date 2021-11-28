@@ -56,12 +56,12 @@ jobs:
       #----------------------------------------------
       - name: Install project if not cached
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run:  poetry install --no-interaction --no-root
+        run: poetry install --no-interaction --no-root
       #----------------------------------------------
       # install project if cache exists
       #----------------------------------------------
       - name: Install project if cached
-        run:  poetry install --no-interaction
+        run: poetry install --no-interaction
       #----------------------------------------------
       # run linting and formatting checks
       #----------------------------------------------
@@ -122,12 +122,17 @@ jobs:
       #----------------------------------------------
       - name: Install project if not cached
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run:  poetry install --no-interaction --no-root
+        run: poetry install --no-interaction --no-root
       #----------------------------------------------
       # install project if cache exists
       #----------------------------------------------
       - name: Install project if cached
-        run:  poetry install --no-interaction
+        run: poetry install --no-interaction
+      #----------------------------------------------
+      # install NLTK data
+      #----------------------------------------------
+      - name: Install NLTK data
+        run: poetry run python -c "import nltk; nltk.download('cmudict', download_dir='./nltk_data')"
       #----------------------------------------------
       # run tests
       #----------------------------------------------

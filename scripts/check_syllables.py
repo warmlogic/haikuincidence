@@ -7,6 +7,8 @@ restopped
 insanely
 DJ's
 sourdough
+guidestone
+oneworld
 """
 
 import argparse

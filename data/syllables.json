@@ -294,6 +294,11 @@
         "pronunciation": "bored",
         "syllables": 1
     },
+    "bouta": {
+        "alt": [],
+        "pronunciation": "bout to",
+        "syllables": 2
+    },
     "brb": {
         "alt": [],
         "pronunciation": "be right back",
@@ -717,6 +722,11 @@
         "pronunciation": "fucking",
         "syllables": 2
     },
+    "fucka": {
+        "alt": [],
+        "pronunciation": "fucker",
+        "syllables": 2
+    },
     "fxck": {
         "alt": [],
         "pronunciation": "fuck",
@@ -955,6 +965,11 @@
         "pronunciation": "H B O",
         "syllables": 3
     },
+    "HBOMax": {
+        "alt": [],
+        "pronunciation": "H B O Max",
+        "syllables": 4
+    },
     "hehehe": {
         "alt": [],
         "pronunciation": "hehehe",
@@ -1115,15 +1130,15 @@
         "pronunciation": "in my opinion",
         "syllables": 5
     },
-    "insanely": {
-        "alt": [],
-        "pronunciation": "insane ly",
-        "syllables": 3
-    },
     "iono": {
         "alt": [],
         "pronunciation": "I don't know",
         "syllables": 3
+    },
+    "iPhone": {
+        "alt": [],
+        "pronunciation": "i phone",
+        "syllables": 2
     },
     "IQ": {
         "alt": [],
@@ -1741,6 +1756,11 @@
     "phd": {
         "alt": [],
         "pronunciation": "p h d",
+        "syllables": 3
+    },
+    "placeholder": {
+        "alt": [],
+        "pronunciation": "place holder",
         "syllables": 3
     },
     "pls": {
@@ -2378,6 +2398,11 @@
         "pronunciation": "W W W",
         "syllables": 9
     },
+    "xbox": {
+        "alt": [],
+        "pronunciation": "x box",
+        "syllables": 2
+    },
     "xmas": {
         "alt": [],
         "pronunciation": "christmas",
@@ -2417,6 +2442,11 @@
         "alt": [],
         "pronunciation": "y'all",
         "syllables": 1
+    },
+    "yfm": {
+        "alt": [],
+        "pronunciation": "you feel me",
+        "syllables": 3
     },
     "yh": {
         "alt": [],

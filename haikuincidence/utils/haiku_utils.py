@@ -262,15 +262,6 @@ def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -
                 else:
                     logger.debug(f"other: {c}")
 
-            # if len(word[i:]) >= 2 and not any([x in vowels + ["y"] for x in word[i:]]):
-            #     minsyl += 1
-            #     maxsyl += 1
-            #     logger.debug(
-            #         f"remaining letters are all consonants: {word[i:]}. add 1:"
-            #         + f"{get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
-            #     )
-            #     break
-
             if i + 1 == len(word):
                 break
 

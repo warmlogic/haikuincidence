@@ -132,11 +132,8 @@ jobs:
       # install NLTK data
       #----------------------------------------------
       - name: Install NLTK data
-        working-directory: ~/.local
         run: |
-          pwd
-          ls
-          poetry run python -c "import nltk; nltk.download('cmudict', download_dir='./nltk_data')"
+          poetry run python -c "import nltk; nltk.download('cmudict')"
       #----------------------------------------------
       # run tests
       #----------------------------------------------

@@ -170,7 +170,9 @@ def count_syllables(
                         subsyllable_count += subtoken_syl
                     else:
                         # make a guess
-                        subtoken_syl = guess_syllables(subtoken, guess_syl_method)
+                        subtoken_syl = guess_syllables(
+                            remove_repeat_last_letter(subtoken), guess_syl_method
+                        )
                         source = "Guess"
                         subsyllable_count += subtoken_syl
         if logger.isEnabledFor(logging.DEBUG):

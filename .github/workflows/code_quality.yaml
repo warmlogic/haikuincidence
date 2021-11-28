@@ -132,7 +132,7 @@ jobs:
       # install NLTK data
       #----------------------------------------------
       - name: Install NLTK data
-        run: poetry run python -c "import nltk; nltk.download('cmudict', download_dir='./nltk_data')"
+        run: poetry run python -c "import nltk; nltk.download('cmudict', download_dir='~/nltk_data')"
       #----------------------------------------------
       # run tests
       #----------------------------------------------

@@ -955,6 +955,11 @@
         "pronunciation": "H B O",
         "syllables": 3
     },
+    "HBOMax": {
+        "alt": [],
+        "pronunciation": "H B O Max",
+        "syllables": 4
+    },
     "hehehe": {
         "alt": [],
         "pronunciation": "hehehe",
@@ -1114,11 +1119,6 @@
         "alt": [],
         "pronunciation": "in my opinion",
         "syllables": 5
-    },
-    "insanely": {
-        "alt": [],
-        "pronunciation": "insane ly",
-        "syllables": 3
     },
     "iono": {
         "alt": [],

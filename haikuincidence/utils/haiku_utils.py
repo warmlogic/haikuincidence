@@ -179,7 +179,7 @@ def count_syllables(
     return subsyllable_count
 
 
-def guess_syllables(word: str, method: str = "mean", mean_round_dir: str = "down") -> int:
+def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -> int:
     """Guess the number of syllables in a string.
     Returned value depends on the method used. Mean is usually good enough.
 
@@ -187,6 +187,8 @@ def guess_syllables(word: str, method: str = "mean", mean_round_dir: str = "down
 
     Adapted from https://github.com/akkana/scripts/blob/master/countsyl
     """
+    method = method or "mean"
+    mean_round_dir = mean_round_dir or "down"
 
     def avg_syl(minsyl: int, maxsyl: int, mean_round_dir: str):
         if mean_round_dir == "up":
@@ -207,6 +209,8 @@ def guess_syllables(word: str, method: str = "mean", mean_round_dir: str = "down
         assert mean_round_dir in ["down", "up"]
 
     logger.debug(f"Guessing syllable count with method: {method}")
+    if method == "mean":
+        logger.debug(f"    Rounding direction: {mean_round_dir}")
 
     vowels = ["a", "e", "i", "o", "u"]
 
@@ -238,7 +242,7 @@ def guess_syllables(word: str, method: str = "mean", mean_round_dir: str = "down
                     minsyl += 1
                     maxsyl += 1
                     logger.debug(
-                        f"new syllable: {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
+                        f"    new syllable: {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
                     )
                 elif on_vowel and not in_diphthong and c != lastchar:
                     # We were already in a vowel.
@@ -247,7 +251,7 @@ def guess_syllables(word: str, method: str = "mean", mean_round_dir: str = "down
                     in_diphthong = True
                     maxsyl += 1
                     logger.debug(
-                        f"diphthong: {c}: {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
+                        f"    diphthong: {c}: {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
                     )
             else:
                 in_diphthong = False
@@ -265,6 +269,9 @@ def guess_syllables(word: str, method: str = "mean", mean_round_dir: str = "down
             #     )
             #     break
 
+            if i + 1 == len(word):
+                break
+
             on_vowel = is_vowel
             lastchar = c
 
@@ -272,18 +279,22 @@ def guess_syllables(word: str, method: str = "mean", mean_round_dir: str = "down
         # run some checks.
         if (
             (len(word) >= 3)
-            and (
-                ((word[-1] == "e") or (word[-2:] == "ed"))
-                and (word[-2:] not in ["be", "ie", "ee"])
-                and (word[-3] not in ["d", "t"])
-            )
-            and ((word[-2:] == "le") and (word[-3] in vowels))
-            and (word[-4:] != "ckle")
+            and ((word[-1] == "e") or (word[-2:] == "ed"))
+            and (word[-2:] not in ["be", "ie", "ee"])
+            and (word[-3] not in ["d", "t"])
         ):
             minsyl -= 1
-            maxsyl -= 1
+            # maxsyl -= 1
             logger.debug(
-                f"Removing a syllable for '{word}':"
+                f"Ends in e or ed, removing a syllable for '{word}':"
+                + f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
+            )
+
+        if (len(word) >= 3) and (word[-2:] == "le") and (word[-3] not in vowels):
+            minsyl += 1
+            maxsyl += 1
+            logger.debug(
+                f"Adding back a syllable for '{word}':"
                 + f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
             )
 
@@ -292,17 +303,28 @@ def guess_syllables(word: str, method: str = "mean", mean_round_dir: str = "down
             minsyl += 1
             maxsyl += 1
             logger.debug(
-                f"Adding a syllable for '{word}':"
+                f"Posessive: Adding a syllable for '{word}':"
                 + f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
             )
 
-        # if it ended with a consonant followed by y, count that as a syllable.
-        if word[-1] == "y" and not on_vowel:
+        # check on ending with a consonant followed by y
+        if (len(word) >= 3) and (word[-2] not in vowels) and (word[-1] == "y"):
+            if word[-3] == "e":
+                minsyl -= 1
+                logger.debug(
+                    f"Ends with e + consonant + y: Removing a syllable for '{word}':"
+                    + f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
+                )
+            else:
+                maxsyl += 1
+                logger.debug(
+                    f"Ends with consonant + y: Adding a syllable for '{word}':"
+                    + f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
+                )
+
+        # other special cases
+        if word.endswith("phobia") or word.endswith("bio"):
             maxsyl += 1
-            logger.debug(
-                f"Adding a syllable for '{word}':"
-                + f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
-            )
 
         # if found no syllables but there's at least one letter,
         # count as one syllable

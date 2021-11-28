@@ -2,8 +2,9 @@
 Run from the top-level folder like:
 poetry run python scripts/check_syllables.py --text "my text here"
 
-Restopped
-Insanely
+Some difficult words:
+restopped
+insanely
 DJ's
 sourdough
 """

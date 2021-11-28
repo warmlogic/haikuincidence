@@ -1,5 +1,6 @@
 """
-Run from the scripts folder like: python test_syllables.py --text "my text here"
+Run from the top-level folder like:
+poetry run python scripts/check_syllables.py --text "my text here"
 
 Restopped
 Insanely
@@ -9,22 +10,18 @@ sourdough
 
 import argparse
 import logging
-import sys
 
 import inflect
 from nltk.corpus import cmudict
 
-# append parent directory to path so next imports work
-sys.path.append("..")
-
-from utils.data_utils import (  # noqa: E402
+from haikuincidence.utils.data_utils import (
     get_emoticons_list,
     get_ignore_tweet_list,
     get_syllable_dict,
     get_track_str,
 )
-from utils.haiku_utils import get_haiku  # noqa: E402
-from utils.text_utils import check_text_wrapper, clean_text  # noqa: E402
+from haikuincidence.utils.haiku_utils import get_haiku
+from haikuincidence.utils.text_utils import check_text_wrapper, clean_text
 
 logging.basicConfig(format="{asctime} : {levelname} : {message}", style="{")
 logger = logging.getLogger("haikulogger")

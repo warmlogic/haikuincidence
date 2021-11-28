@@ -42,8 +42,8 @@ If running the app on Heroku (see below), `.env` is not needed but it may still 
 
 ### Locally
 
-1. Run the application: `poetry run python app.py`
-   1. Alternatively, activate the virtual environment that poetry created by running `poetry shell` and then run the script: `python app.py`
+1. Run the application: `poetry run python haikuincidence/app.py`
+   1. Alternatively, activate the virtual environment that poetry created by running `poetry shell` and then run the script: `python haikuincidence/app.py`
    1. Deactivate the virtual environment by running `deactivate`
 
 ### As a Heroku app

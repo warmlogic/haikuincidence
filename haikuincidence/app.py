@@ -10,7 +10,6 @@ import pytz
 from dotenv import load_dotenv
 from nltk.corpus import cmudict
 from twython import Twython, TwythonError, TwythonStreamer
-
 from utils.data_base import Haiku, session_factory
 from utils.data_utils import (
     get_emoticons_list,

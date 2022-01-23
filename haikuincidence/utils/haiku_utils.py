@@ -278,7 +278,7 @@ def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -
             + f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
         )
 
-    if (len(word) >= 3) and (word[-2:] == "le") and (word[-3] not in vowels):
+    if (len(word) >= 3) and (word[-2:] == "le") and (word[-3] not in vowels + ["l"]):
         minsyl += 1
         maxsyl += 1
         logger.debug(

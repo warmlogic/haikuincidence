@@ -328,6 +328,11 @@
         "pronunciation": "by the way",
         "syllables": 3
     },
+    "cheque": {
+        "alt": [],
+        "pronunciation": "check",
+        "syllables": 1
+    },
     "civ": {
         "alt": [],
         "pronunciation": "civ",
@@ -471,6 +476,16 @@
         "alt": [],
         "pronunciation": "D J",
         "syllables": 2
+    },
+    "djing": {
+        "alt": [],
+        "pronunciation": "D J ing",
+        "syllables": 3
+    },
+    "dj'ing": {
+        "alt": [],
+        "pronunciation": "D J ing",
+        "syllables": 3
     },
     "dj's": {
         "alt": [],
@@ -632,6 +647,16 @@
         "pronunciation": "favorite",
         "syllables": 3
     },
+    "favourite": {
+        "alt": [
+            {
+                "pronunciation": "favorite",
+                "syllables": 2
+            }
+        ],
+        "pronunciation": "favorite",
+        "syllables": 3
+    },
     "fb": {
         "alt": [],
         "pronunciation": "facebook",
@@ -767,6 +792,11 @@
         "pronunciation": "gonna",
         "syllables": 2
     },
+    "flavoured": {
+        "alt": [],
+        "pronunciation": "flavored",
+        "syllables": 2
+    },
     "flickr": {
         "alt": [],
         "pronunciation": "flicker",
@@ -806,6 +836,11 @@
         "alt": [],
         "pronunciation": "for what it's worth",
         "syllables": 4
+    },
+    "fwu": {
+        "alt": [],
+        "pronunciation": "fuck with you",
+        "syllables": 3
     },
     "fwy": {
         "alt": [
@@ -879,6 +914,11 @@
         "alt": [],
         "pronunciation": "good game",
         "syllables": 2
+    },
+    "giaw": {
+        "alt": [],
+        "pronunciation": "god is a woman",
+        "syllables": 5
     },
     "gif": {
         "alt": [],
@@ -1010,6 +1050,11 @@
         "pronunciation": "hold",
         "syllables": 1
     },
+    "honoured": {
+        "alt": [],
+        "pronunciation": "honored",
+        "syllables": 2
+    },
     "hrs": {
         "alt": [],
         "pronunciation": "hours",
@@ -1034,6 +1079,11 @@
         "alt": [],
         "pronunciation": "H T T P S",
         "syllables": 5
+    },
+    "humoured": {
+        "alt": [],
+        "pronunciation": "humored",
+        "syllables": 2
     },
     "ianal": {
         "alt": [],
@@ -1215,6 +1265,11 @@
         "pronunciation": "junior",
         "syllables": 2
     },
+    "JT": {
+        "alt": [],
+        "pronunciation": "J T",
+        "syllables": 2
+    },
     "jus": {
         "alt": [],
         "pronunciation": "just",
@@ -1298,6 +1353,11 @@
         ],
         "pronunciation": "laboratory",
         "syllables": 4
+    },
+    "laboured": {
+        "alt": [],
+        "pronunciation": "labored",
+        "syllables": 2
     },
     "las": {
         "alt": [],
@@ -1578,6 +1638,11 @@
         "pronunciation": "N B C",
         "syllables": 3
     },
+    "neighboured": {
+        "alt": [],
+        "pronunciation": "neighbored",
+        "syllables": 2
+    },
     "NFL": {
         "alt": [],
         "pronunciation": "N F L",
@@ -1622,6 +1687,11 @@
         "alt": [],
         "pronunciation": "not safe for work",
         "syllables": 4
+    },
+    "NSYNC": {
+        "alt": [],
+        "pronunciation": "n sync",
+        "syllables": 2
     },
     "nvm": {
         "alt": [],
@@ -1883,6 +1953,11 @@
         "pronunciation": "rofl",
         "syllables": 2
     },
+    "rumoured": {
+        "alt": [],
+        "pronunciation": "rumored",
+        "syllables": 2
+    },
     "rt": {
         "alt": [],
         "pronunciation": "retweet",
@@ -1938,11 +2013,6 @@
         "pronunciation": "sound effects",
         "syllables": 3
     },
-    "shouldnt": {
-        "alt": [],
-        "pronunciation": "shouldn't",
-        "syllables": 2
-    },
     "sh": {
         "alt": [],
         "pronunciation": "sh",
@@ -1952,6 +2022,16 @@
         "alt": [],
         "pronunciation": "she's",
         "syllables": 1
+    },
+    "shouldnt": {
+        "alt": [],
+        "pronunciation": "shouldn't",
+        "syllables": 2
+    },
+    "shoutout": {
+        "alt": [],
+        "pronunciation": "shout out",
+        "syllables": 2
     },
     "sht": {
         "alt": [],
@@ -2078,6 +2158,11 @@
         "pronunciation": "the fuck",
         "syllables": 2
     },
+    "th": {
+        "alt": [],
+        "pronunciation": "th",
+        "syllables": 1
+    },
     "tha": {
         "alt": [],
         "pronunciation": "the",
@@ -2122,6 +2207,16 @@
         "alt": [],
         "pronunciation": "tick",
         "syllables": 1
+    },
+    "TIL": {
+        "alt": [
+            {
+                "pronunciation": "til",
+                "syllables": 1
+            }
+        ],
+        "pronunciation": "today I learned",
+        "syllables": 4
     },
     "tiktok": {
         "alt": [],
@@ -2271,6 +2366,11 @@
     "visuals": {
         "alt": [],
         "pronunciation": "visuals",
+        "syllables": 3
+    },
+    "VMA": {
+        "alt": [],
+        "pronunciation": "V M A",
         "syllables": 3
     },
     "voy": {

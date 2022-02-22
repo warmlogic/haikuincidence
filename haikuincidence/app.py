@@ -36,7 +36,7 @@ logger = logging.getLogger("haikulogger")
 IS_PROD = os.getenv("IS_PROD", default=None)
 
 if IS_PROD is None:
-    env_path = Path.cwd() / ".env"
+    env_path = Path.cwd().parent / ".env"
     if env_path.exists():
         load_dotenv(dotenv_path=env_path)
     else:

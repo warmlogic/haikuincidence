@@ -48,7 +48,9 @@ guess_syl_method = "mean"
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process text and count syllables.")
-    parser.add_argument("-t", "--text", type=str, nargs="?", help="String to process, in quotes")
+    parser.add_argument(
+        "-t", "--text", type=str, nargs="?", help="String to process, in quotes"
+    )
     args = parser.parse_args()
 
     text = args.text
@@ -58,7 +60,9 @@ if __name__ == "__main__":
     text = clean_text(text)
     logger.debug(f"Cleaned text:\n{text}")
 
-    logger.debug(f"Passes check_text_wrapper: {check_text_wrapper(text, ignore_tweet_list)}")
+    logger.debug(
+        f"Passes check_text_wrapper: {check_text_wrapper(text, ignore_tweet_list)}"
+    )
 
     haiku = get_haiku(
         text, inflect_p, pronounce_dict, syllable_dict, emoticons_list, guess_syl_method

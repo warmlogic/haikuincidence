@@ -128,7 +128,7 @@ def count_syllables(
         else:
             # it's not a "real" word
             if re.findall(r"[^\w']", subtoken):
-                # there are some non-letter characters remaining (shouldn't be possible);
+                # there are non-letter characters remaining (shouldn't be possible);
                 # run it through again
                 subtoken_syl = count_syllables(
                     subtoken,
@@ -163,8 +163,8 @@ def count_syllables(
                             source = "Multiple apostrophes"
                             subsyllable_count += subtoken_syl
                 else:
-                    # no apostrophes;
-                    # might be an acronym, split the letters apart and run it through again
+                    # no apostrophes; might be an acronym,
+                    # split the letters apart and run it through again
                     if text_might_contain_acronym(subtoken_orig):
                         subtoken_syl = count_syllables(
                             " ".join(subtoken),
@@ -247,7 +247,8 @@ def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -
                 minsyl += 1
                 maxsyl += 1
                 logger.debug(
-                    f"    new syllable: {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
+                    "    new syllable:"
+                    + f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
                 )
             elif on_vowel and not in_diphthong and c != lastchar:
                 # We were already in a vowel.
@@ -256,7 +257,8 @@ def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -
                 in_diphthong = True
                 maxsyl += 1
                 logger.debug(
-                    f"    diphthong: {c}: {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
+                    "    diphthong:"
+                    + f" {c}: {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
                 )
         else:
             in_diphthong = False
@@ -423,7 +425,8 @@ def get_haiku(
             # Therefore not a haiku coincidence!
             if logger.isEnabledFor(logging.DEBUG):
                 logger.debug(
-                    f"Not a haiku because are more lines to check: {' '.join(text_split[i + 1:])}"
+                    "Not a haiku because are more lines to check:"
+                    + f" {' '.join(text_split[i + 1:])}"
                 )
             return ""
     if haiku_line == len(haiku_form):
@@ -451,7 +454,8 @@ def construct_haiku_to_post(h, this_status) -> Dict:
 def get_best_haiku(haikus, twitter, session) -> Dict:
     """Attempt to get the haiku by assessing verified user,
     or number of favorites, retweets, or followers.
-    High probability that followers will yield a tweet. Otherwise get the most recent one.
+    High probability that followers will yield a tweet.
+    Otherwise get the most recent one.
 
     TODO: If there's more than 1 verified user (extremely unlikely), rank tweets
     """

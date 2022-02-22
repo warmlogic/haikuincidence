@@ -56,8 +56,13 @@ while True:
     cursor_if = result["next_cursor"]
     logger.info(f"Added {len(user_list)} users who I follow (total: {len(i_follow)})")
     # # find the screen names with notifications turned on
-    # user_list_notif = [user['screen_name'] for user in ifollow['users'] if user['notifications']]
-    # logger.info(f'Found {len(user_list_notif)} users with notifications turned on who I follow')
+    # user_list_notif = [
+    #     user["screen_name"] for user in ifollow["users"] if user["notifications"]
+    # ]
+    # logger.info(
+    #     f"Found {len(user_list_notif)} users"
+    #     + " with notifications turned on who I follow"
+    # )
     # i_follow.extend(user_list_notif)
     logger.info(f"Sleeping for {sleep_seconds} seconds")
     sleep(sleep_seconds)
@@ -95,7 +100,8 @@ follows_me = list(set([sn for sn in follows_me if sn]))
 logger.info(f"Found {len(follows_me)} users who follow me")
 
 
-# unfollow people I follow who do not follow me, to make room for following more new poets
+# unfollow people I follow who do not follow me,
+# to make room for following more new poets
 # https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/post-friendships-destroy
 unfollowed = []
 does_not_follow_me = set(i_follow) - set(follows_me)
@@ -117,8 +123,10 @@ logger.info(f"Unfollowed {len(unfollowed)} users who do not follow me")
 
 # get the screen names I have replied to
 # with user auth, can only make 900 requests in a 15-minute window (60 per minute)
-# if instead was using app auth, could make 1500 requests in a 15-minute window (100 per minute)
-# Twitter's API limits this to the most recent 3200 tweets, there's no way around this limit
+# if instead was using app auth,
+# could make 1500 requests in a 15-minute window (100 per minute)
+# Twitter's API limits this to the most recent 3200 tweets,
+# there's no way around this limit
 # https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline
 poets = []
 mytweets = twitter.get_user_timeline(

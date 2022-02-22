@@ -171,9 +171,7 @@ class Haiku(Base):
                 session.execute(delete_q)
                 session.commit()
             except Exception as e:
-                logger.warning(
-                    f"Exception when deleting unposted haikus older than {days} days: {e}"
-                )
+                logger.warning(f"Exception when deleting old unposted haikus: {e}")
                 session.rollback()
 
     @classmethod
@@ -192,9 +190,7 @@ class Haiku(Base):
                 session.execute(delete_q)
                 session.commit()
             except Exception as e:
-                logger.warning(
-                    f"Exception when deleting posted haikus older than {days} days: {e}"
-                )
+                logger.warning(f"Exception when deleting old posted haikus: {e}")
                 session.rollback()
 
     @classmethod
@@ -213,6 +209,6 @@ class Haiku(Base):
                     session.commit()
                 except Exception as e:
                     logger.warning(
-                        f"Exception when keeping most recent {n} rows of haikus: {e}"
+                        f"Exception when keeping most recent rows of haikus: {e}"
                     )
                     session.rollback()

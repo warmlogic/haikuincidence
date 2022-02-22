@@ -1,3 +1,4 @@
+# Meant to be run from inside `poetry shell`
 .PHONY: default
 default: list;
 

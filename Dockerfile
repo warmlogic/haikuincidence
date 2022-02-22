@@ -9,7 +9,7 @@ ENV APP_ENV=${APP_ENV} \
   PIP_NO_CACHE_DIR=off \
   PIP_DISABLE_PIP_VERSION_CHECK=on \
   PIP_DEFAULT_TIMEOUT=100 \
-  POETRY_VERSION=1.1.11 \
+  POETRY_VERSION=1.1.13 \
   POETRY_NO_INTERACTION=1 \
   POETRY_VIRTUALENVS_CREATE=false \
   POETRY_CACHE_DIR='/var/cache/pypoetry' \
@@ -25,7 +25,7 @@ RUN apt-get update && apt-get upgrade -y \
     libpq-dev \
     # Define build-time-only dependencies
     $BUILD_ONLY_PACKAGES \
-  && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - \
+  && curl -sSL https://install.python-poetry.org | python3 - \
   && poetry --version \
   # Remove build-time-only dependencies
   && apt-get remove -y $BUILD_ONLY_PACKAGES \

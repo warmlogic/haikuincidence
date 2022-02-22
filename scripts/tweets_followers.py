@@ -85,7 +85,9 @@ while True:
     user_list = [user["screen_name"] for user in result["users"]]
     follows_me.extend(user_list)
     cursor_fm = result["next_cursor"]
-    logger.info(f"Added {len(user_list)} users who follow me (total: {len(follows_me)})")
+    logger.info(
+        f"Added {len(user_list)} users who follow me (total: {len(follows_me)})"
+    )
     logger.info(f"Sleeping for {sleep_seconds} seconds")
     sleep(sleep_seconds)
 
@@ -143,7 +145,9 @@ while True:
         counter += 1
     user_list = [tweet["in_reply_to_screen_name"] for tweet in mytweets]
     poets.extend(user_list)
-    logger.info(f"Added {len(user_list)} users who I have replied to (total: {len(poets)})")
+    logger.info(
+        f"Added {len(user_list)} users who I have replied to (total: {len(poets)})"
+    )
     logger.info(f"Sleeping for {sleep_seconds} seconds")
     sleep(sleep_seconds)
 
@@ -172,7 +176,10 @@ to_follow = list(
         [
             sn
             for sn in poets
-            if sn and (sn not in i_follow) and (sn not in followed) and (sn not in do_not_follow)
+            if sn
+            and (sn not in i_follow)
+            and (sn not in followed)
+            and (sn not in do_not_follow)
         ]
     )
 )

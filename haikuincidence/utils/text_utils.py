@@ -10,7 +10,8 @@ from unidecode import unidecode
 
 logger = logging.getLogger("haikulogger")
 
-# Regex to look for all URLs (mailto:, x-whatever://, etc.) https://gist.github.com/gruber/249502
+# Regex to look for all URLs (mailto:, x-whatever://, etc.)
+# https://gist.github.com/gruber/249502
 # Removed case insensitive flag from the start: (?i)
 url_all_re = (
     r"\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)"
@@ -49,7 +50,8 @@ UNICODE_IGNORE = [
 def clean_text(text: str) -> str:
     """Process text so it's ready for syllable counting
 
-    If this doesn't properly handle emojis, try https://stackoverflow.com/a/49930688/2592858
+    If this doesn't properly handle emojis
+    try https://stackoverflow.com/a/49930688/2592858
     """
     # change some characters that are difficult to count syllables for, but keep emojis
     # split on whitespace and rejoin; removes multiple spaces and newlines
@@ -106,7 +108,11 @@ def check_text_wrapper(text: str, ignore_list: List[str]) -> bool:
     return all(
         [
             (not text_contains_url(text)),
-            (not text_contains_ignore_list_plural(clean_token(clean_text(text)), ignore_list)),
+            (
+                not text_contains_ignore_list_plural(
+                    clean_token(clean_text(text)), ignore_list
+                )
+            ),
             (not text_has_chars_digits_together(text)),
             (not text_is_all_uppercase(text)),
             # (text_is_all_alpha(text)),
@@ -187,7 +193,10 @@ def remove_repeat_last_letter(text: str) -> str:
 
 
 def text_might_contain_acronym(text: str) -> bool:
-    """True if text satisfies acronym criteria. One option for all caps, one for lowercase."""
+    """True if text satisfies acronym criteria.
+    One option for all caps, one for lowercase.
+    """
+
     # If it's a single letter that can be pronounced, don't try to make it an acronym
     # Set intersection is the letter if it's in the special list, else empty
     if (len(set(text)) <= 1) and (set(text) & set(PRONOUNCED_LETTERS)):
@@ -207,10 +216,14 @@ def text_contains_ignore_list_plural(
     text: str, ignore_list: List[str], match_substring: bool = False
 ) -> bool:
     """Return True if anything from the ignore list is in the text.
+
     Each ignore list line is considered separately (OR logic).
+
     All tokens from one ignore list line must be somewhere in the text (AND logic).
-    Each token in the ignore list line is also augmented to consider some basic plural forms,
-    e.g., if ignore_list line is 'god dog', will match 'dogs are gods' but not 'doggies are godly'.
+
+    Each token in the ignore list line is also augmented to consider some basic plural
+    forms, e.g., if ignore_list line is 'god dog', will match 'dogs are gods' but not
+    'doggies are godly'.
     """
     # found all of the subtokens from one ignore line in the text
     if text is None:
@@ -225,7 +238,12 @@ def text_contains_ignore_list_plural(
         [
             all(
                 [
-                    any([it in text_compare for it in [itok, f"{itok}s", f"{itok}z", f"{itok}es"]])
+                    any(
+                        [
+                            it in text_compare
+                            for it in [itok, f"{itok}s", f"{itok}z", f"{itok}es"]
+                        ]
+                    )
                     for itok in ignore_line.split()
                 ]
             )
@@ -259,15 +277,19 @@ def text_contains_ignore_list(
 
 
 def text_has_chars_digits_together(text: str) -> bool:
-    """It's not easy to count syllables for a token that contains letters and digits (h3llo).
-    Return True if we find one of those.
+    """It's not easy to count syllables for a token that contains letters and digits
+    (h3llo). Return True if we find one of those.
     """
     # keep only letters and spaces
     text_split = re.sub(r"[^\w\s]", "", text).split()
     # count number of tokens that are solely digits
-    num_nums = sum(sum(char.isdigit() for char in token) == len(token) for token in text_split)
+    num_nums = sum(
+        sum(char.isdigit() for char in token) == len(token) for token in text_split
+    )
     # count number of tokens that are solely letters
-    num_words = sum(sum(char.isalpha() for char in token) == len(token) for token in text_split)
+    num_words = sum(
+        sum(char.isalpha() for char in token) == len(token) for token in text_split
+    )
     # are the counts above different from the length of tokens?
     return num_nums + num_words != len(text_split)
 

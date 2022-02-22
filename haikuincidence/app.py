@@ -65,7 +65,9 @@ else:
     FOLLOW_POET = os.getenv("FOLLOW_POET", default="False") == "True"
     EVERY_N_SECONDS = int(os.getenv("EVERY_N_SECONDS", default="3600"))
     DELETE_OLDER_THAN_DAYS = os.getenv("DELETE_OLDER_THAN_DAYS", default=None)
-    DELETE_OLDER_THAN_DAYS = float(DELETE_OLDER_THAN_DAYS) if DELETE_OLDER_THAN_DAYS else None
+    DELETE_OLDER_THAN_DAYS = (
+        float(DELETE_OLDER_THAN_DAYS) if DELETE_OLDER_THAN_DAYS else None
+    )
     ROWS_TO_KEEP = os.getenv("ROWS_TO_KEEP", default=None)
     ROWS_TO_KEEP = int(ROWS_TO_KEEP) if ROWS_TO_KEEP else None
     # Wait half the rate limit time before making first post
@@ -86,7 +88,9 @@ GUESS_SYL_METHOD = os.getenv("GUESS_SYL_METHOD", default="mean")
 
 IGNORE_USER_SCREEN_NAMES = os.getenv("IGNORE_USER_SCREEN_NAMES", default=None)
 IGNORE_USER_SCREEN_NAMES = (
-    [x.strip() for x in IGNORE_USER_SCREEN_NAMES.split(",")] if IGNORE_USER_SCREEN_NAMES else []
+    [x.strip() for x in IGNORE_USER_SCREEN_NAMES.split(",")]
+    if IGNORE_USER_SCREEN_NAMES
+    else []
 )
 IGNORE_USER_ID_STR = os.getenv("IGNORE_USER_ID_STR", default=None)
 IGNORE_USER_ID_STR = (
@@ -187,7 +191,9 @@ class MyStreamer(TwythonStreamer):
                             # Get the haiku to post
                             haiku_to_post = get_best_haiku(haikus, twitter, session)
                             if haiku_to_post["status_id_str"] != "":
-                                status = twitter.show_status(id=haiku_to_post["status_id_str"])
+                                status = twitter.show_status(
+                                    id=haiku_to_post["status_id_str"]
+                                )
 
                                 # Format the haiku with attribution
                                 haiku_attributed = (
@@ -204,27 +210,39 @@ class MyStreamer(TwythonStreamer):
                                 if logger.isEnabledFor(logging.DEBUG):
                                     logger.debug(pformat(status))
                                     logger.debug(tweet_url)
-                                    logger.debug(f"Original: {haiku_to_post['text_original']}")
-                                    logger.debug(f"Cleaned:  {haiku_to_post['text_clean']}")
+                                    logger.debug(
+                                        f"Original: {haiku_to_post['text_original']}"
+                                    )
+                                    logger.debug(
+                                        f"Cleaned:  {haiku_to_post['text_clean']}"
+                                    )
                                 logger.info(f"Haiku to post:\n{haiku_attributed}")
 
                                 # Try to post haiku (client checks rate limit time internally)
                                 if POST_HAIKU:
                                     if POST_AS_REPLY:
-                                        logger.info("Attempting to post haiku as reply...")
+                                        logger.info(
+                                            "Attempting to post haiku as reply..."
+                                        )
                                         # Post a tweet, sending as a reply to the coincidental haiku
-                                        posted_status = twitter.update_status_check_rate(
-                                            status=haiku_attributed,
-                                            in_reply_to_status_id=status["id_str"],
-                                            attachment_url=tweet_url,
+                                        posted_status = (
+                                            twitter.update_status_check_rate(
+                                                status=haiku_attributed,
+                                                in_reply_to_status_id=status["id_str"],
+                                                attachment_url=tweet_url,
+                                            )
                                         )
                                     else:
-                                        logger.info("Attempting to post haiku, but not as reply...")
+                                        logger.info(
+                                            "Attempting to post haiku, but not as reply..."
+                                        )
                                         # Post a tweet, but not as a reply to the coincidental haiku
                                         # The user will not get a notification
-                                        posted_status = twitter.update_status_check_rate(
-                                            status=haiku_attributed,
-                                            attachment_url=tweet_url,
+                                        posted_status = (
+                                            twitter.update_status_check_rate(
+                                                status=haiku_attributed,
+                                                attachment_url=tweet_url,
+                                            )
                                         )
                                     if posted_status:
                                         logger.info("Attempting to follow this poet...")
@@ -236,7 +254,9 @@ class MyStreamer(TwythonStreamer):
                                         if FOLLOW_POET:
                                             try:
                                                 followed = twitter.create_friendship(
-                                                    screen_name=haiku_to_post["user_screen_name"],
+                                                    screen_name=haiku_to_post[
+                                                        "user_screen_name"
+                                                    ],
                                                     # follow: enable notifications
                                                     follow="false",
                                                 )
@@ -263,20 +283,26 @@ class MyStreamer(TwythonStreamer):
         logger.info(f"status_code: {status_code}")
         logger.info(f"content: {content}")
         logger.info(f"headers: {headers}")
-        content = content.decode().strip() if isinstance(content, bytes) else content.strip()
+        content = (
+            content.decode().strip() if isinstance(content, bytes) else content.strip()
+        )
         if "Server overloaded, try again in a few seconds".lower() in content.lower():
-            seconds = self.sleep_seconds ** self.sleep_exponent
+            seconds = self.sleep_seconds**self.sleep_exponent
             logger.warning(f"Server overloaded. Sleeping for {seconds} seconds.")
             sleep(seconds)
             self.sleep_exponent += 1
         elif "Exceeded connection limit for user".lower() in content.lower():
-            seconds = self.sleep_seconds ** self.sleep_exponent
-            logger.warning(f"Exceeded connection limit. Sleeping for {seconds} seconds.")
+            seconds = self.sleep_seconds**self.sleep_exponent
+            logger.warning(
+                f"Exceeded connection limit. Sleeping for {seconds} seconds."
+            )
             sleep(seconds)
             self.sleep_exponent += 1
         else:
-            seconds = self.sleep_seconds ** self.sleep_exponent
-            logger.warning(f"Some other error occurred. Sleeping for {seconds} seconds.")
+            seconds = self.sleep_seconds**self.sleep_exponent
+            logger.warning(
+                f"Some other error occurred. Sleeping for {seconds} seconds."
+            )
             sleep(seconds)
             self.sleep_exponent += 1
 
@@ -305,8 +331,10 @@ twitter = MyTwitterClient(
     oauth_token_secret=OAUTH_TOKEN_SECRET,
 )
 
-# if this screen_name has a recent tweet, use that timestamp as the time of the last post
-most_recent_tweet = twitter.get_user_timeline(screen_name=MY_SCREEN_NAME, count=1, trim_user=True)
+# if our screen_name has a recent tweet, use that timestamp as the time of the last post
+most_recent_tweet = twitter.get_user_timeline(
+    screen_name=MY_SCREEN_NAME, count=1, trim_user=True
+)
 if len(most_recent_tweet) > 0:
     twitter.last_post_time = date_string_to_datetime(most_recent_tweet[0]["created_at"])
 

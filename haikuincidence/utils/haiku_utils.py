@@ -85,7 +85,9 @@ def count_syllables(
             source = "Dict"
             subsyllable_count += subtoken_syl
         elif remove_repeat_last_letter(subtoken) in syllable_dict:
-            subtoken_syl = syllable_dict[remove_repeat_last_letter(subtoken)]["syllables"]
+            subtoken_syl = syllable_dict[remove_repeat_last_letter(subtoken)][
+                "syllables"
+            ]
             source = "Dict (remove repeat)"
             subsyllable_count += subtoken_syl
         elif (subtoken_orig.endswith("s") or subtoken_orig.endswith("z")) and (
@@ -96,7 +98,10 @@ def count_syllables(
             subsyllable_count += subtoken_syl
         elif subtoken in pronounce_dict:
             subtoken_syl = max(
-                [len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken]]
+                [
+                    len([y for y in x if y[-1].isdigit()])
+                    for x in pronounce_dict[subtoken]
+                ]
             )
             source = "CMU"
             subsyllable_count += subtoken_syl
@@ -113,7 +118,10 @@ def count_syllables(
             subtoken[:-1] in pronounce_dict
         ):
             subtoken_syl = max(
-                [len([y for y in x if y[-1].isdigit()]) for x in pronounce_dict[subtoken[:-1]]]
+                [
+                    len([y for y in x if y[-1].isdigit()])
+                    for x in pronounce_dict[subtoken[:-1]]
+                ]
             )
             source = "CMU (singular)"
             subsyllable_count += subtoken_syl
@@ -474,7 +482,10 @@ def get_best_haiku(haikus, twitter, session) -> Dict:
                     haiku_to_post = construct_haiku_to_post(h, this_status)
                 elif this_status["retweet_count"] > haiku_to_post["retweet_count"]:
                     haiku_to_post = construct_haiku_to_post(h, this_status)
-                elif this_status["user"]["followers_count"] > haiku_to_post["followers_count"]:
+                elif (
+                    this_status["user"]["followers_count"]
+                    > haiku_to_post["followers_count"]
+                ):
                     haiku_to_post = construct_haiku_to_post(h, this_status)
 
     if haiku_to_post["status_id_str"] == "":

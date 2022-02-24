@@ -40,7 +40,11 @@ if IS_PROD is None:
     if env_path.exists():
         load_dotenv(dotenv_path=env_path)
     else:
-        raise OSError(f"{env_path} not found. Did you set it up?")
+        env_path = Path.cwd() / ".env"
+        if env_path.exists():
+            load_dotenv(dotenv_path=env_path)
+        else:
+            raise OSError(".env file not found. Did you set it up?")
 
 DEBUG_RUN = os.getenv("DEBUG_RUN", default="False")
 if DEBUG_RUN not in ["True", "False"]:

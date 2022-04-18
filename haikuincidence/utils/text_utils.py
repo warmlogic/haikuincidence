@@ -91,7 +91,7 @@ def clean_text(text: str) -> str:
 
 
 def check_profile(
-    status, ignore_profile_list: List[str], match_substring: bool
+    status, ignore_profile_list: List[str], match_substring: bool = False
 ) -> bool:
     return all(
         [

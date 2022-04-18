@@ -930,6 +930,11 @@
         "pronunciation": "G L B T",
         "syllables": 4
     },
+    "gmi": {
+        "alt": [],
+        "pronunciation": "gonna make it",
+        "syllables": 4
+    },
     "goin": {
         "alt": [],
         "pronunciation": "going",
@@ -990,6 +995,11 @@
         "pronunciation": "hab",
         "syllables": 1
     },
+    "hampshire": {
+        "alt": [],
+        "pronunciation": "hampshire",
+        "syllables": 2
+    },
     "hasnt": {
         "alt": [],
         "pronunciation": "hasn't",
@@ -1010,10 +1020,40 @@
         "pronunciation": "H B O Max",
         "syllables": 4
     },
+    "hehe": {
+        "alt": [],
+        "pronunciation": "he he",
+        "syllables": 2
+    },
     "hehehe": {
         "alt": [],
-        "pronunciation": "hehehe",
+        "pronunciation": "he he he",
         "syllables": 3
+    },
+    "hehehehe": {
+        "alt": [],
+        "pronunciation": "he he he he",
+        "syllables": 4
+    },
+    "hehehehehe": {
+        "alt": [],
+        "pronunciation": "he he he he he",
+        "syllables": 5
+    },
+    "hehehehehehe": {
+        "alt": [],
+        "pronunciation": "he he he he he he",
+        "syllables": 6
+    },
+    "hehehehehehehe": {
+        "alt": [],
+        "pronunciation": "he he he he he he he",
+        "syllables": 7
+    },
+    "hehehehehehehehe": {
+        "alt": [],
+        "pronunciation": "he he he he he he he he",
+        "syllables": 8
     },
     "hes": {
         "alt": [],
@@ -1638,6 +1678,11 @@
         "pronunciation": "N B C",
         "syllables": 3
     },
+    "neighbour": {
+        "alt": [],
+        "pronunciation": "neighbor",
+        "syllables": 2
+    },
     "neighboured": {
         "alt": [],
         "pronunciation": "neighbored",
@@ -1658,6 +1703,11 @@
         "pronunciation": "not gonna lie",
         "syllables": 4
     },
+    "ngmi": {
+        "alt": [],
+        "pronunciation": "not gonna make it",
+        "syllables": 5
+    },
     "NHL": {
         "alt": [],
         "pronunciation": "N H L",
@@ -1667,6 +1717,11 @@
         "alt": [],
         "pronunciation": "nevermind",
         "syllables": 3
+    },
+    "nmp": {
+        "alt": [],
+        "pronunciation": "not my problem",
+        "syllables": 4
     },
     "noone": {
         "alt": [],
@@ -1943,6 +1998,11 @@
         "pronunciation": "right now",
         "syllables": 2
     },
+    "RPG": {
+        "alt": [],
+        "pronunciation": "R P G",
+        "syllables": 3
+    },
     "rnb": {
         "alt": [],
         "pronunciation": "R N B",
@@ -2139,8 +2199,18 @@
         "syllables": 3
     },
     "tbd": {
-        "alt": [],
+        "alt": [
+            {
+                "pronunciation": "to be determined",
+                "syllables": 5
+            }
+        ],
         "pronunciation": "T B D",
+        "syllables": 3
+    },
+    "tbf": {
+        "alt": [],
+        "pronunciation": "to be frank",
         "syllables": 3
     },
     "tbh": {
@@ -2152,6 +2222,11 @@
         "alt": [],
         "pronunciation": "throwback thursday",
         "syllables": 4
+    },
+    "tbvh": {
+        "alt": [],
+        "pronunciation": "to be very honest",
+        "syllables": 6
     },
     "tf": {
         "alt": [],
@@ -2468,6 +2543,11 @@
         "pronunciation": "whoa",
         "syllables": 1
     },
+    "wordle": {
+        "alt": [],
+        "pronunciation": "word le",
+        "syllables": 2
+    },
     "wouldnt": {
         "alt": [],
         "pronunciation": "wouldn't",
@@ -2537,6 +2617,11 @@
         "alt": [],
         "pronunciation": "X X X",
         "syllables": 3
+    },
+    "yae": {
+        "alt": [],
+        "pronunciation": "yay",
+        "syllables": 1
     },
     "yall": {
         "alt": [],

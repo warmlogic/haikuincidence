@@ -284,7 +284,7 @@ def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -
         minsyl -= 1
         # maxsyl -= 1
         logger.debug(
-            f"Ends in e or ed, removing a syllable for '{word}':"
+            f"Ends in e or ed (with conditions), removing a syllable for '{word}':"
             + f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
         )
 

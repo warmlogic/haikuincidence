@@ -90,14 +90,16 @@ def clean_text(text: str) -> str:
     return text_cleaned
 
 
-def check_profile(status, ignore_profile_list: List[str]) -> bool:
+def check_profile(
+    status, ignore_profile_list: List[str], match_substring: bool
+) -> bool:
     return all(
         [
             (
                 not text_contains_ignore_list(
                     clean_token(clean_text(status["user"]["description"])),
                     ignore_profile_list,
-                    match_substring=True,
+                    match_substring=match_substring,
                 )
             ),
         ]
@@ -145,7 +147,7 @@ def check_tweet(
 
     return all(
         [
-            check_text_wrapper(tweet_body, ignore_tweet_list),
+            check_text_wrapper(tweet_body, ignore_list=ignore_tweet_list),
             (status["lang"] == language),
             (not status["entities"]["hashtags"]),
             (not status["entities"]["urls"]),

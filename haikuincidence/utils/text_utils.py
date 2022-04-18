@@ -19,11 +19,11 @@ url_all_re = (
     + r"(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|"
     + r"(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 )
-url_all_re = re.compile(url_all_re, flags=re.IGNORECASE)
+url_all_re_cmp = re.compile(url_all_re, flags=re.IGNORECASE)
 
 # Web only version: https://gist.github.com/gruber/8891611
 
-# Letters that can be pronoucned as a single syllable when repeated (aaaaaaa)
+# Letters that can be pronounced as a single syllable when repeated (aaaaaaa)
 PRONOUNCED_LETTERS = [
     "a",
     "e",
@@ -206,7 +206,7 @@ def text_might_contain_acronym(text: str) -> bool:
 
 def text_contains_url(text: str) -> bool:
     """True if text contains a URL"""
-    return len(url_all_re.findall(text)) > 0
+    return len(url_all_re_cmp.findall(text)) > 0
 
 
 def text_contains_ignore_list_plural(
@@ -371,7 +371,7 @@ def clean_token(token: str, unicode_normalize_form: str = "NFKC") -> str:
 #     """Return True if all tokens are real words (in pronunciation dictionary or
 #     in syllable dictionary)
 #     """
-#     # Keep characters and apostrphes
+#     # Keep characters and apostrophes
 #     return all(
 #         (
 #             re.sub(r"[^\w']", "", token)

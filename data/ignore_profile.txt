@@ -6,4 +6,5 @@ conservative
 patriot
 bible
 qanon
-masculin
+masculine
+masculinity

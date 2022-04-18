@@ -15,6 +15,7 @@ guidestone
 oneworld
 preheadache
 hehehehe
+wordle
 """
 
 import argparse

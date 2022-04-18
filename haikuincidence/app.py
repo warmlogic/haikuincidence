@@ -100,6 +100,10 @@ IGNORE_USER_ID_STR = os.getenv("IGNORE_USER_ID_STR", default=None)
 IGNORE_USER_ID_STR = (
     [x.strip() for x in IGNORE_USER_ID_STR.split(",")] if IGNORE_USER_ID_STR else []
 )
+CHECK_USER_PROFILE = os.getenv("CHECK_USER_PROFILE", default="True") == "True"
+CHECK_USER_PROFILE_MATCH_SUBSTRING = (
+    os.getenv("CHECK_USER_PROFILE_MATCH_SUBSTRING", default="False") == "True"
+)
 
 
 class MyTwitterClient(Twython):
@@ -152,18 +156,23 @@ class MyStreamer(TwythonStreamer):
         if not tweet_passes:
             return
 
-        profile_passes = check_profile(status, ignore_profile_list)
-
-        if not profile_passes:
-            logger.info(
-                f"Failed check_profile: {status['user']['screen_name']}:"
-                + f" {status['user']['description']}"
+        if CHECK_USER_PROFILE:
+            profile_passes = check_profile(
+                status,
+                ignore_profile_list=ignore_profile_list,
+                match_substring=CHECK_USER_PROFILE_MATCH_SUBSTRING,
             )
-            return
+
+            if not profile_passes:
+                logger.info(
+                    f"Failed check_profile: {status['user']['screen_name']}:"
+                    + f" {status['user']['description']}"
+                )
+                return
 
         tweet_body = get_tweet_body(status)
         text = clean_text(tweet_body)
-        text_passes = check_text_wrapper(text, ignore_tweet_list)
+        text_passes = check_text_wrapper(text, ignore_list=ignore_tweet_list)
 
         if not text_passes:
             logger.info(f"Failed check_text_wrapper: {text}")

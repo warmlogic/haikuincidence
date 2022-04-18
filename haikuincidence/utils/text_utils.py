@@ -4,6 +4,7 @@ import unicodedata
 from datetime import datetime
 from typing import List
 
+import emoji
 import pytz
 from ftfy import fix_text
 from unidecode import unidecode
@@ -18,11 +19,11 @@ url_all_re = (
     + r"(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|"
     + r"(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 )
-url_all_re = re.compile(url_all_re, flags=re.IGNORECASE)
+url_all_re_cmp = re.compile(url_all_re, flags=re.IGNORECASE)
 
 # Web only version: https://gist.github.com/gruber/8891611
 
-# Letters that can be pronoucned as a single syllable when repeated (aaaaaaa)
+# Letters that can be pronounced as a single syllable when repeated (aaaaaaa)
 PRONOUNCED_LETTERS = [
     "a",
     "e",
@@ -48,11 +49,7 @@ UNICODE_IGNORE = [
 
 
 def clean_text(text: str) -> str:
-    """Process text so it's ready for syllable counting
-
-    If this doesn't properly handle emojis
-    try https://stackoverflow.com/a/49930688/2592858
-    """
+    """Process text so it's ready for syllable counting"""
     # change some characters that are difficult to count syllables for, but keep emojis
     # split on whitespace and rejoin; removes multiple spaces and newlines
     if text is None:
@@ -77,9 +74,7 @@ def clean_text(text: str) -> str:
         [
             "".join(
                 [
-                    unidecode(letter)
-                    if (str(letter.encode("unicode-escape"))[2] != "\\")
-                    else letter
+                    unidecode(letter) if not emoji.is_emoji(letter) else letter
                     for letter in word
                 ]
             )
@@ -90,14 +85,16 @@ def clean_text(text: str) -> str:
     return text_cleaned
 
 
-def check_profile(status, ignore_profile_list: List[str]) -> bool:
+def check_profile(
+    status, ignore_profile_list: List[str], match_substring: bool = False
+) -> bool:
     return all(
         [
             (
                 not text_contains_ignore_list(
                     clean_token(clean_text(status["user"]["description"])),
                     ignore_profile_list,
-                    match_substring=True,
+                    match_substring=match_substring,
                 )
             ),
         ]
@@ -145,7 +142,7 @@ def check_tweet(
 
     return all(
         [
-            check_text_wrapper(tweet_body, ignore_tweet_list),
+            check_text_wrapper(tweet_body, ignore_list=ignore_tweet_list),
             (status["lang"] == language),
             (not status["entities"]["hashtags"]),
             (not status["entities"]["urls"]),
@@ -209,7 +206,7 @@ def text_might_contain_acronym(text: str) -> bool:
 
 def text_contains_url(text: str) -> bool:
     """True if text contains a URL"""
-    return len(url_all_re.findall(text)) > 0
+    return len(url_all_re_cmp.findall(text)) > 0
 
 
 def text_contains_ignore_list_plural(
@@ -374,7 +371,7 @@ def clean_token(token: str, unicode_normalize_form: str = "NFKC") -> str:
 #     """Return True if all tokens are real words (in pronunciation dictionary or
 #     in syllable dictionary)
 #     """
-#     # Keep characters and apostrphes
+#     # Keep characters and apostrophes
 #     return all(
 #         (
 #             re.sub(r"[^\w']", "", token)

@@ -9,6 +9,7 @@ description = "Find tweets that contain coincidental haikus and tweet these beau
 authors = ["Matt Mollison <matt.mollison@gmail.com>"]
 
 [tool.poetry.dependencies]
+emoji = "~1.7.0"
 ftfy = "~6.1.1"
 inflect = "~5.5.2"
 nltk = "~3.7.0"

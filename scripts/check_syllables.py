@@ -3,12 +3,19 @@ Run as a module from the top-level folder like:
 poetry run python -m scripts.check_syllables --text "my text here"
 
 Some difficult words:
+
+Currently correct:
 restopped
 insanely
 DJ's
 sourdough
+
+Currently incorrect:
 guidestone
 oneworld
+preheadache
+hehehehe
+wordle
 """
 
 import argparse

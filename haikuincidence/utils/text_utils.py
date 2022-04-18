@@ -4,6 +4,7 @@ import unicodedata
 from datetime import datetime
 from typing import List
 
+import emoji
 import pytz
 from ftfy import fix_text
 from unidecode import unidecode
@@ -48,11 +49,7 @@ UNICODE_IGNORE = [
 
 
 def clean_text(text: str) -> str:
-    """Process text so it's ready for syllable counting
-
-    If this doesn't properly handle emojis
-    try https://stackoverflow.com/a/49930688/2592858
-    """
+    """Process text so it's ready for syllable counting"""
     # change some characters that are difficult to count syllables for, but keep emojis
     # split on whitespace and rejoin; removes multiple spaces and newlines
     if text is None:
@@ -77,9 +74,7 @@ def clean_text(text: str) -> str:
         [
             "".join(
                 [
-                    unidecode(letter)
-                    if (str(letter.encode("unicode-escape"))[2] != "\\")
-                    else letter
+                    unidecode(letter) if not emoji.is_emoji(letter) else letter
                     for letter in word
                 ]
             )

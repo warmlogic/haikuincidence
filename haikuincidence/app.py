@@ -166,7 +166,7 @@ class MyStreamer(TwythonStreamer):
             if not profile_passes:
                 logger.info(
                     f"Failed check_profile: {status['user']['screen_name']}:"
-                    + f" {status['user']['description']}"
+                    + f" {' '.join(status['user']['description'].splitlines())}"
                 )
                 return
 
@@ -175,7 +175,9 @@ class MyStreamer(TwythonStreamer):
         text_passes = check_text_wrapper(text, ignore_list=ignore_tweet_list)
 
         if not text_passes:
-            logger.info(f"Failed check_text_wrapper: {text}")
+            logger.info(
+                f"Failed check_text_wrapper: {status['user']['screen_name']}: {text}"
+            )
             return
 
         haiku = get_haiku(

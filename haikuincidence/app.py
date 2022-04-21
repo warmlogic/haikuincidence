@@ -145,9 +145,22 @@ class MyStreamer(TwythonStreamer):
         # Reset sleep seconds exponent
         self.sleep_exponent = 0
 
+        # If this tweet was truncated, get the full text
+        if "truncated" in status and status["truncated"]:
+            status_full = twitter.get_user_timeline(
+                user_id=status["user"]["id"],
+                tweet_mode="extended",
+                max_id=status["id"],
+                count=1,
+            )
+            if status_full and (status_full[0]["id"] == status["id"]):
+                logger.debug(f"Retrieved full text for truncated tweet {status['id']}")
+                status = status_full[0]
+            else:
+                logger.debug(f"Didn't get full text for truncated tweet {status['id']}")
+
         tweet_passes = check_tweet(
             status,
-            ignore_tweet_list=ignore_tweet_list,
             language=LANGUAGE,
             ignore_user_screen_names=IGNORE_USER_SCREEN_NAMES,
             ignore_user_id_str=IGNORE_USER_ID_STR,
@@ -166,17 +179,20 @@ class MyStreamer(TwythonStreamer):
             if not profile_passes:
                 logger.info(
                     f"Failed check_profile: {status['user']['screen_name']}:"
-                    + f" {status['user']['description']}"
+                    f" {' '.join(status['user']['description'].splitlines())}"
                 )
                 return
 
-        tweet_body = get_tweet_body(status)
-        text = clean_text(tweet_body)
-        text_passes = check_text_wrapper(text, ignore_list=ignore_tweet_list)
+        text_passes = check_text_wrapper(status, ignore_list=ignore_tweet_list)
 
         if not text_passes:
-            logger.info(f"Failed check_text_wrapper: {text}")
+            logger.info(
+                f"Failed check_text_wrapper: {status['user']['screen_name']}, tweet"
+                f" {status['id_str']}: {get_tweet_body(status)}"
+            )
             return
+
+        text = clean_text(get_tweet_body(status))
 
         haiku = get_haiku(
             text,

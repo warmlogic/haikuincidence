@@ -60,19 +60,25 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    text = args.text
+    original_text = args.text
+    status = dict(text=original_text)
 
-    logger.debug(f"Original text:\n{text}")
+    logger.debug(f"Original text:\n{original_text}")
 
-    text = clean_text(text)
-    logger.debug(f"Cleaned text:\n{text}")
+    cleaned_text = clean_text(original_text)
+    logger.debug(f"Cleaned text:\n{cleaned_text}")
 
     logger.debug(
-        f"Passes check_text_wrapper: {check_text_wrapper(text, ignore_tweet_list)}"
+        f"Passes check_text_wrapper: {check_text_wrapper(status, ignore_tweet_list)}"
     )
 
     haiku = get_haiku(
-        text, inflect_p, pronounce_dict, syllable_dict, emoticons_list, guess_syl_method
+        cleaned_text,
+        inflect_p,
+        pronounce_dict,
+        syllable_dict,
+        emoticons_list,
+        guess_syl_method,
     )
 
     logger.debug(f"Resulting haiku:\n{haiku}")

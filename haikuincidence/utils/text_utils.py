@@ -9,6 +9,7 @@ import pytz
 from ftfy import fix_text
 from unidecode import unidecode
 
+logging.basicConfig(format="{asctime} : {levelname} : {message}", style="{")
 logger = logging.getLogger("haikulogger")
 
 # Regex to look for all URLs (mailto:, x-whatever://, etc.)
@@ -101,25 +102,42 @@ def check_profile(
     )
 
 
-def check_text_wrapper(text: str, ignore_list: List[str]) -> bool:
-    return all(
-        [
-            (not text_contains_url(text)),
-            (
-                not text_contains_ignore_list_plural(
-                    clean_token(clean_text(text)), ignore_list
-                )
-            ),
-            (not text_has_chars_digits_together(text)),
-            (not text_is_all_uppercase(text)),
-            # (text_is_all_alpha(text)),
-        ]
+def check_text_wrapper(status, ignore_list: List[str]) -> bool:
+    tweet_body = get_tweet_body(status)
+    text = clean_text(tweet_body)
+
+    valid_body = tweet_body is not None
+    valid_length = len(text) >= 17
+    valid_contains_url = not text_contains_url(text)
+    valid_contains_ignore_words = not text_contains_ignore_list_plural(
+        clean_token(text), ignore_list
     )
+    valid_has_chars_digits_together = not text_has_chars_digits_together(text)
+    # valid_is_all_uppercase = not text_is_all_uppercase(text)
+    # valid_is_all_alpha = text_is_all_alpha(text)
+
+    checks = {
+        "valid_body": valid_body,
+        "valid_length": valid_length,
+        "valid_contains_url": valid_contains_url,
+        "valid_contains_ignore_words": valid_contains_ignore_words,
+        "valid_has_chars_digits_together": valid_has_chars_digits_together,
+        # "valid_is_all_uppercase": valid_is_all_uppercase,
+        # "valid_is_all_alpha": valid_is_all_alpha,
+    }
+
+    for check, value in checks.items():
+        if not value:
+            logger.debug(f"Tweet {status['id_str']} failed check {str(check)}: {text}")
+
+    return all(checks.values())
 
 
 def get_tweet_body(status):
     if "extended_tweet" in status:
         tweet_body = status["extended_tweet"]["full_text"]
+    elif "full_text" in status:
+        tweet_body = status["full_text"]
     elif "text" in status:
         tweet_body = status["text"]
     else:
@@ -133,34 +151,78 @@ def check_tweet(
     language: str = "en",
     ignore_user_screen_names: List[str] = [],
     ignore_user_id_str: List[str] = [],
+    ignore_possibly_sensitive: bool = False,
+    ignore_quote_status: bool = True,
+    ignore_reply_status: bool = True,
+    min_friends_count: int = 10,
+    min_followers_count: int = 100,
 ) -> bool:
     """Return True if tweet satisfies specific criteria"""
-    tweet_body = get_tweet_body(status)
 
+    tweet_body = get_tweet_body(status)
     if not tweet_body:
+        # Likely has been deleted
+        logger.debug(f"Tweet has no body: {status}")
         return False
 
-    return all(
+    # valid_text = check_text_wrapper(status, ignore_list=ignore_tweet_list)
+    valid_language = status["lang"] == language
+    valid_screen_name = all(
         [
-            check_text_wrapper(tweet_body, ignore_list=ignore_tweet_list),
-            (status["lang"] == language),
-            (not status["entities"]["hashtags"]),
-            (not status["entities"]["urls"]),
-            (not status["entities"]["user_mentions"]),
-            (not status["entities"]["symbols"]),
-            (not status["truncated"]),
-            (not status["is_quote_status"]),
-            (not status["in_reply_to_status_id_str"]),
-            (not status["retweeted"]),
-            (status["user"]["screen_name"] not in ignore_user_screen_names),
-            (status["user"]["id_str"] not in ignore_user_id_str),
-            (status["user"]["friends_count"] > 10),  # following
-            (status["user"]["followers_count"] > 100),  # followers
-            # (status['user']['verified']),
-            # ('media' not in status['entities']),
-            (len(tweet_body) >= 17),
+            re.search(name, status["user"]["screen_name"], flags=re.IGNORECASE) is None
+            for name in ignore_user_screen_names
         ]
     )
+    valid_user_id = status["user"]["id_str"] not in ignore_user_id_str
+    # valid_verified = status["user"]["verified"]
+    # valid_no_media = "media" not in status["entities"]
+    valid_no_hashtags = not status["entities"]["hashtags"]
+    valid_no_urls = not status["entities"]["urls"]
+    valid_no_user_mentions = not status["entities"]["user_mentions"]
+    valid_no_symbols = not status["entities"]["symbols"]
+    valid_not_truncated = not status["truncated"]
+    valid_possibly_sensitive = (
+        not status.get("possibly_sensitive", False)
+        if ignore_possibly_sensitive
+        else True
+    )
+    valid_quoted = (
+        not status.get("is_quote_status", False) if ignore_quote_status else True
+    )
+    valid_reply = (
+        status.get("in_reply_to_status_id_str") is None if ignore_reply_status else True
+    )
+    valid_not_retweeted = not status["retweeted"]
+    # following
+    valid_friends_count = status["user"]["friends_count"] >= min_friends_count
+    # followers
+    valid_followers_count = status["user"]["followers_count"] >= min_followers_count
+
+    checks = {
+        # "valid_text": valid_text,
+        "valid_language": valid_language,
+        "valid_screen_name": valid_screen_name,
+        "valid_user_id": valid_user_id,
+        # "valid_verified": valid_verified,
+        # "valid_no_media": valid_no_media,
+        "valid_no_hashtags": valid_no_hashtags,
+        "valid_no_urls": valid_no_urls,
+        "valid_no_user_mentions": valid_no_user_mentions,
+        "valid_no_symbols": valid_no_symbols,
+        "valid_not_truncated": valid_not_truncated,
+        "valid_possibly_sensitive": valid_possibly_sensitive,
+        "valid_quoted": valid_quoted,
+        "valid_reply": valid_reply,
+        "valid_not_retweeted": valid_not_retweeted,
+        "valid_friends_count": valid_friends_count,
+        "valid_followers_count": valid_followers_count,
+    }
+
+    for check, value in checks.items():
+        if not value:
+            logger.debug(f"Tweet {status['id_str']} failed check {str(check)}")
+
+    return all(checks.values())
 
 
 def date_string_to_datetime(

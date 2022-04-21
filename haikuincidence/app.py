@@ -161,7 +161,6 @@ class MyStreamer(TwythonStreamer):
 
         tweet_passes = check_tweet(
             status,
-            ignore_tweet_list=ignore_tweet_list,
             language=LANGUAGE,
             ignore_user_screen_names=IGNORE_USER_SCREEN_NAMES,
             ignore_user_id_str=IGNORE_USER_ID_STR,

@@ -147,13 +147,13 @@ def get_tweet_body(status):
 
 def check_tweet(
     status,
-    ignore_tweet_list: List[str],
     language: str = "en",
     ignore_user_screen_names: List[str] = [],
     ignore_user_id_str: List[str] = [],
     ignore_possibly_sensitive: bool = False,
     ignore_quote_status: bool = True,
     ignore_reply_status: bool = True,
+    ignore_retweet_status: bool = True,
     min_friends_count: int = 10,
     min_followers_count: int = 100,
 ) -> bool:
@@ -165,7 +165,6 @@ def check_tweet(
         logger.debug(f"Tweet has no body: {status}")
         return False
 
-    # valid_text = check_text_wrapper(status, ignore_list=ignore_tweet_list)
     valid_language = status["lang"] == language
     valid_screen_name = all(
         [
@@ -192,7 +191,9 @@ def check_tweet(
     valid_reply = (
         status.get("in_reply_to_status_id_str") is None if ignore_reply_status else True
     )
-    valid_not_retweeted = not status["retweeted"]
+    valid_not_retweeted = (
+        status.get("retweeted_status") is None if ignore_retweet_status else True
+    )
     # following
     valid_friends_count = status["user"]["friends_count"] >= min_friends_count
     # followers

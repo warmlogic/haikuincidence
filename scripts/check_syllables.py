@@ -61,7 +61,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     original_text = args.text
-    status = dict(text=original_text)
+    status = dict(text=original_text, id_str="0")
 
     logger.debug(f"Original text:\n{original_text}")
 

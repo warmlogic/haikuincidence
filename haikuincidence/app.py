@@ -9,7 +9,7 @@ import inflect
 import pytz
 from dotenv import load_dotenv
 from nltk.corpus import cmudict
-from twython import Twython, TwythonError, TwythonStreamer
+from twython import Twython, TwythonError, TwythonRateLimitError, TwythonStreamer
 from utils.data_base import Haiku, session_factory
 from utils.data_utils import (
     get_emoticons_list,
@@ -139,11 +139,11 @@ class MyStreamer(TwythonStreamer):
     def __init__(self, *args, **kwargs):
         super(MyStreamer, self).__init__(*args, **kwargs)
         self.sleep_seconds = 2
-        self.sleep_exponent = 0
+        self.sleep_exponent = 3
 
     def on_success(self, status):
         # Reset sleep seconds exponent
-        self.sleep_exponent = 0
+        self.sleep_exponent = 3
 
         # If this tweet was truncated, get the full text
         if "truncated" in status and status["truncated"]:
@@ -301,32 +301,27 @@ class MyStreamer(TwythonStreamer):
                     logger.info(e)
 
     def on_error(self, status_code, content, headers=None):
+        content = (
+            content.decode().strip() if isinstance(content, bytes) else content.strip()
+        )
         logger.info("Error while streaming.")
         logger.info(f"status_code: {status_code}")
         logger.info(f"content: {content}")
         logger.info(f"headers: {headers}")
-        content = (
-            content.decode().strip() if isinstance(content, bytes) else content.strip()
-        )
-        if "Server overloaded, try again in a few seconds".lower() in content.lower():
-            seconds = self.sleep_seconds**self.sleep_exponent
-            logger.warning(f"Server overloaded. Sleeping for {seconds} seconds.")
-            sleep(seconds)
-            self.sleep_exponent += 1
-        elif "Exceeded connection limit for user".lower() in content.lower():
+        if status_code == 420:
+            # Server overloaded, try again in a few seconds
+            # Exceeded connection limit for user
+            # Too many requests recently
             seconds = self.sleep_seconds**self.sleep_exponent
             logger.warning(
-                f"Exceeded connection limit. Sleeping for {seconds} seconds."
+                f"Too many requests recently. Sleeping for {seconds} seconds."
             )
             sleep(seconds)
             self.sleep_exponent += 1
         else:
-            seconds = self.sleep_seconds**self.sleep_exponent
-            logger.warning(
-                f"Some other error occurred. Sleeping for {seconds} seconds."
-            )
-            sleep(seconds)
-            self.sleep_exponent += 1
+            # Unable to decode response
+            # (or something else)
+            pass
 
 
 logger.info("Initializing dependencies...")
@@ -354,11 +349,30 @@ twitter = MyTwitterClient(
 )
 
 # if our screen_name has a recent tweet, use that timestamp as the time of the last post
-most_recent_tweet = twitter.get_user_timeline(
-    screen_name=MY_SCREEN_NAME, count=1, trim_user=True
-)
-if len(most_recent_tweet) > 0:
-    twitter.last_post_time = date_string_to_datetime(most_recent_tweet[0]["created_at"])
+sleep_seconds = 2
+sleep_exponent = 3
+while True:
+    try:
+        most_recent_tweet = twitter.get_user_timeline(
+            screen_name=MY_SCREEN_NAME, count=1, trim_user=True
+        )
+        if len(most_recent_tweet) > 0:
+            twitter.last_post_time = date_string_to_datetime(
+                most_recent_tweet[0]["created_at"]
+            )
+        break
+    except TwythonRateLimitError:
+        seconds = sleep_seconds**sleep_exponent
+        logger.info(
+            "Rate limit exceeded when getting recent tweet. Sleeping for"
+            f" {seconds} seconds."
+        )
+        sleep(seconds)
+        sleep_exponent += 1
+        continue
+    except Exception as e:
+        logger.info(f"Exception when getting recent tweet: {e}")
+        break
 
 # Establish connection to database
 session = session_factory(DATABASE_URL)
@@ -384,6 +398,14 @@ if __name__ == "__main__":
             else:
                 # get samples from stream
                 stream.statuses.sample()
+        except TwythonRateLimitError:
+            seconds = stream.sleep_seconds**stream.sleep_exponent
+            logger.info(
+                "Rate limit exceeded when streaming tweets. Sleeping for"
+                f" {seconds} seconds."
+            )
+            sleep(seconds)
+            stream.sleep_exponent += 1
         except Exception as e:
             logger.info(f"Exception when streaming tweets: {e}")
             continue

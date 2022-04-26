@@ -177,7 +177,7 @@ class MyStreamer(TwythonStreamer):
             )
 
             if not profile_passes:
-                logger.info(
+                logger.debug(
                     f"Failed check_profile: {status['user']['screen_name']}:"
                     f" {' '.join(status['user']['description'].splitlines())}"
                 )
@@ -186,7 +186,7 @@ class MyStreamer(TwythonStreamer):
         text_passes = check_text_wrapper(status, ignore_list=ignore_tweet_list)
 
         if not text_passes:
-            logger.info(
+            logger.debug(
                 f"Failed check_text_wrapper: {status['user']['screen_name']}, tweet"
                 f" {status['id_str']}: {get_tweet_body(status)}"
             )

@@ -46,10 +46,7 @@ if IS_PROD is None:
         else:
             raise OSError(".env file not found. Did you set it up?")
 
-DEBUG_RUN = os.getenv("DEBUG_RUN", default="False")
-if DEBUG_RUN not in ["True", "False"]:
-    raise ValueError(f"DEBUG_RUN must be True or False, current value: {DEBUG_RUN}")
-DEBUG_RUN = DEBUG_RUN == "True"
+DEBUG_RUN = os.getenv("DEBUG_RUN", default="true").lower() == "true"
 
 if DEBUG_RUN:
     logger.setLevel(logging.DEBUG)
@@ -64,9 +61,9 @@ if DEBUG_RUN:
 else:
     logger.setLevel(logging.INFO)
     LOG_HAIKU = True
-    POST_HAIKU = os.getenv("POST_HAIKU", default="False") == "True"
-    POST_AS_REPLY = os.getenv("POST_AS_REPLY", default="False") == "True"
-    FOLLOW_POET = os.getenv("FOLLOW_POET", default="False") == "True"
+    POST_HAIKU = os.getenv("POST_HAIKU", default="false").lower() == "true"
+    POST_AS_REPLY = os.getenv("POST_AS_REPLY", default="false").lower() == "true"
+    FOLLOW_POET = os.getenv("FOLLOW_POET", default="false").lower() == "true"
     EVERY_N_SECONDS = int(os.getenv("EVERY_N_SECONDS", default="3600"))
     DELETE_OLDER_THAN_DAYS = os.getenv("DELETE_OLDER_THAN_DAYS", default=None)
     DELETE_OLDER_THAN_DAYS = (
@@ -100,9 +97,9 @@ IGNORE_USER_ID_STR = os.getenv("IGNORE_USER_ID_STR", default=None)
 IGNORE_USER_ID_STR = (
     [x.strip() for x in IGNORE_USER_ID_STR.split(",")] if IGNORE_USER_ID_STR else []
 )
-CHECK_USER_PROFILE = os.getenv("CHECK_USER_PROFILE", default="True") == "True"
+CHECK_USER_PROFILE = os.getenv("CHECK_USER_PROFILE", default="true").lower() == "true"
 CHECK_USER_PROFILE_MATCH_SUBSTRING = (
-    os.getenv("CHECK_USER_PROFILE_MATCH_SUBSTRING", default="False") == "True"
+    os.getenv("CHECK_USER_PROFILE_MATCH_SUBSTRING", default="false").lower() == "true"
 )
 
 

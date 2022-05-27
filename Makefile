@@ -9,11 +9,11 @@ list:
 
 .PHONY: format
 format:
-	black .
+	black --preview .
 
 .PHONY: sort
 sort:
-	isort .
+	isort --profile black .
 
 .PHONY: stylecheck
 stylecheck:

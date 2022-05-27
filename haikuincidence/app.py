@@ -33,9 +33,17 @@ from utils.text_utils import (
 logging.basicConfig(format="{asctime} : {levelname} : {message}", style="{")
 logger = logging.getLogger("haikulogger")
 
-IS_PROD = os.getenv("IS_PROD", default=None)
+SLEEP_SECONDS_BASE = 2
+DEFAULT_SLEEP_EXPONENT = 3
 
-if IS_PROD is None:
+ENVIRONMENT = os.getenv("ENVIRONMENT", default="development").lower()
+assert ENVIRONMENT in [
+    "development",
+    "production",
+], f"Invalid ENVIRONMENT: {ENVIRONMENT}"
+
+# Read .env file for local development
+if ENVIRONMENT == "development":
     env_path = Path.cwd().parent / ".env"
     if env_path.exists():
         load_dotenv(dotenv_path=env_path)
@@ -46,9 +54,9 @@ if IS_PROD is None:
         else:
             raise OSError(".env file not found. Did you set it up?")
 
-DEBUG_RUN = os.getenv("DEBUG_RUN", default="true").lower() == "true"
+DEBUG_MODE = os.getenv("DEBUG_MODE", default="true").lower() == "true"
 
-if DEBUG_RUN:
+if DEBUG_MODE:
     logger.setLevel(logging.DEBUG)
     LOG_HAIKU = False
     POST_HAIKU = False
@@ -135,12 +143,11 @@ class MyTwitterClient(Twython):
 class MyStreamer(TwythonStreamer):
     def __init__(self, *args, **kwargs):
         super(MyStreamer, self).__init__(*args, **kwargs)
-        self.sleep_seconds = 2
-        self.sleep_exponent = 3
+        self.sleep_exponent = DEFAULT_SLEEP_EXPONENT
 
     def on_success(self, status):
         # Reset sleep seconds exponent
-        self.sleep_exponent = 3
+        self.sleep_exponent = DEFAULT_SLEEP_EXPONENT
 
         # If this tweet was truncated, get the full text
         if "truncated" in status and status["truncated"]:
@@ -208,7 +215,7 @@ class MyStreamer(TwythonStreamer):
         logger.info("=" * 50)
         logger.info(f"Found new haiku:\n{tweet_haiku.haiku}")
 
-        if not DEBUG_RUN:
+        if not DEBUG_MODE:
             # Get haikus from the last hour
             haikus = Haiku.get_haikus_unposted_timedelta(
                 session, td_seconds=EVERY_N_SECONDS
@@ -309,7 +316,7 @@ class MyStreamer(TwythonStreamer):
             # Server overloaded, try again in a few seconds
             # Exceeded connection limit for user
             # Too many requests recently
-            seconds = self.sleep_seconds**self.sleep_exponent
+            seconds = SLEEP_SECONDS_BASE**self.sleep_exponent
             logger.warning(
                 f"Too many requests recently. Sleeping for {seconds} seconds."
             )
@@ -346,8 +353,7 @@ twitter = MyTwitterClient(
 )
 
 # if our screen_name has a recent tweet, use that timestamp as the time of the last post
-sleep_seconds = 2
-sleep_exponent = 3
+sleep_exponent = DEFAULT_SLEEP_EXPONENT
 while True:
     try:
         most_recent_tweet = twitter.get_user_timeline(
@@ -359,7 +365,7 @@ while True:
             )
         break
     except TwythonRateLimitError:
-        seconds = sleep_seconds**sleep_exponent
+        seconds = SLEEP_SECONDS_BASE**sleep_exponent
         logger.info(
             "Rate limit exceeded when getting recent tweet. Sleeping for"
             f" {seconds} seconds."
@@ -396,13 +402,14 @@ if __name__ == "__main__":
                 # get samples from stream
                 stream.statuses.sample()
         except TwythonRateLimitError:
-            seconds = stream.sleep_seconds**stream.sleep_exponent
+            seconds = SLEEP_SECONDS_BASE**stream.sleep_exponent
             logger.info(
                 "Rate limit exceeded when streaming tweets. Sleeping for"
                 f" {seconds} seconds."
             )
             sleep(seconds)
             stream.sleep_exponent += 1
+            continue
         except Exception as e:
             logger.info(f"Exception when streaming tweets: {e}")
             continue

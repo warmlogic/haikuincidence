@@ -87,13 +87,22 @@ def clean_text(text: str) -> str:
 
 
 def check_profile(
-    status, ignore_profile_list: List[str], match_substring: bool = False
+    status,
+    ignore_profile_list: List[str],
+    match_substring: bool = False,
+    remove_punct: bool = True,
 ) -> bool:
+    profile = status["user"]["description"]
+
+    if remove_punct:
+        profile = re.sub(r"[^\s\w]", " ", profile).strip()
+        profile = re.sub(r"_", " ", profile).strip()
+
     return all(
         [
             (
                 not text_contains_ignore_list(
-                    clean_token(clean_text(status["user"]["description"])),
+                    clean_token(clean_text(profile)),
                     ignore_profile_list,
                     match_substring=match_substring,
                 )

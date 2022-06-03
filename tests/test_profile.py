@@ -3,6 +3,7 @@ from haikuincidence.utils.text_utils import check_profile
 
 ignore_profile_list = get_ignore_profile_list()
 match_substring = False
+remove_punct = True
 
 
 def test_profile_pass():
@@ -15,6 +16,7 @@ def test_profile_pass():
             status,
             ignore_profile_list=ignore_profile_list,
             match_substring=match_substring,
+            remove_punct=remove_punct,
         )
         assert profile_passes, f"Should have passed: {status['user']['description']}"
 
@@ -29,6 +31,7 @@ def test_profile_fail():
             status,
             ignore_profile_list=ignore_profile_list,
             match_substring=match_substring,
+            remove_punct=remove_punct,
         )
         assert (
             not profile_passes

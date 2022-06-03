@@ -95,7 +95,8 @@ def check_profile(
     profile = status["user"]["description"]
 
     if remove_punct:
-        profile = re.sub(r"[^\w ]", "", profile).strip()
+        profile = re.sub(r"[^\s\w]", " ", profile).strip()
+        profile = re.sub(r"_", " ", profile).strip()
 
     return all(
         [

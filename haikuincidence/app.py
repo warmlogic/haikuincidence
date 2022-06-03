@@ -34,7 +34,7 @@ logging.basicConfig(format="{asctime} : {levelname} : {message}", style="{")
 logger = logging.getLogger("haikulogger")
 
 SLEEP_SECONDS_BASE = 2
-DEFAULT_SLEEP_EXPONENT = 3
+DEFAULT_SLEEP_EXPONENT = 4
 
 ENVIRONMENT = os.getenv("ENVIRONMENT", default="development").lower()
 assert ENVIRONMENT in [
@@ -146,6 +146,9 @@ class MyStreamer(TwythonStreamer):
         self.sleep_exponent = DEFAULT_SLEEP_EXPONENT
 
     def on_success(self, status):
+        # Reset sleep seconds exponent
+        self.sleep_exponent = DEFAULT_SLEEP_EXPONENT
+
         # If this tweet was truncated, get the full text
         if "truncated" in status and status["truncated"]:
             status_full = twitter.get_user_timeline(
@@ -398,9 +401,6 @@ if __name__ == "__main__":
             else:
                 # get samples from stream
                 stream.statuses.sample()
-
-            # Reset sleep seconds exponent if successful
-            stream.sleep_exponent = DEFAULT_SLEEP_EXPONENT
         except TwythonRateLimitError:
             seconds = SLEEP_SECONDS_BASE**stream.sleep_exponent
             logger.info(
@@ -409,7 +409,5 @@ if __name__ == "__main__":
             )
             sleep(seconds)
             stream.sleep_exponent += 1
-            continue
         except Exception as e:
             logger.info(f"Exception when streaming tweets: {e}")
-            continue

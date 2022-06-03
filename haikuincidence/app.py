@@ -146,9 +146,6 @@ class MyStreamer(TwythonStreamer):
         self.sleep_exponent = DEFAULT_SLEEP_EXPONENT
 
     def on_success(self, status):
-        # Reset sleep seconds exponent
-        self.sleep_exponent = DEFAULT_SLEEP_EXPONENT
-
         # If this tweet was truncated, get the full text
         if "truncated" in status and status["truncated"]:
             status_full = twitter.get_user_timeline(
@@ -401,6 +398,9 @@ if __name__ == "__main__":
             else:
                 # get samples from stream
                 stream.statuses.sample()
+
+            # Reset sleep seconds exponent if successful
+            stream.sleep_exponent = DEFAULT_SLEEP_EXPONENT
         except TwythonRateLimitError:
             seconds = SLEEP_SECONDS_BASE**stream.sleep_exponent
             logger.info(

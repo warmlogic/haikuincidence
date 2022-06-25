@@ -2,6 +2,10 @@ name: Build and deploy
 
 on:
   push:
+  workflow_run:
+    workflows: [Code Quality]
+    types:
+      - completed
 
 jobs:
   build:

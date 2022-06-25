@@ -34,7 +34,7 @@ logging.basicConfig(format="{asctime} : {levelname} : {message}", style="{")
 logger = logging.getLogger("haikulogger")
 
 SLEEP_SECONDS_BASE = 2
-DEFAULT_SLEEP_EXPONENT = 4
+DEFAULT_SLEEP_EXPONENT = 5
 
 ENVIRONMENT = os.getenv("ENVIRONMENT", default="development").lower()
 assert ENVIRONMENT in [

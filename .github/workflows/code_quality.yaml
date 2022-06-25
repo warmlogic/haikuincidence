@@ -6,8 +6,8 @@ on:
       - main
 
 env:
-  PYTHON_VERSION: 3.9
-  POETRY_VERSION: 1.1.13
+  PYTHON_VERSION: "3.10"
+  POETRY_VERSION: "1.2.0b1"
 
 jobs:
   lint:
@@ -16,12 +16,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
@@ -29,7 +29,7 @@ jobs:
       # load cached ~/.local for installing poetry
       #----------------------------------------------
       - name: Load cached $HOME/.local
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.local
           key: dotlocal-${{ runner.os }}-${{ hashFiles('.github/workflows/code_quality.yaml') }}
@@ -47,7 +47,7 @@ jobs:
       #----------------------------------------------
       - name: Load cached project
         id: cached-poetry-dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: .venv
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
@@ -82,12 +82,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
@@ -95,7 +95,7 @@ jobs:
       # load cached ~/.local for installing poetry
       #----------------------------------------------
       - name: Load cached $HOME/.local
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.local
           key: dotlocal-${{ runner.os }}-${{ hashFiles('.github/workflows/code_quality.yaml') }}
@@ -113,7 +113,7 @@ jobs:
       #----------------------------------------------
       - name: Load cached project
         id: cached-poetry-dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: .venv
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}

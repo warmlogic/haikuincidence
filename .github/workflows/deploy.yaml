@@ -12,11 +12,8 @@ jobs:
       HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
       HEROKU_PROCESS_TYPE: worker
 
-    if: ${{ github.ref_name }} == 'main' || contains(github.event.head_commit.message, '#deploy')
+    if: ${{ github.ref_name == 'main' || contains(github.event.head_commit.message, '#deploy') }}
     steps:
-      - name: Print branch name
-        run: echo ${{ github.ref_name }}
-
       - name: Checkout
         uses: actions/checkout@v3
         with:

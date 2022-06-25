@@ -6,8 +6,8 @@ on:
       - main
 
 env:
-  PYTHON_VERSION: 3.10
-  POETRY_VERSION: 1.2
+  PYTHON_VERSION: "3.10"
+  POETRY_VERSION: "1.2"
 
 jobs:
   lint:

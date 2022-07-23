@@ -122,7 +122,7 @@ def check_text_wrapper(status, ignore_list: List[str]) -> bool:
         clean_token(text), ignore_list
     )
     valid_has_chars_digits_together = not text_has_chars_digits_together(text)
-    # valid_is_all_uppercase = not text_is_all_uppercase(text)
+    valid_is_all_uppercase = not text_is_all_uppercase(text)
     # valid_is_all_alpha = text_is_all_alpha(text)
 
     checks = {
@@ -131,7 +131,7 @@ def check_text_wrapper(status, ignore_list: List[str]) -> bool:
         "valid_contains_url": valid_contains_url,
         "valid_contains_ignore_words": valid_contains_ignore_words,
         "valid_has_chars_digits_together": valid_has_chars_digits_together,
-        # "valid_is_all_uppercase": valid_is_all_uppercase,
+        "valid_is_all_uppercase": valid_is_all_uppercase,
         # "valid_is_all_alpha": valid_is_all_alpha,
     }
 

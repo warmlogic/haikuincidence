@@ -44,11 +44,13 @@ PRONOUNCED_LETTERS = [
     "z",
 ]
 
+# Escape backslash because they are compared with "unicode-escape"
 UNICODE_IGNORE = [
     "\\u3164",  # Hangul Filler https://codepoints.net/U+3164
     "\\uffa0",  # Halfwidth Hangul Filler https://codepoints.net/U+FFA0
 ]
 
+# Do not need to escape backslash
 UNICODE_KEEP = [
     "\u200d",  # Zero-width joiner https://codepoints.net/U+200D
 ]

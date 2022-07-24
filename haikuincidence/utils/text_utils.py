@@ -52,7 +52,10 @@ UNICODE_IGNORE = [
 
 # Do not need to escape backslash
 UNICODE_KEEP = [
-    "\u200d",  # Zero-width joiner https://codepoints.net/U+200D
+    "\u200d",  # Zero Width Joiner https://codepoints.net/U+200D
+    "\u2642",  # Male Sign  https://codepoints.net/U+2642
+    "\u2640",  # Female Sign  https://codepoints.net/U+2640
+    "\ufe0f",  # Variation Selector-16 for emoji https://codepoints.net/U+FE0F
 ]
 
 

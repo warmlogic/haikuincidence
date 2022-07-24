@@ -10,7 +10,7 @@ from ftfy import fix_text
 from unidecode import unidecode
 
 logging.basicConfig(format="{asctime} : {levelname} : {message}", style="{")
-logger = logging.getLogger("haikulogger")
+logger = logging.getLogger("haiku_logger")
 
 # Regex to look for all URLs (mailto:, x-whatever://, etc.)
 # https://gist.github.com/gruber/249502
@@ -316,11 +316,11 @@ def text_contains_ignore_list_plural(
                 [
                     any(
                         [
-                            it in text_compare
-                            for it in [itok, f"{itok}s", f"{itok}z", f"{itok}es"]
+                            t in text_compare
+                            for t in [token, f"{token}s", f"{token}z", f"{token}es"]
                         ]
                     )
-                    for itok in ignore_line.split()
+                    for token in ignore_line.split()
                 ]
             )
             for ignore_line in ignore_list
@@ -346,7 +346,7 @@ def text_contains_ignore_list(
 
     return any(
         [
-            all([itok in text_compare for itok in ignore_line.lower().split()])
+            all([token in text_compare for token in ignore_line.lower().split()])
             for ignore_line in ignore_list
         ]
     )

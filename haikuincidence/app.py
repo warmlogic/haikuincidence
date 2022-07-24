@@ -31,7 +31,7 @@ from utils.text_utils import (
 # I'm a poet and I didn't even know it. Hey, that's a haiku!
 
 logging.basicConfig(format="{asctime} : {levelname} : {message}", style="{")
-logger = logging.getLogger("haikulogger")
+logger = logging.getLogger("haiku_logger")
 
 SLEEP_SECONDS_BASE = 2
 DEFAULT_SLEEP_EXPONENT = 5

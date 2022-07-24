@@ -10,7 +10,7 @@ from sqlalchemy.pool import NullPool
 
 from .text_utils import date_string_to_datetime, get_tweet_body
 
-logger = logging.getLogger("haikulogger")
+logger = logging.getLogger("haiku_logger")
 
 Base = declarative_base()
 

@@ -3,7 +3,7 @@ import logging
 from pathlib import Path
 from typing import Dict, List
 
-logger = logging.getLogger("haikulogger")
+logger = logging.getLogger("haiku_logger")
 
 
 def get_track_str(filepath: Path = None) -> str:

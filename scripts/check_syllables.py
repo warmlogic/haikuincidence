@@ -34,7 +34,7 @@ from haikuincidence.utils.haiku_utils import get_haiku
 from haikuincidence.utils.text_utils import check_text_wrapper, clean_text
 
 logging.basicConfig(format="{asctime} : {levelname} : {message}", style="{")
-logger = logging.getLogger("haikulogger")
+logger = logging.getLogger("haiku_logger")
 logger.setLevel(logging.DEBUG)
 
 # get data to use for dealing with tweets

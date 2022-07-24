@@ -12,7 +12,7 @@ from .text_utils import (
     text_might_contain_acronym,
 )
 
-logger = logging.getLogger("haikulogger")
+logger = logging.getLogger("haiku_logger")
 
 # keep letters and apostrophes for contractions, and commas and periods for numbers
 punct_to_keep = ["'", ",", "."]

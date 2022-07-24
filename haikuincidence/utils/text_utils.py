@@ -45,7 +45,12 @@ PRONOUNCED_LETTERS = [
 ]
 
 UNICODE_IGNORE = [
-    "\\u3164",  # Hangul Filler
+    "\\u3164",  # Hangul Filler https://codepoints.net/U+3164
+    "\\uffa0",  # Halfwidth Hangul Filler https://codepoints.net/U+FFA0
+]
+
+UNICODE_KEEP = [
+    "\u200d",  # Zero-width joiner https://codepoints.net/U+200D
 ]
 
 
@@ -71,11 +76,13 @@ def clean_text(text: str) -> str:
     )
 
     # Decode unicode letters and keep emojis
-    text_cleaned = " ".join(
+    text_decoded = " ".join(
         [
             "".join(
                 [
-                    unidecode(letter) if not emoji.is_emoji(letter) else letter
+                    unidecode(letter)
+                    if (not emoji.is_emoji(letter) and letter not in UNICODE_KEEP)
+                    else letter
                     for letter in word
                 ]
             )
@@ -83,7 +90,7 @@ def clean_text(text: str) -> str:
         ]
     )
 
-    return text_cleaned
+    return text_decoded
 
 
 def check_profile(

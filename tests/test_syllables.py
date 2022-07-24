@@ -45,24 +45,25 @@ def get_syllable_count_and_haiku(text):
 
 def test_haikus():
     with open("tests/data_haiku.txt", "r") as fp:
-        haikus = fp.read().splitlines()
+        inputs = fp.read().splitlines()
 
-    for text in haikus:
-        text = clean_text(text)
-        count, haiku = get_syllable_count_and_haiku(text)
+    for text in inputs:
+        text_cleaned = clean_text(text)
+        count, haiku = get_syllable_count_and_haiku(text_cleaned)
 
-        assert count == 17, f"Not 17 syllables: {text}"
-        assert haiku != "", f"Not a haiku: {text}"
+        assert count == 17, f"{count} syllables, not 17 syllables: {text_cleaned}"
+        assert haiku != "", f"Not a haiku: {text_cleaned}"
 
 
 def test_not_haikus():
     with open("tests/data_not_haiku.txt", "r") as fp:
-        haikus = fp.read().splitlines()
+        inputs = fp.read().splitlines()
 
-    for text in haikus:
-        text = clean_text(text)
-        count, haiku = get_syllable_count_and_haiku(text)
+    for text in inputs:
+        text_cleaned = clean_text(text)
+        count, haiku = get_syllable_count_and_haiku(text_cleaned)
 
-        print(text)
-        print(f"Syllable count: {count}")
-        assert haiku == "", f"Not supposed to be a haiku: {text}"
+        print(text_cleaned)
+        assert (
+            haiku == ""
+        ), f"Syllable count: {count}, not supposed to be a haiku: {text_cleaned}"

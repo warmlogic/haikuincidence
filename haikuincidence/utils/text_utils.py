@@ -10,7 +10,7 @@ from ftfy import fix_text
 from unidecode import unidecode
 
 logging.basicConfig(format="{asctime} : {levelname} : {message}", style="{")
-logger = logging.getLogger("haikulogger")
+logger = logging.getLogger("haiku_logger")
 
 # Regex to look for all URLs (mailto:, x-whatever://, etc.)
 # https://gist.github.com/gruber/249502
@@ -44,8 +44,18 @@ PRONOUNCED_LETTERS = [
     "z",
 ]
 
+# Escape backslash because they are compared with "unicode-escape"
 UNICODE_IGNORE = [
-    "\\u3164",  # Hangul Filler
+    "\\u3164",  # Hangul Filler https://codepoints.net/U+3164
+    "\\uffa0",  # Halfwidth Hangul Filler https://codepoints.net/U+FFA0
+]
+
+# Do not need to escape backslash
+UNICODE_KEEP = [
+    "\u200d",  # Zero Width Joiner https://codepoints.net/U+200D
+    "\u2642",  # Male Sign  https://codepoints.net/U+2642
+    "\u2640",  # Female Sign  https://codepoints.net/U+2640
+    "\ufe0f",  # Variation Selector-16 for emoji https://codepoints.net/U+FE0F
 ]
 
 
@@ -71,11 +81,13 @@ def clean_text(text: str) -> str:
     )
 
     # Decode unicode letters and keep emojis
-    text_cleaned = " ".join(
+    text_decoded = " ".join(
         [
             "".join(
                 [
-                    unidecode(letter) if not emoji.is_emoji(letter) else letter
+                    unidecode(letter)
+                    if (not emoji.is_emoji(letter) and letter not in UNICODE_KEEP)
+                    else letter
                     for letter in word
                 ]
             )
@@ -83,7 +95,7 @@ def clean_text(text: str) -> str:
         ]
     )
 
-    return text_cleaned
+    return text_decoded
 
 
 def check_profile(
@@ -122,7 +134,7 @@ def check_text_wrapper(status, ignore_list: List[str]) -> bool:
         clean_token(text), ignore_list
     )
     valid_has_chars_digits_together = not text_has_chars_digits_together(text)
-    # valid_is_all_uppercase = not text_is_all_uppercase(text)
+    valid_is_all_uppercase = not text_is_all_uppercase(text)
     # valid_is_all_alpha = text_is_all_alpha(text)
 
     checks = {
@@ -131,7 +143,7 @@ def check_text_wrapper(status, ignore_list: List[str]) -> bool:
         "valid_contains_url": valid_contains_url,
         "valid_contains_ignore_words": valid_contains_ignore_words,
         "valid_has_chars_digits_together": valid_has_chars_digits_together,
-        # "valid_is_all_uppercase": valid_is_all_uppercase,
+        "valid_is_all_uppercase": valid_is_all_uppercase,
         # "valid_is_all_alpha": valid_is_all_alpha,
     }
 
@@ -309,11 +321,11 @@ def text_contains_ignore_list_plural(
                 [
                     any(
                         [
-                            it in text_compare
-                            for it in [itok, f"{itok}s", f"{itok}z", f"{itok}es"]
+                            t in text_compare
+                            for t in [token, f"{token}s", f"{token}z", f"{token}es"]
                         ]
                     )
-                    for itok in ignore_line.split()
+                    for token in ignore_line.split()
                 ]
             )
             for ignore_line in ignore_list
@@ -339,7 +351,7 @@ def text_contains_ignore_list(
 
     return any(
         [
-            all([itok in text_compare for itok in ignore_line.lower().split()])
+            all([token in text_compare for token in ignore_line.lower().split()])
             for ignore_line in ignore_list
         ]
     )

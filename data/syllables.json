@@ -74,6 +74,11 @@
         "pronunciation": "about",
         "syllables": 2
     },
+    "abs": {
+        "alt": [],
+        "pronunciation": "abs",
+        "syllables": 1
+    },
     "acc": {
         "alt": [],
         "pronunciation": "account",
@@ -142,6 +147,11 @@
     "anime": {
         "alt": [],
         "pronunciation": "anime",
+        "syllables": 3
+    },
+    "antifa": {
+        "alt": [],
+        "pronunciation": "an ti fa",
         "syllables": 3
     },
     "appt": {
@@ -273,6 +283,16 @@
         "alt": [],
         "pronunciation": "best friends for life",
         "syllables": 4
+    },
+    "bffs": {
+        "alt": [
+            {
+                "pronunciation": "best friends forever",
+                "syllables": 5
+            }
+        ],
+        "pronunciation": "B F Fs",
+        "syllables": 3
     },
     "blockheaded": {
         "alt": [],
@@ -1225,6 +1245,11 @@
         "pronunciation": "I don't know",
         "syllables": 3
     },
+    "iOS": {
+        "alt": [],
+        "pronunciation": "i o s",
+        "syllables": 3
+    },
     "iPhone": {
         "alt": [],
         "pronunciation": "i phone",
@@ -1259,6 +1284,11 @@
         "alt": [],
         "pronunciation": "I've",
         "syllables": 1
+    },
+    "jbh": {
+        "alt": [],
+        "pronunciation": "just being honest",
+        "syllables": 5
     },
     "jeje": {
         "alt": [],
@@ -1335,6 +1365,11 @@
         "pronunciation": "K K K",
         "syllables": 3
     },
+    "kms": {
+        "alt": [],
+        "pronunciation": "kill myself",
+        "syllables": 3
+    },
     "kno": {
         "alt": [],
         "pronunciation": "know",
@@ -1359,6 +1394,11 @@
         "alt": [],
         "pronunciation": "k thanks bye",
         "syllables": 3
+    },
+    "kum": {
+        "alt": [],
+        "pronunciation": "come",
+        "syllables": 1
     },
     "LBYL": {
         "alt": [
@@ -1433,6 +1473,11 @@
         "alt": [],
         "pronunciation": "looks good to me",
         "syllables": 4
+    },
+    "lioness": {
+        "alt": [],
+        "pronunciation": "li o ness",
+        "syllables": 3
     },
     "livestream": {
         "alt": [],

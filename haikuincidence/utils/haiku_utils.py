@@ -42,96 +42,96 @@ def count_syllables(
 
     token_clean = clean_token(token)
 
-    subsyllable_count = 0
-    for subtoken in token_clean.split():
+    sub_syllable_count = 0
+    for sub_token in token_clean.split():
         # remove starting or ending punctuation
         for punct in punct_to_keep:
-            subtoken = subtoken.strip(punct)
+            sub_token = sub_token.strip(punct)
 
         # keep capitalization for checking acronyms
-        subtoken_orig = subtoken
+        sub_token_orig = sub_token
         # lowercase for checking against syllable_dict and pronounce_dict
-        subtoken = subtoken.lower()
+        sub_token = sub_token.lower()
 
         if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(f"    Subtoken: {subtoken}")
+            logger.debug(f"    Sub-token: {sub_token}")
 
-        if subtoken.replace(",", "").replace(".", "").isdigit():
+        if sub_token.replace(",", "").replace(".", "").isdigit():
             # split a string that looks like a year
-            if len(subtoken) == 4:
-                if subtoken.isdigit():
-                    if (int(subtoken[:2]) % 10 == 0) and (int(subtoken[2:]) < 10):
-                        subtoken = inflect_p.number_to_words(subtoken, andword="")
+            if len(sub_token) == 4:
+                if sub_token.isdigit():
+                    if (int(sub_token[:2]) % 10 == 0) and (int(sub_token[2:]) < 10):
+                        sub_token = inflect_p.number_to_words(sub_token, andword="")
                     else:
-                        subtoken = f"{subtoken[:2]} {subtoken[2:]}"
+                        sub_token = f"{sub_token[:2]} {sub_token[2:]}"
                 else:
-                    subtoken = inflect_p.number_to_words(subtoken, andword="")
-            elif len(subtoken) == 2:
-                if subtoken.isdigit():
+                    sub_token = inflect_p.number_to_words(sub_token, andword="")
+            elif len(sub_token) == 2:
+                if sub_token.isdigit():
                     # pronounce zero as "oh"
-                    if subtoken[0] == "0":
-                        subtoken = f"oh {subtoken[1]}"
+                    if sub_token[0] == "0":
+                        sub_token = f"oh {sub_token[1]}"
                     else:
-                        subtoken = inflect_p.number_to_words(subtoken, andword="")
+                        sub_token = inflect_p.number_to_words(sub_token, andword="")
                 else:
-                    subtoken = inflect_p.number_to_words(subtoken, andword="")
+                    sub_token = inflect_p.number_to_words(sub_token, andword="")
             else:
-                subtoken = inflect_p.number_to_words(subtoken, andword="")
+                sub_token = inflect_p.number_to_words(sub_token, andword="")
             # remove all punctuation except apostrophes
-            subtoken = re.sub(r"[^\w']", " ", subtoken).strip()
+            sub_token = re.sub(r"[^\w']", " ", sub_token).strip()
 
-        if subtoken in syllable_dict:
-            subtoken_syl = syllable_dict[subtoken]["syllables"]
+        if sub_token in syllable_dict:
+            sub_token_syl = syllable_dict[sub_token]["syllables"]
             source = "Dict"
-            subsyllable_count += subtoken_syl
-        elif remove_repeat_last_letter(subtoken) in syllable_dict:
-            subtoken_syl = syllable_dict[remove_repeat_last_letter(subtoken)][
+            sub_syllable_count += sub_token_syl
+        elif remove_repeat_last_letter(sub_token) in syllable_dict:
+            sub_token_syl = syllable_dict[remove_repeat_last_letter(sub_token)][
                 "syllables"
             ]
             source = "Dict (remove repeat)"
-            subsyllable_count += subtoken_syl
-        elif (subtoken_orig.endswith("s") or subtoken_orig.endswith("z")) and (
-            subtoken[:-1] in syllable_dict
+            sub_syllable_count += sub_token_syl
+        elif (sub_token_orig.endswith("s") or sub_token_orig.endswith("z")) and (
+            sub_token[:-1] in syllable_dict
         ):
-            subtoken_syl = syllable_dict[subtoken[:-1]]["syllables"]
+            sub_token_syl = syllable_dict[sub_token[:-1]]["syllables"]
             source = "Dict (singular)"
-            subsyllable_count += subtoken_syl
-        elif subtoken in pronounce_dict:
-            subtoken_syl = max(
+            sub_syllable_count += sub_token_syl
+        elif sub_token in pronounce_dict:
+            sub_token_syl = max(
                 [
                     len([y for y in x if y[-1].isdigit()])
-                    for x in pronounce_dict[subtoken]
+                    for x in pronounce_dict[sub_token]
                 ]
             )
             source = "CMU"
-            subsyllable_count += subtoken_syl
-        elif remove_repeat_last_letter(subtoken) in pronounce_dict:
-            subtoken_syl = max(
+            sub_syllable_count += sub_token_syl
+        elif remove_repeat_last_letter(sub_token) in pronounce_dict:
+            sub_token_syl = max(
                 [
                     len([y for y in x if y[-1].isdigit()])
-                    for x in pronounce_dict[remove_repeat_last_letter(subtoken)]
+                    for x in pronounce_dict[remove_repeat_last_letter(sub_token)]
                 ]
             )
             source = "CMU (remove repeat)"
-            subsyllable_count += subtoken_syl
-        elif (subtoken_orig.endswith("s") or subtoken_orig.endswith("z")) and (
-            subtoken[:-1] in pronounce_dict
+            sub_syllable_count += sub_token_syl
+        elif (sub_token_orig.endswith("s") or sub_token_orig.endswith("z")) and (
+            sub_token[:-1] in pronounce_dict
         ):
-            subtoken_syl = max(
+            sub_token_syl = max(
                 [
                     len([y for y in x if y[-1].isdigit()])
-                    for x in pronounce_dict[subtoken[:-1]]
+                    for x in pronounce_dict[sub_token[:-1]]
                 ]
             )
             source = "CMU (singular)"
-            subsyllable_count += subtoken_syl
+            sub_syllable_count += sub_token_syl
         else:
             # it's not a "real" word
-            if re.findall(r"[^\w']", subtoken):
+            if re.findall(r"[^\w']", sub_token):
                 # there are non-letter characters remaining (shouldn't be possible);
                 # run it through again
-                subtoken_syl = count_syllables(
-                    subtoken,
+                sub_token_syl = count_syllables(
+                    sub_token,
                     inflect_p,
                     pronounce_dict,
                     syllable_dict,
@@ -139,21 +139,21 @@ def count_syllables(
                     guess_syl_method,
                 )
                 source = "Non-letter chars"
-                subsyllable_count += subtoken_syl
+                sub_syllable_count += sub_token_syl
             else:
-                if "'" in subtoken:
+                if "'" in sub_token:
                     # contains an apostrophe
-                    if subtoken.rsplit("'")[-1] in contraction_ends:
+                    if sub_token.rsplit("'")[-1] in contraction_ends:
                         # ends with one of the contraction endings; make a guess
-                        subtoken_syl = guess_syllables(subtoken, guess_syl_method)
+                        sub_token_syl = guess_syllables(sub_token, guess_syl_method)
                         source = "Guess"
-                        subsyllable_count += subtoken_syl
+                        sub_syllable_count += sub_token_syl
                     else:
                         # doesn't end with a contraction ending;
                         # count each chunk between apostrophes
-                        for subsubtoken in subtoken.rsplit("'"):
-                            subtoken_syl = count_syllables(
-                                subsubtoken,
+                        for sub_sub_token in sub_token.rsplit("'"):
+                            sub_token_syl = count_syllables(
+                                sub_sub_token,
                                 inflect_p,
                                 pronounce_dict,
                                 syllable_dict,
@@ -161,13 +161,13 @@ def count_syllables(
                                 guess_syl_method,
                             )
                             source = "Multiple apostrophes"
-                            subsyllable_count += subtoken_syl
+                            sub_syllable_count += sub_token_syl
                 else:
                     # no apostrophes; might be an acronym,
                     # split the letters apart and run it through again
-                    if text_might_contain_acronym(subtoken_orig):
-                        subtoken_syl = count_syllables(
-                            " ".join(subtoken),
+                    if text_might_contain_acronym(sub_token_orig):
+                        sub_token_syl = count_syllables(
+                            " ".join(sub_token),
                             inflect_p,
                             pronounce_dict,
                             syllable_dict,
@@ -175,18 +175,18 @@ def count_syllables(
                             guess_syl_method,
                         )
                         source = "Acronym"
-                        subsyllable_count += subtoken_syl
+                        sub_syllable_count += sub_token_syl
                     else:
                         # make a guess
-                        subtoken_syl = guess_syllables(
-                            remove_repeat_last_letter(subtoken), guess_syl_method
+                        sub_token_syl = guess_syllables(
+                            remove_repeat_last_letter(sub_token), guess_syl_method
                         )
                         source = "Guess"
-                        subsyllable_count += subtoken_syl
+                        sub_syllable_count += sub_token_syl
         if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(f"    {source}: {subtoken}: {subtoken_syl}")
+            logger.debug(f"    {source}: {sub_token}: {sub_token_syl}")
 
-    return subsyllable_count
+    return sub_syllable_count
 
 
 def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -> int:
@@ -206,8 +206,8 @@ def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -
     def get_syl_count_str(minsyl: int, maxsyl: int, mean_round_dir: str):
         return (
             f"min syl {minsyl},"
-            + f" mean syl {avg_syl(minsyl, maxsyl, mean_round_dir)},"
-            + f" max syl {maxsyl}"
+            f" mean syl {avg_syl(minsyl, maxsyl, mean_round_dir)},"
+            f" max syl {maxsyl}"
         )
 
     vowels = ["a", "e", "i", "o", "u"]
@@ -227,7 +227,7 @@ def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -
     in_diphthong = False
     minsyl = 0
     maxsyl = 0
-    lastchar = None
+    last_char = None
 
     word = word.lower()
     for i, c in enumerate(word):
@@ -248,9 +248,9 @@ def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -
                 maxsyl += 1
                 logger.debug(
                     "    new syllable:"
-                    + f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
+                    f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
                 )
-            elif on_vowel and not in_diphthong and c != lastchar:
+            elif on_vowel and not in_diphthong and c != last_char:
                 # We were already in a vowel.
                 # Don't increment anything except the max count,
                 # and only do that once per diphthong.
@@ -258,7 +258,7 @@ def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -
                 maxsyl += 1
                 logger.debug(
                     "    diphthong:"
-                    + f" {c}: {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
+                    f" {c}: {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
                 )
         else:
             in_diphthong = False
@@ -271,7 +271,7 @@ def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -
             break
 
         on_vowel = is_vowel
-        lastchar = c
+        last_char = c
 
     # May have counted too many syllables: If word ends in e, or past tense (-ed),
     # run some checks.
@@ -285,7 +285,7 @@ def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -
         # maxsyl -= 1
         logger.debug(
             f"Ends in e or ed (with conditions), removing a syllable for '{word}':"
-            + f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
+            f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
         )
 
     if (len(word) >= 3) and (word[-2:] == "le") and (word[-3] not in vowels + ["l"]):
@@ -293,16 +293,16 @@ def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -
         maxsyl += 1
         logger.debug(
             f"Adding back a syllable for '{word}':"
-            + f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
+            f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
         )
 
-    # Posessive with word ending in certain sounds may not get enough syllables
+    # Possessive with word ending in certain sounds may not get enough syllables
     if (len(word) >= 3) and (word[-2:] == "'s") and (word[-3] in ["x"]):
         minsyl += 1
         maxsyl += 1
         logger.debug(
-            f"Posessive: Adding a syllable for '{word}':"
-            + f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
+            f"Possessive: Adding a syllable for '{word}':"
+            f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
         )
 
     # check on ending with a consonant followed by y
@@ -311,13 +311,13 @@ def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -
             minsyl -= 1
             logger.debug(
                 f"Ends with e + consonant + y: Removing a syllable for '{word}':"
-                + f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
+                f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
             )
         else:
             maxsyl += 1
             logger.debug(
                 f"Ends with consonant + y: Adding a syllable for '{word}':"
-                + f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
+                f" {get_syl_count_str(minsyl, maxsyl, mean_round_dir)}"
             )
 
     # other special cases
@@ -426,7 +426,7 @@ def get_haiku(
             if logger.isEnabledFor(logging.DEBUG):
                 logger.debug(
                     "Not a haiku because are more lines to check:"
-                    + f" {' '.join(text_split[i + 1:])}"
+                    f" {' '.join(text_split[i + 1:])}"
                 )
             return ""
     if haiku_line == len(haiku_form):

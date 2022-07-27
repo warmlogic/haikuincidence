@@ -247,13 +247,12 @@ class MyStreamer(TwythonStreamer):
 
         # Format the haiku with attribution
         haiku_attributed = (
-            f"{haiku_to_post['haiku']}\n\n"
-            + f"A haiku by @{status['user']['screen_name']}"
+            f"{haiku_to_post['haiku']}\n\nA haiku by @{status['user']['screen_name']}"
         )
 
         tweet_url = (
             f"https://twitter.com/{status['user']['screen_name']}"
-            + f"/status/{status['id_str']}"
+            f"/status/{status['id_str']}"
         )
 
         logger.info("=" * 50)

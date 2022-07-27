@@ -56,14 +56,14 @@ while True:
     cursor_if = result["next_cursor"]
     logger.info(f"Added {len(user_list)} users who I follow (total: {len(i_follow)})")
     # # find the screen names with notifications turned on
-    # user_list_notif = [
-    #     user["screen_name"] for user in ifollow["users"] if user["notifications"]
+    # user_list_notification = [
+    #     user["screen_name"] for user in i_follow["users"] if user["notifications"]
     # ]
     # logger.info(
-    #     f"Found {len(user_list_notif)} users"
+    #     f"Found {len(user_list_notification)} users"
     #     + " with notifications turned on who I follow"
     # )
-    # i_follow.extend(user_list_notif)
+    # i_follow.extend(user_list_notification)
     logger.info(f"Sleeping for {sleep_seconds} seconds")
     sleep(sleep_seconds)
 
@@ -129,29 +129,29 @@ logger.info(f"Unfollowed {len(unfollowed)} users who do not follow me")
 # there's no way around this limit
 # https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline
 poets = []
-mytweets = twitter.get_user_timeline(
+my_tweets = twitter.get_user_timeline(
     screen_name=MY_SCREEN_NAME, count=200, exclude_replies="false", include_rts="true"
 )
-poets.extend([tweet["in_reply_to_screen_name"] for tweet in mytweets])
-max_id = mytweets[-1]["id_str"]
+poets.extend([tweet["in_reply_to_screen_name"] for tweet in my_tweets])
+max_id = my_tweets[-1]["id_str"]
 sleep_seconds = 1.1
 counter = 1
 while True:
     logger.info(f"Query {counter}, Tweet max id: {max_id}")
-    mytweets = twitter.get_user_timeline(
+    my_tweets = twitter.get_user_timeline(
         screen_name=MY_SCREEN_NAME,
         count=200,
         exclude_replies="false",
         include_rts="true",
         max_id=max_id,
     )
-    max_id_next = mytweets[-1]["id_str"]
+    max_id_next = my_tweets[-1]["id_str"]
     if max_id_next == max_id:
         break
     else:
         max_id = max_id_next
         counter += 1
-    user_list = [tweet["in_reply_to_screen_name"] for tweet in mytweets]
+    user_list = [tweet["in_reply_to_screen_name"] for tweet in my_tweets]
     poets.extend(user_list)
     logger.info(
         f"Added {len(user_list)} users who I have replied to (total: {len(poets)})"
@@ -206,7 +206,7 @@ for sn in to_follow:
             # logger.info(f'updated {counter} / {len(to_follow)}: {sn}')
         except TwythonError as e:
             logger.info(f"exception for {sn}: {e}")
-            # remove the screenname from the list if it matches a valid reason
+            # remove the screen name from the list if it matches a valid reason
             if any([reason in str(e) for reason in exclude_reasons]):
                 do_not_follow.append(sn)
                 logger.info(f"Adding {sn} to do not follow list")

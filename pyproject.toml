@@ -13,7 +13,7 @@ emoji = "^2.1.0"
 ftfy = "^6.1.1"
 inflect = "^6.0.0"
 nltk = "^3.7.0"
-psycopg2-binary = "^2.9.3"
+psycopg = {extras = ["binary"], version = "^3.1.2"}
 python-dotenv = "^0.21.0"
 pytz = "^2022.2.1"
 python = ">=3.10,<3.11"

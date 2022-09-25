@@ -46,11 +46,11 @@ assert ENVIRONMENT in [
 if ENVIRONMENT == "development":
     env_path = Path.cwd().parent / ".env"
     if env_path.exists():
-        load_dotenv(dotenv_path=env_path)
+        _ = load_dotenv(dotenv_path=env_path)
     else:
         env_path = Path.cwd() / ".env"
         if env_path.exists():
-            load_dotenv(dotenv_path=env_path)
+            _ = load_dotenv(dotenv_path=env_path)
         else:
             raise OSError(".env file not found. Did you set it up?")
 

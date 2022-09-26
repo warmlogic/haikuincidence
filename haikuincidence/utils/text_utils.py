@@ -104,7 +104,7 @@ def check_profile(
     match_substring: bool = False,
     remove_punct: bool = True,
 ) -> bool:
-    profile = status["user"]["description"]
+    profile = status["user"]["description"] or ""
 
     if remove_punct:
         profile = re.sub(r"[^\s\w]", " ", profile).strip()

@@ -109,6 +109,11 @@
         "pronunciation": "aged",
         "syllables": 1
     },
+    "ai": {
+        "alt": [],
+        "pronunciation": "A I",
+        "syllables": 2
+    },
     "ain": {
         "alt": [],
         "pronunciation": "ain't",
@@ -348,6 +353,11 @@
         "pronunciation": "by the way",
         "syllables": 3
     },
+    "cgpa": {
+        "alt": [],
+        "pronunciation": "C G P A",
+        "syllables": 4
+    },
     "cheque": {
         "alt": [],
         "pronunciation": "check",
@@ -412,6 +422,11 @@
         "alt": [],
         "pronunciation": "C SPAN",
         "syllables": 2
+    },
+    "ctfu": {
+        "alt": [],
+        "pronunciation": "cracking the fuck up",
+        "syllables": 5
     },
     "cus": {
         "alt": [],
@@ -492,6 +507,11 @@
         "pronunciation": "difference",
         "syllables": 2
     },
+    "disda": {
+        "alt": [],
+        "pronunciation": "this the",
+        "syllables": 2
+    },
     "dj": {
         "alt": [],
         "pronunciation": "D J",
@@ -551,6 +571,11 @@
         "alt": [],
         "pronunciation": "doing",
         "syllables": 2
+    },
+    "dont": {
+        "alt": [],
+        "pronunciation": "don't",
+        "syllables": 1
     },
     "dnt": {
         "alt": [],
@@ -935,6 +960,11 @@
         "pronunciation": "good game",
         "syllables": 2
     },
+    "ggs": {
+        "alt": [],
+        "pronunciation": "good games",
+        "syllables": 2
+    },
     "giaw": {
         "alt": [],
         "pronunciation": "god is a woman",
@@ -950,10 +980,35 @@
         "pronunciation": "G L B T",
         "syllables": 4
     },
+    "gmail": {
+        "alt": [],
+        "pronunciation": "g mail",
+        "syllables": 2
+    },
+    "gm": {
+        "alt": [],
+        "pronunciation": "good morning",
+        "syllables": 3
+    },
     "gmi": {
         "alt": [],
         "pronunciation": "gonna make it",
         "syllables": 4
+    },
+    "gn": {
+        "alt": [],
+        "pronunciation": "goodnight",
+        "syllables": 2
+    },
+    "gna": {
+        "alt": [],
+        "pronunciation": "gonna",
+        "syllables": 2
+    },
+    "gnna": {
+        "alt": [],
+        "pronunciation": "gonna",
+        "syllables": 2
     },
     "goin": {
         "alt": [],
@@ -970,20 +1025,10 @@
         "pronunciation": "goo gle",
         "syllables": 2
     },
-    "gn": {
+    "gpa": {
         "alt": [],
-        "pronunciation": "goodnight",
-        "syllables": 2
-    },
-    "gna": {
-        "alt": [],
-        "pronunciation": "gonna",
-        "syllables": 2
-    },
-    "gnna": {
-        "alt": [],
-        "pronunciation": "gonna",
-        "syllables": 2
+        "pronunciation": "G P A",
+        "syllables": 3
     },
     "grindr": {
         "alt": [],
@@ -1114,6 +1159,11 @@
         "alt": [],
         "pronunciation": "honored",
         "syllables": 2
+    },
+    "hotd": {
+        "alt": [],
+        "pronunciation": "H O T D",
+        "syllables": 4
     },
     "hrs": {
         "alt": [],
@@ -1284,6 +1334,11 @@
         "alt": [],
         "pronunciation": "I've",
         "syllables": 1
+    },
+    "jayz": {
+        "alt": [],
+        "pronunciation": "Jay Z",
+        "syllables": 2
     },
     "jbh": {
         "alt": [],
@@ -1593,6 +1648,11 @@
         "pronunciation": "level",
         "syllables": 2
     },
+    "lwk": {
+        "alt": [],
+        "pronunciation": "low key",
+        "syllables": 2
+    },
     "lyf": {
         "alt": [],
         "pronunciation": "life",
@@ -1832,6 +1892,11 @@
         "alt": [],
         "pronunciation": "old",
         "syllables": 1
+    },
+    "oli": {
+        "alt": [],
+        "pronunciation": "olly",
+        "syllables": 2
     },
     "om": {
         "alt": [],
@@ -2391,6 +2456,11 @@
     "tua": {
         "alt": [],
         "pronunciation": "tu a",
+        "syllables": 2
+    },
+    "tumbl": {
+        "alt": [],
+        "pronunciation": "tumble",
         "syllables": 2
     },
     "tumblr": {

@@ -16,6 +16,7 @@ oneworld
 preheadache
 hehehehe
 wordle
+timesquare
 """
 
 import argparse

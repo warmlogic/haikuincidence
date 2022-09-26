@@ -1,7 +1,5 @@
 import json
 import logging
-from pathlib import Path
-from typing import Dict, List
 
 logger = logging.getLogger("haiku_logger")
 
@@ -19,7 +17,7 @@ def get_track_str(filepath) -> str:
     return track_str
 
 
-def get_ignore_tweet_list(filepath) -> List:
+def get_ignore_tweet_list(filepath) -> list:
     """filter out likely oppressive/offensive tweets using this word list"""
     try:
         logger.info(f"Reading ignore tweet list: {filepath}")
@@ -34,7 +32,7 @@ def get_ignore_tweet_list(filepath) -> List:
     return ignore_tweet_list
 
 
-def get_ignore_profile_list(filepath) -> List:
+def get_ignore_profile_list(filepath) -> list:
     """filter out tweets based on contents of user profile"""
     try:
         logger.info(f"Reading ignore profile list: {filepath}")
@@ -49,7 +47,7 @@ def get_ignore_profile_list(filepath) -> List:
     return ignore_profile_list
 
 
-def get_syllable_dict(filepath) -> Dict:
+def get_syllable_dict(filepath) -> dict:
     """specify syllables for certain acronyms or abbreviations"""
     try:
         logger.info(f"Reading syllable list: {filepath}")
@@ -64,7 +62,7 @@ def get_syllable_dict(filepath) -> Dict:
     return syllable_dict
 
 
-def get_emoticons_list(filepath) -> List:
+def get_emoticons_list(filepath) -> list:
     """text emoticons do not contribute to the syllable count"""
     try:
         logger.info(f"Reading emoticon list: {filepath}")

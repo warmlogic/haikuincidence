@@ -16,10 +16,12 @@ oneworld
 preheadache
 hehehehe
 wordle
+timesquare
 """
 
 import argparse
 import logging
+from pathlib import Path
 
 import inflect
 from nltk.corpus import cmudict
@@ -38,10 +40,11 @@ logger = logging.getLogger("haiku_logger")
 logger.setLevel(logging.DEBUG)
 
 # get data to use for dealing with tweets
-track_str = get_track_str()
-ignore_tweet_list = get_ignore_tweet_list()
-syllable_dict = get_syllable_dict()
-emoticons_list = get_emoticons_list()
+data_dir = Path.cwd() / "data"
+track_str = get_track_str(data_dir / "track.txt")
+ignore_tweet_list = get_ignore_tweet_list(data_dir / "ignore_tweet.txt")
+syllable_dict = get_syllable_dict(data_dir / "syllables.json")
+emoticons_list = get_emoticons_list(data_dir / "emoticons.txt")
 
 # Use inflect to change digits to their English word equivalent
 inflect_p = inflect.engine()

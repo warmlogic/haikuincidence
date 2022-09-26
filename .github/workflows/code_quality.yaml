@@ -32,7 +32,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.local
-          key: dotlocal-${{ runner.os }}-${{ hashFiles('.github/workflows/code_quality.yaml') }}
+          key: dotlocal-${{ runner.os }}-${{ hashFiles('.github/workflows/code_quality.yaml') }}-${{ github.run_id }}
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
@@ -50,7 +50,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}-${{ github.run_id }}
       #----------------------------------------------
       # install project if cache does not exist
       #----------------------------------------------
@@ -98,7 +98,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.local
-          key: dotlocal-${{ runner.os }}-${{ hashFiles('.github/workflows/code_quality.yaml') }}
+          key: dotlocal-${{ runner.os }}-${{ hashFiles('.github/workflows/code_quality.yaml') }}-${{ github.run_id }}
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
@@ -116,7 +116,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}-${{ github.run_id }}
       #----------------------------------------------
       # install project if cache does not exist
       #----------------------------------------------

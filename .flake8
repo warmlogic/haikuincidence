@@ -1,4 +1,5 @@
 [flake8]
+exclude = .venv
 # E203 warns about whitespace before colon, but is used here due to isort
 # W503 warns about line break before binary operator
 extend-ignore = E203,W503

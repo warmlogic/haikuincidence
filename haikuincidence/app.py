@@ -1,3 +1,5 @@
+# I'm a poet and I didn't even know it. Hey, that's a haiku!
+
 import logging
 import os
 from datetime import datetime, timedelta
@@ -27,8 +29,6 @@ from utils.text_utils import (
     date_string_to_datetime,
     get_tweet_body,
 )
-
-# I'm a poet and I didn't even know it. Hey, that's a haiku!
 
 logging.basicConfig(format="{asctime} : {levelname} : {message}", style="{")
 logger = logging.getLogger("haiku_logger")
@@ -91,6 +91,7 @@ OAUTH_TOKEN_SECRET = os.getenv("ACCESS_TOKEN_SECRET", default="")
 DATABASE_URL = os.getenv("DATABASE_URL", default="")
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://")
+RETRY_WAIT_SECONDS = int(os.getenv("RETRY_WAIT_SECONDS", default="60"))
 MY_SCREEN_NAME = os.getenv("MY_SCREEN_NAME", default="twitter")
 LANGUAGE = os.getenv("LANGUAGE", default="en")
 GUESS_SYL_METHOD = os.getenv("GUESS_SYL_METHOD", default="mean")
@@ -122,7 +123,7 @@ class MyTwitterClient(Twython):
         super(MyTwitterClient, self).__init__(*args, **kwargs)
         self.last_post_time = self.get_last_post_time()
 
-    @retry(wait=wait_fixed(30))
+    @retry(wait=wait_fixed(RETRY_WAIT_SECONDS))
     def get_last_post_time(self):
         """if our screen_name has a recent tweet, use that timestamp as the time of the
         last post
@@ -143,11 +144,11 @@ class MyTwitterClient(Twython):
                 last_post_time = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(
                     seconds=EVERY_N_SECONDS // 2
                 )
-        except TwythonRateLimitError:
-            logger.info("Rate limit exceeded when getting recent tweet")
+        except TwythonRateLimitError as e:
+            logger.info(f"Rate limit exceeded when getting recent tweet: {e}")
             raise
-        except Exception:
-            logger.info("Exception when getting recent tweet")
+        except Exception as e:
+            logger.info(f"Exception when getting recent tweet: {e}")
             last_post_time = self.DEFAULT_LAST_POST_TIME
 
         return last_post_time
@@ -193,7 +194,7 @@ class MyStreamer(TwythonStreamer):
         self.inflect_p = inflect_p
         self.pronounce_dict = pronounce_dict
 
-    @retry(wait=wait_fixed(30))
+    @retry(wait=wait_fixed(RETRY_WAIT_SECONDS))
     def stream_tweets(self):
         # Use try/except to avoid ChunkedEncodingError
         # https://github.com/ryanmcgrath/twython/issues/288#issuecomment-66360160
@@ -204,11 +205,11 @@ class MyStreamer(TwythonStreamer):
             else:
                 # get samples from stream
                 self.statuses.sample()
-        except TwythonRateLimitError:
-            logger.info("Rate limit exceeded when streaming tweets.")
+        except TwythonRateLimitError as e:
+            logger.info(f"Rate limit exceeded when streaming tweets: {e}")
             raise
-        except Exception:
-            logger.info("Exception when streaming tweets")
+        except Exception as e:
+            logger.info(f"Exception when streaming tweets: {e}")
             raise
 
     def on_success(self, status):

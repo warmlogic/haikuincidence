@@ -208,7 +208,8 @@ class MyStreamer(TwythonStreamer):
             logger.info("Rate limit exceeded when streaming tweets.")
             raise
         except Exception:
-            logger.exception("Exception when streaming tweets")
+            logger.info("Exception when streaming tweets")
+            raise
 
     def on_success(self, status):
         # If this tweet was truncated, get the full text

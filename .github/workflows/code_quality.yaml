@@ -1,4 +1,4 @@
-name: Code Quality
+name: Code Quality Checks
 
 on:
   pull_request:
@@ -32,14 +32,14 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.local
-          key: dotlocal-${{ runner.os }}-${{ hashFiles('.github/workflows/code_quality.yaml') }}-${{ github.run_id }}
+          key: dotlocal-${{ runner.os }}-${{ hashFiles('.github/workflows/code_quality.yaml') }}
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
           version: ${{ env.POETRY_VERSION }}
           virtualenvs-create: true
-          virtualenvs-in-project: false
+          virtualenvs-in-project: true
           installer-parallel: true
 
       #----------------------------------------------
@@ -50,7 +50,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}-${{ github.run_id }}
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
       #----------------------------------------------
       # install project if cache does not exist
       #----------------------------------------------
@@ -98,14 +98,14 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.local
-          key: dotlocal-${{ runner.os }}-${{ hashFiles('.github/workflows/code_quality.yaml') }}-${{ github.run_id }}
+          key: dotlocal-${{ runner.os }}-${{ hashFiles('.github/workflows/code_quality.yaml') }}
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
           version: ${{ env.POETRY_VERSION }}
           virtualenvs-create: true
-          virtualenvs-in-project: false
+          virtualenvs-in-project: true
           installer-parallel: true
 
       #----------------------------------------------
@@ -116,7 +116,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}-${{ github.run_id }}
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
       #----------------------------------------------
       # install project if cache does not exist
       #----------------------------------------------

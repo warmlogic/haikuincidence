@@ -1,7 +1,11 @@
+from pathlib import Path
+
 from haikuincidence.utils.data_utils import get_ignore_profile_list
 from haikuincidence.utils.text_utils import check_profile
 
-ignore_profile_list = get_ignore_profile_list()
+data_dir = Path.cwd().parent / "data"
+
+ignore_profile_list = get_ignore_profile_list(data_dir / "ignore_profile.txt")
 match_substring = False
 remove_punct = True
 

@@ -1,9 +1,7 @@
 name: Build and deploy
 
 on:
-  pull_request:
-    branches:
-      - main
+  push:
 
 jobs:
   build:

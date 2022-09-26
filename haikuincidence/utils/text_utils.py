@@ -80,20 +80,24 @@ def clean_text(text: str) -> str:
         ]
     )
 
-    # Decode unicode letters and keep emojis
+    # Convert emoji to text
+    text_cleaned = emoji.demojize(text_cleaned)
+
+    # Decode unicode letters
     text_decoded = " ".join(
         [
             "".join(
                 [
-                    unidecode(letter)
-                    if (not emoji.is_emoji(letter) and letter not in UNICODE_KEEP)
-                    else letter
+                    unidecode(letter) if (letter not in UNICODE_KEEP) else letter
                     for letter in word
                 ]
             )
             for word in text_cleaned.split()
         ]
     )
+
+    # Convert text to emoji
+    text_decoded = emoji.emojize(text_decoded)
 
     return text_decoded
 

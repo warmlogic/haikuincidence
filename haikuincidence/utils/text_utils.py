@@ -315,6 +315,9 @@ def text_contains_ignore_list_plural(
     else:
         text_compare = text.lower().split()
 
+    # Create versions of tokens without repeated final letters
+    text_compare.extend([remove_repeat_last_letter(t) for t in text_compare])
+
     return any(
         [
             all(

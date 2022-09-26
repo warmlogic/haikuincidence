@@ -3,25 +3,23 @@ import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from pprint import pformat
-from time import sleep
 
 import inflect
 import pytz
 from dotenv import load_dotenv
 from nltk.corpus import cmudict
-from tenacity import retry, stop_after_attempt, wait_exponential, wait_random
+from tenacity import retry, wait_fixed
 from twython import Twython, TwythonError, TwythonRateLimitError, TwythonStreamer
-
-from haikuincidence.utils.data_base import Haiku, session_factory
-from haikuincidence.utils.data_utils import (
+from utils.data_base import Haiku, session_factory
+from utils.data_utils import (
     get_emoticons_list,
     get_ignore_profile_list,
     get_ignore_tweet_list,
     get_syllable_dict,
     get_track_str,
 )
-from haikuincidence.utils.haiku_utils import get_best_haiku, get_haiku
-from haikuincidence.utils.text_utils import (
+from utils.haiku_utils import get_best_haiku, get_haiku
+from utils.text_utils import (
     check_profile,
     check_text_wrapper,
     check_tweet,
@@ -35,26 +33,31 @@ from haikuincidence.utils.text_utils import (
 logging.basicConfig(format="{asctime} : {levelname} : {message}", style="{")
 logger = logging.getLogger("haiku_logger")
 
-SLEEP_SECONDS_BASE = 2
-DEFAULT_SLEEP_EXPONENT = 5
-
 ENVIRONMENT = os.getenv("ENVIRONMENT", default="development").lower()
 assert ENVIRONMENT in [
     "development",
     "production",
 ], f"Invalid ENVIRONMENT: {ENVIRONMENT}"
 
-# Read .env file for local development
+# Set up a root_dir to support running from different locations during development
 if ENVIRONMENT == "development":
-    env_path = Path.cwd().parent / ".env"
-    if env_path.exists():
-        _ = load_dotenv(dotenv_path=env_path)
+    if (Path.cwd() / "data").exists():
+        root_dir = Path.cwd()
+    elif (Path.cwd().parent / "data").exists():
+        root_dir = Path.cwd().parent
     else:
-        env_path = Path.cwd() / ".env"
-        if env_path.exists():
-            _ = load_dotenv(dotenv_path=env_path)
-        else:
-            raise OSError(".env file not found. Did you set it up?")
+        raise OSError(f"Running from unsupported directory: {Path.cwd()}")
+
+    # Read .env file for local development
+    dotenv_file = root_dir / ".env"
+    try:
+        with open(dotenv_file, "r") as fp:
+            _ = load_dotenv(stream=fp)
+    except FileNotFoundError:
+        logger.info(f"{dotenv_file} file not found. Did you set it up?")
+        raise
+else:
+    root_dir = Path.cwd()
 
 DEBUG_MODE = os.getenv("DEBUG_MODE", default="true").lower() == "true"
 
@@ -67,7 +70,6 @@ if DEBUG_MODE:
     EVERY_N_SECONDS = 1
     DELETE_OLDER_THAN_DAYS = None
     ROWS_TO_KEEP = None
-    # INITIAL_TIME = datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)
 else:
     logger.setLevel(logging.INFO)
     LOG_HAIKU = True
@@ -81,10 +83,6 @@ else:
     )
     ROWS_TO_KEEP = os.getenv("ROWS_TO_KEEP", default=None)
     ROWS_TO_KEEP = int(ROWS_TO_KEEP) if ROWS_TO_KEEP else None
-    # # Wait half the rate limit time before making first post
-    # INITIAL_TIME = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(
-    #     seconds=EVERY_N_SECONDS // 2
-    # )
 
 APP_KEY = os.getenv("API_KEY", default="")
 APP_SECRET = os.getenv("API_SECRET", default="")
@@ -118,29 +116,20 @@ class MyTwitterClient(Twython):
     Limits status update rate.
     """
 
+    DEFAULT_LAST_POST_TIME = datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)
+
     def __init__(self, *args, **kwargs):
         super(MyTwitterClient, self).__init__(*args, **kwargs)
         self.last_post_time = self.get_last_post_time()
-        # if initial_time is None:
-        #     # Wait half the rate limit time before making first post
-        #     initial_time = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(
-        #         seconds=EVERY_N_SECONDS // 2
-        #     )
-        # self.last_post_time = initial_time
 
-    @retry(
-        # stop=stop_after_attempt(7),
-        wait=wait_exponential(multiplier=4, min=4, max=32),
-        # reraise=True,
-    )
+    @retry(wait=wait_fixed(30))
     def get_last_post_time(self):
         """if our screen_name has a recent tweet, use that timestamp as the time of the
         last post
         """
-        # sleep_exponent = DEFAULT_SLEEP_EXPONENT
-        # while True:
         if DEBUG_MODE:
-            last_post_time = datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)
+            return self.DEFAULT_LAST_POST_TIME
+
         try:
             most_recent_tweet = self.get_user_timeline(
                 screen_name=MY_SCREEN_NAME, count=1, trim_user=True
@@ -154,17 +143,12 @@ class MyTwitterClient(Twython):
                 last_post_time = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(
                     seconds=EVERY_N_SECONDS // 2
                 )
-            # break
         except TwythonRateLimitError:
-            # seconds = SLEEP_SECONDS_BASE**sleep_exponent
-            logger.info("Rate limit exceeded when getting recent tweet.")
-            # sleep(seconds)
-            # sleep_exponent += 1
-            # continue
+            logger.info("Rate limit exceeded when getting recent tweet")
             raise
         except Exception:
-            logger.exception("Exception when getting recent tweet")
-            # break
+            logger.info("Exception when getting recent tweet")
+            last_post_time = self.DEFAULT_LAST_POST_TIME
 
         return last_post_time
 
@@ -184,28 +168,35 @@ class MyTwitterClient(Twython):
 
 
 class MyStreamer(TwythonStreamer):
-    def __init__(self, *args, **kwargs):
+    def __init__(
+        self,
+        twitter,
+        db_session,
+        track_str: str = "",
+        ignore_tweet_list: list = [],
+        ignore_profile_list: list = [],
+        syllable_dict: dict = {},
+        emoticons_list: list = [],
+        inflect_p=None,
+        pronounce_dict: dict = None,
+        *args,
+        **kwargs,
+    ):
         super(MyStreamer, self).__init__(*args, **kwargs)
-        self.sleep_exponent = DEFAULT_SLEEP_EXPONENT
-        self.twitter = kwargs.get("twitter")
-        self.db_session = kwargs.get("db_session")
-        self.track_str = kwargs.get("track_str", "")
-        self.ignore_tweet_list = kwargs.get("ignore_tweet_list", [])
-        self.ignore_profile_list = kwargs.get("ignore_profile_list", [])
-        self.syllable_dict = kwargs.get("syllable_dict", {})
-        self.emoticons_list = kwargs.get("emoticons_list", [])
-        self.inflect_p = kwargs.get("inflect_p")
-        self.pronounce_dict = kwargs.get("pronounce_dict", {})
+        self.twitter = twitter
+        self.db_session = db_session
+        self.track_str = track_str
+        self.ignore_tweet_list = ignore_tweet_list
+        self.ignore_profile_list = ignore_profile_list
+        self.syllable_dict = syllable_dict
+        self.emoticons_list = emoticons_list
+        self.inflect_p = inflect_p
+        self.pronounce_dict = pronounce_dict
 
-    @retry(
-        # stop=stop_after_attempt(7),
-        wait=wait_exponential(multiplier=4, min=4, max=32),
-        # reraise=True,
-    )
+    @retry(wait=wait_fixed(30))
     def stream_tweets(self):
-        # while True:
         # Use try/except to avoid ChunkedEncodingError
-        # https://github.com/ryanmcgrath/twython/issues/288
+        # https://github.com/ryanmcgrath/twython/issues/288#issuecomment-66360160
         try:
             if self.track_str:
                 # search specific keywords
@@ -214,18 +205,12 @@ class MyStreamer(TwythonStreamer):
                 # get samples from stream
                 self.statuses.sample()
         except TwythonRateLimitError:
-            # seconds = SLEEP_SECONDS_BASE**stream.sleep_exponent
             logger.info("Rate limit exceeded when streaming tweets.")
-            # sleep(seconds)
-            # stream.sleep_exponent += 1
             raise
         except Exception:
             logger.exception("Exception when streaming tweets")
 
     def on_success(self, status):
-        # Reset sleep seconds exponent
-        self.sleep_exponent = DEFAULT_SLEEP_EXPONENT
-
         # If this tweet was truncated, get the full text
         if "truncated" in status and status["truncated"]:
             status_full = self.twitter.get_user_timeline(
@@ -395,89 +380,26 @@ class MyStreamer(TwythonStreamer):
         logger.info(f"content: {content}")
         logger.info(f"headers: {headers}")
         if status_code == 420:
+            # Server overloaded, try again in a few seconds
+            # Exceeded connection limit for user
+            # Too many requests recently
             raise TwythonRateLimitError("Too many requests recently")
-            # # Server overloaded, try again in a few seconds
-            # # Exceeded connection limit for user
-            # # Too many requests recently
-            # seconds = SLEEP_SECONDS_BASE**self.sleep_exponent
-            # logger.warning(
-            #     f"Too many requests recently. Sleeping for {seconds} seconds."
-            # )
-            # sleep(seconds)
-            # self.sleep_exponent += 1
         else:
             # Unable to decode response
             # (or something else)
             pass
 
 
-# @retry(
-#     # stop=stop_after_attempt(7),
-#     wait=wait_exponential(multiplier=4, min=4, max=32),
-#     # reraise=True,
-# )
-# def set_last_post_time(twitter):
-#     """if our screen_name has a recent tweet, use that timestamp as the time of the
-#     last post
-#     """
-#     # sleep_exponent = DEFAULT_SLEEP_EXPONENT
-#     # while True:
-#     try:
-#         most_recent_tweet = twitter.get_user_timeline(
-#             screen_name=MY_SCREEN_NAME, count=1, trim_user=True
-#         )
-#         if len(most_recent_tweet) > 0:
-#             twitter.last_post_time = date_string_to_datetime(
-#                 most_recent_tweet[0]["created_at"]
-#             )
-#         # break
-#     except TwythonRateLimitError:
-#         # seconds = SLEEP_SECONDS_BASE**sleep_exponent
-#         logger.info("Rate limit exceeded when getting recent tweet.")
-#         # sleep(seconds)
-#         # sleep_exponent += 1
-#         # continue
-#         raise
-#     except Exception:
-#         logger.exception("Exception when getting recent tweet")
-#         # break
-
-
-# @retry(
-#     # stop=stop_after_attempt(7),
-#     wait=wait_exponential(multiplier=4, min=4, max=32),
-#     # reraise=True,
-# )
-# def stream_tweets(stream, track_str):
-#     # while True:
-#     # Use try/except to avoid ChunkedEncodingError
-#     # https://github.com/ryanmcgrath/twython/issues/288
-#     try:
-#         if track_str:
-#             # search specific keywords
-#             stream.statuses.filter(track=track_str)
-#         else:
-#             # get samples from stream
-#             stream.statuses.sample()
-#     except TwythonRateLimitError:
-#         # seconds = SLEEP_SECONDS_BASE**stream.sleep_exponent
-#         logger.info("Rate limit exceeded when streaming tweets.")
-#         # sleep(seconds)
-#         # stream.sleep_exponent += 1
-#         raise
-#     except Exception:
-#         logger.exception("Exception when streaming tweets")
-
-
 def main():
     logger.info("Initializing dependencies...")
 
     # get data to use for dealing with tweets
-    track_str = get_track_str()
-    ignore_tweet_list = get_ignore_tweet_list()
-    ignore_profile_list = get_ignore_profile_list()
-    syllable_dict = get_syllable_dict()
-    emoticons_list = get_emoticons_list()
+    data_dir = root_dir / "data"
+    track_str = get_track_str(data_dir / "track.txt")
+    ignore_tweet_list = get_ignore_tweet_list(data_dir / "ignore_tweet.txt")
+    ignore_profile_list = get_ignore_profile_list(data_dir / "ignore_profile.txt")
+    syllable_dict = get_syllable_dict(data_dir / "syllables.json")
+    emoticons_list = get_emoticons_list(data_dir / "emoticons.txt")
 
     # Use inflect to change digits to their English word equivalent
     inflect_p = inflect.engine()
@@ -487,14 +409,11 @@ def main():
     # Establish connection to Twitter
     # Uses OAuth1 ("user auth") for authentication
     twitter = MyTwitterClient(
-        # initial_time=INITIAL_TIME,
         app_key=APP_KEY,
         app_secret=APP_SECRET,
         oauth_token=OAUTH_TOKEN,
         oauth_token_secret=OAUTH_TOKEN_SECRET,
     )
-
-    # twitter.set_last_post_time()
 
     # Establish connection to database
     db_session = session_factory(DATABASE_URL)
@@ -522,33 +441,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # logger.info("Initializing tweet streamer...")
-    # stream = MyStreamer(
-    #     app_key=APP_KEY,
-    #     app_secret=APP_SECRET,
-    #     oauth_token=OAUTH_TOKEN,
-    #     oauth_token_secret=OAUTH_TOKEN_SECRET,
-    # )
-
-    # logger.info("Looking for haikus...")
-    # stream_tweets(stream, track_str)
-    # while True:
-    #     # Use try/except to avoid ChunkedEncodingError
-    #     # https://github.com/ryanmcgrath/twython/issues/288
-    #     try:
-    #         if track_str:
-    #             # search specific keywords
-    #             stream.statuses.filter(track=track_str)
-    #         else:
-    #             # get samples from stream
-    #             stream.statuses.sample()
-    #     except TwythonRateLimitError:
-    #         seconds = SLEEP_SECONDS_BASE**stream.sleep_exponent
-    #         logger.info(
-    #             "Rate limit exceeded when streaming tweets. Sleeping for"
-    #             f" {seconds} seconds."
-    #         )
-    #         sleep(seconds)
-    #         stream.sleep_exponent += 1
-    #     except Exception as e:
-    #         logger.info(f"Exception when streaming tweets: {e}")

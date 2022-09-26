@@ -3,7 +3,7 @@ from pathlib import Path
 from haikuincidence.utils.data_utils import get_ignore_profile_list
 from haikuincidence.utils.text_utils import check_profile
 
-data_dir = Path.cwd().parent / "data"
+data_dir = Path.cwd() / "data"
 
 ignore_profile_list = get_ignore_profile_list(data_dir / "ignore_profile.txt")
 match_substring = False

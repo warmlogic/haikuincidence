@@ -13,7 +13,7 @@ from haikuincidence.utils.haiku_utils import count_syllables, get_haiku
 from haikuincidence.utils.text_utils import clean_text
 
 # get data to use for dealing with tweets
-data_dir = Path.cwd().parent / "data"
+data_dir = Path.cwd() / "data"
 track_str = get_track_str(data_dir / "track.txt")
 ignore_tweet_list = get_ignore_tweet_list(data_dir / "ignore_tweet.txt")
 syllable_dict = get_syllable_dict(data_dir / "syllables.json")

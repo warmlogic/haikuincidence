@@ -10,8 +10,14 @@ import inflect
 import pytz
 from dotenv import load_dotenv
 from nltk.corpus import cmudict
-from tenacity import retry, wait_fixed
-from twython import Twython, TwythonError, TwythonRateLimitError, TwythonStreamer
+from tenacity import retry, stop_after_attempt, wait_fixed
+from twython import (
+    Twython,
+    TwythonAuthError,
+    TwythonError,
+    TwythonRateLimitError,
+    TwythonStreamer,
+)
 from utils.data_base import Haiku, session_factory
 from utils.data_utils import (
     get_emoticons_list,
@@ -153,19 +159,38 @@ class MyTwitterClient(Twython):
 
         return last_post_time
 
+    @retry(wait=wait_fixed(RETRY_WAIT_SECONDS), stop=stop_after_attempt(3))
     def update_status_check_rate(self, *args, **kwargs):
         current_time = datetime.utcnow().replace(tzinfo=pytz.UTC)
         logger.info(f"Current time: {current_time}")
         logger.info(f"Previous post time: {self.last_post_time}")
         logger.info(f"Difference: {current_time - self.last_post_time}")
+
+        posted_status = False
         if (current_time - self.last_post_time).total_seconds() > EVERY_N_SECONDS:
-            self.update_status(*args, **kwargs)
-            self.last_post_time = current_time
-            logger.info("Success")
-            return True
+            try:
+                self.update_status(*args, **kwargs)
+                self.last_post_time = current_time
+                logger.info("Success")
+                posted_status = True
+            except TwythonAuthError as e:
+                logger.info(
+                    f"Authorization error. Did you create read+write credentials? {e}"
+                )
+                raise
+            except TwythonRateLimitError as e:
+                logger.info(f"Rate limit exceeded when posting haiku: {e}")
+                raise
+            except TwythonError as e:
+                logger.info(f"Encountered some other error: {e}")
+                raise
         else:
-            logger.info("Not posting haiku due to rate limit")
-            return False
+            logger.info(
+                "Not posting haiku due to our post limit, once every"
+                f" {EVERY_N_SECONDS:,} seconds"
+            )
+
+        return posted_status
 
 
 class MyStreamer(TwythonStreamer):

@@ -451,7 +451,7 @@ def construct_haiku_to_post(h, this_status) -> dict:
     }
 
 
-def get_best_haiku(haikus, twitter, session) -> dict:
+def get_best_haiku(haikus, twitter, db_session) -> dict:
     """Attempt to get the haiku by assessing verified user,
     or number of favorites, retweets, or followers.
     High probability that followers will yield a tweet.
@@ -477,7 +477,7 @@ def get_best_haiku(haikus, twitter, session) -> dict:
             # Tweet no longer exists
             this_status = {}
             # soft delete
-            Haiku.update_haiku_deleted(session, h.status_id_str)
+            Haiku.update_haiku_deleted(db_session, h.status_id_str)
         if this_status:
             if this_status["user"]["verified"]:
                 haiku_to_post = construct_haiku_to_post(h, this_status)
@@ -505,7 +505,7 @@ def get_best_haiku(haikus, twitter, session) -> dict:
                 # Tweet no longer exists, not going to post a haiku this time
                 this_status = {}
                 # soft delete
-                Haiku.update_haiku_deleted(session, h.status_id_str)
+                Haiku.update_haiku_deleted(db_session, h.status_id_str)
             if this_status:
                 haiku_to_post = construct_haiku_to_post(h, this_status)
                 break

@@ -39,7 +39,7 @@ class Haiku(Base):
     date_deleted = Column(DateTime, nullable=True)
 
     @classmethod
-    def add_haiku(cls, session, status, text, haiku, log_haiku: bool = True):
+    def add_haiku(cls, db_session, status, text, haiku, log_haiku: bool = True):
         """Add haiku record to the database"""
         tweet_haiku = cls(
             status_id_str=status["id_str"],
@@ -55,43 +55,43 @@ class Haiku(Base):
         )
 
         if log_haiku:
-            session.add(tweet_haiku)
+            db_session.add(tweet_haiku)
             try:
-                session.commit()
+                db_session.commit()
             except Exception as e:
                 logger.warning(f"Exception when adding haiku: {e}")
-                session.rollback()
+                db_session.rollback()
 
         return tweet_haiku
 
     @classmethod
-    def get_haikus_all(cls, session) -> list:
+    def get_haikus_all(cls, db_session) -> list:
         """Get all records"""
-        q = session.query(cls)
+        q = db_session.query(cls)
         return q.all()
 
     @classmethod
-    def get_haikus_posted(cls, session) -> list:
+    def get_haikus_posted(cls, db_session) -> list:
         """Get all posted records"""
         q = (
-            session.query(cls)
+            db_session.query(cls)
             .filter(cls.date_posted != None)  # noqa: E711
             .filter(cls.date_deleted == None)  # noqa: E711
         )
         return q.all()
 
     @classmethod
-    def get_haikus_unposted(cls, session) -> list:
+    def get_haikus_unposted(cls, db_session) -> list:
         """Get all unposted records"""
         q = (
-            session.query(cls)
+            db_session.query(cls)
             .filter(cls.date_posted == None)  # noqa: E711
             .filter(cls.date_deleted == None)  # noqa: E711
         )
         return q.all()
 
     @classmethod
-    def get_haikus_unposted_timedelta(cls, session, td_seconds: int = None) -> list:
+    def get_haikus_unposted_timedelta(cls, db_session, td_seconds: int = None) -> list:
         """Get all unposted records from the last N seconds"""
         if td_seconds is None:
             td_seconds = 3600
@@ -99,7 +99,7 @@ class Haiku(Base):
             seconds=td_seconds
         )
         q = (
-            session.query(cls)
+            db_session.query(cls)
             .filter(cls.created_at > filter_td)
             .filter(cls.date_posted == None)  # noqa: E711
             .filter(cls.date_deleted == None)  # noqa: E711
@@ -107,55 +107,55 @@ class Haiku(Base):
         return q.all()
 
     @classmethod
-    def update_haiku_posted(cls, session, status_id_str: str):
+    def update_haiku_posted(cls, db_session, status_id_str: str):
         """Mark haiku as posted"""
         try:
-            session.query(cls).filter(cls.status_id_str == status_id_str).update(
+            db_session.query(cls).filter(cls.status_id_str == status_id_str).update(
                 {"date_posted": datetime.utcnow().replace(tzinfo=pytz.UTC)}
             )
-            session.commit()
+            db_session.commit()
         except Exception as e:
             logger.warning(f"Exception when updating haiku as posted: {e}")
-            session.rollback()
+            db_session.rollback()
 
     @classmethod
-    def update_haiku_unposted(cls, session, status_id_str: str):
+    def update_haiku_unposted(cls, db_session, status_id_str: str):
         """Mark haiku as unposted"""
         try:
-            session.query(cls).filter(cls.status_id_str == status_id_str).update(
+            db_session.query(cls).filter(cls.status_id_str == status_id_str).update(
                 {"date_posted": None}
             )
-            session.commit()
+            db_session.commit()
         except Exception as e:
             logger.warning(f"Exception when updating haiku as unposted: {e}")
-            session.rollback()
+            db_session.rollback()
 
     @classmethod
-    def update_haiku_deleted(cls, session, status_id_str: str):
+    def update_haiku_deleted(cls, db_session, status_id_str: str):
         """Mark haiku as deleted"""
         try:
-            session.query(cls).filter(cls.status_id_str == status_id_str).update(
+            db_session.query(cls).filter(cls.status_id_str == status_id_str).update(
                 {"date_deleted": datetime.utcnow().replace(tzinfo=pytz.UTC)}
             )
-            session.commit()
+            db_session.commit()
         except Exception as e:
             logger.warning(f"Exception when updating haiku as deleted: {e}")
-            session.rollback()
+            db_session.rollback()
 
     @classmethod
-    def update_haiku_undeleted(cls, session, status_id_str: str):
+    def update_haiku_undeleted(cls, db_session, status_id_str: str):
         """Mark haiku as undeleted"""
         try:
-            session.query(cls).filter(cls.status_id_str == status_id_str).update(
+            db_session.query(cls).filter(cls.status_id_str == status_id_str).update(
                 {"date_deleted": None}
             )
-            session.commit()
+            db_session.commit()
         except Exception as e:
             logger.warning(f"Exception when updating haiku as undeleted: {e}")
-            session.rollback()
+            db_session.rollback()
 
     @classmethod
-    def delete_haikus_unposted_timedelta(cls, session, days: float = None) -> list:
+    def delete_haikus_unposted_timedelta(cls, db_session, days: float = None) -> list:
         """Delete all unposted records older than N days"""
         if days is not None:
             ts_end = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(days=days)
@@ -167,14 +167,14 @@ class Haiku(Base):
                     .where(cls.date_posted == None)  # noqa: E711
                 )
 
-                session.execute(delete_q)
-                session.commit()
+                db_session.execute(delete_q)
+                db_session.commit()
             except Exception as e:
                 logger.warning(f"Exception when deleting old unposted haikus: {e}")
-                session.rollback()
+                db_session.rollback()
 
     @classmethod
-    def delete_haikus_posted_timedelta(cls, session, days: float = None) -> list:
+    def delete_haikus_posted_timedelta(cls, db_session, days: float = None) -> list:
         """Delete all posted records older than N days"""
         if days is not None:
             ts_end = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(days=days)
@@ -186,17 +186,17 @@ class Haiku(Base):
                     .where(cls.date_posted != None)  # noqa: E711
                 )
 
-                session.execute(delete_q)
-                session.commit()
+                db_session.execute(delete_q)
+                db_session.commit()
             except Exception as e:
                 logger.warning(f"Exception when deleting old posted haikus: {e}")
-                session.rollback()
+                db_session.rollback()
 
     @classmethod
-    def keep_haikus_n_rows(cls, session, n: int = None):
+    def keep_haikus_n_rows(cls, db_session, n: int = None):
         """Keep the most recent n rows"""
         if n is not None:
-            ids = session.query(cls.id).order_by(desc(cls.created_at)).all()
+            ids = db_session.query(cls.id).order_by(desc(cls.created_at)).all()
             ids_to_delete = [x[0] for x in ids[n:]]
 
             if ids_to_delete:
@@ -204,10 +204,10 @@ class Haiku(Base):
                     logger.info(f"Keeping most recent {n} rows of haikus")
                     delete_q = cls.__table__.delete().where(cls.id.in_(ids_to_delete))
 
-                    session.execute(delete_q)
-                    session.commit()
+                    db_session.execute(delete_q)
+                    db_session.commit()
                 except Exception as e:
                     logger.warning(
                         f"Exception when keeping most recent rows of haikus: {e}"
                     )
-                    session.rollback()
+                    db_session.rollback()

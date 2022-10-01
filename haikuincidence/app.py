@@ -131,9 +131,7 @@ class MyTwitterClient(Twython):
 
     @retry(wait=wait_fixed(RETRY_WAIT_SECONDS))
     def get_last_post_time(self):
-        """if our screen_name has a recent tweet, use that timestamp as the time of the
-        last post
-        """
+        """get the time of our screen_name's most recent tweet"""
         if DEBUG_MODE:
             return self.DEFAULT_LAST_POST_TIME
 
@@ -159,38 +157,43 @@ class MyTwitterClient(Twython):
 
         return last_post_time
 
-    @retry(wait=wait_fixed(RETRY_WAIT_SECONDS), stop=stop_after_attempt(3))
-    def update_status_check_rate(self, *args, **kwargs):
-        current_time = datetime.utcnow().replace(tzinfo=pytz.UTC)
+    def can_post(self, current_time):
         logger.info(f"Current time: {current_time}")
         logger.info(f"Previous post time: {self.last_post_time}")
         logger.info(f"Difference: {current_time - self.last_post_time}")
 
-        posted_status = False
         if (current_time - self.last_post_time).total_seconds() > EVERY_N_SECONDS:
-            try:
-                self.update_status(*args, **kwargs)
-                self.last_post_time = current_time
-                logger.info("Success")
-                posted_status = True
-            except TwythonAuthError as e:
-                logger.info(
-                    f"Authorization error. Did you create read+write credentials? {e}"
-                )
-                raise
-            except TwythonRateLimitError as e:
-                logger.info(f"Rate limit exceeded when posting haiku: {e}")
-                raise
-            except TwythonError as e:
-                logger.info(f"Encountered some other error: {e}")
-                raise
+            return True
         else:
+            return False
+
+    @retry(wait=wait_fixed(RETRY_WAIT_SECONDS), stop=stop_after_attempt(3))
+    def _update_status(self, *args, **kwargs):
+        current_time = datetime.utcnow().replace(tzinfo=pytz.UTC)
+
+        if not self.can_post(current_time):
             logger.info(
                 "Not posting haiku due to our post limit, once every"
                 f" {EVERY_N_SECONDS:,} seconds"
             )
+            return False
 
-        return posted_status
+        try:
+            _ = self.update_status(*args, **kwargs)
+            self.last_post_time = current_time
+            logger.info("Successfully updated status")
+            return True
+        except TwythonAuthError as e:
+            logger.info(
+                f"Authorization error. Did you create read+write credentials? {e}"
+            )
+            raise
+        except TwythonRateLimitError as e:
+            logger.info(f"Rate limit exceeded when posting haiku: {e}")
+            raise
+        except TwythonError as e:
+            logger.info(f"Encountered some other error: {e}")
+            raise
 
 
 class MyStreamer(TwythonStreamer):
@@ -366,7 +369,7 @@ class MyStreamer(TwythonStreamer):
         if POST_AS_REPLY:
             logger.info("Attempting to post haiku as reply...")
             # Post a tweet, sending as a reply to the coincidental haiku
-            posted_status = self.twitter.update_status_check_rate(
+            posted_status = self.twitter._update_status(
                 status=haiku_attributed,
                 in_reply_to_status_id=status["id_str"],
                 attachment_url=tweet_url,
@@ -375,7 +378,7 @@ class MyStreamer(TwythonStreamer):
             logger.info("Attempting to post haiku, but not as reply...")
             # Post a tweet, but not as a reply to the coincidental haiku
             # The user will not get a notification
-            posted_status = self.twitter.update_status_check_rate(
+            posted_status = self.twitter._update_status(
                 status=haiku_attributed,
                 attachment_url=tweet_url,
             )
@@ -433,7 +436,7 @@ def main():
     # Use the CMU dictionary to count syllables
     pronounce_dict = cmudict.dict()
 
-    # Establish connection to Twitter
+    # Establish connection to Twitter;
     # Uses OAuth1 ("user auth") for authentication
     twitter = MyTwitterClient(
         app_key=APP_KEY,

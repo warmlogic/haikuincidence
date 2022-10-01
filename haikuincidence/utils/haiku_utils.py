@@ -2,15 +2,15 @@ import logging
 import math
 import re
 
-# import random
-from typing import Dict, List
-
 from .data_base import Haiku
 from .text_utils import (
     clean_token,
     remove_repeat_last_letter,
     text_might_contain_acronym,
 )
+
+# import random
+
 
 logger = logging.getLogger("haiku_logger")
 
@@ -24,9 +24,9 @@ contraction_ends = ["d", "ll", "m", "re", "s", "t", "ve"]
 def count_syllables(
     token: str,
     inflect_p,
-    pronounce_dict: Dict,
-    syllable_dict: Dict,
-    emoticons_list: List,
+    pronounce_dict: dict,
+    syllable_dict: dict,
+    emoticons_list: list,
     guess_syl_method: str,
 ) -> int:
     if token in emoticons_list:
@@ -35,7 +35,7 @@ def count_syllables(
     # find whether the token is an exact match to a dictionary entry
     if token in syllable_dict:
         token_syl = syllable_dict[token]["syllables"]
-        source = "Dict"
+        source = "dict"
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f"    {source}: {token}: {token_syl}")
         return token_syl
@@ -82,19 +82,19 @@ def count_syllables(
 
         if sub_token in syllable_dict:
             sub_token_syl = syllable_dict[sub_token]["syllables"]
-            source = "Dict"
+            source = "dict"
             sub_syllable_count += sub_token_syl
         elif remove_repeat_last_letter(sub_token) in syllable_dict:
             sub_token_syl = syllable_dict[remove_repeat_last_letter(sub_token)][
                 "syllables"
             ]
-            source = "Dict (remove repeat)"
+            source = "dict (remove repeat)"
             sub_syllable_count += sub_token_syl
         elif (sub_token_orig.endswith("s") or sub_token_orig.endswith("z")) and (
             sub_token[:-1] in syllable_dict
         ):
             sub_token_syl = syllable_dict[sub_token[:-1]]["syllables"]
-            source = "Dict (singular)"
+            source = "dict (singular)"
             sub_syllable_count += sub_token_syl
         elif sub_token in pronounce_dict:
             sub_token_syl = max(
@@ -345,9 +345,9 @@ def guess_syllables(word: str, method: str = None, mean_round_dir: str = None) -
 def get_haiku(
     text: str,
     inflect_p,
-    pronounce_dict: Dict,
-    syllable_dict: Dict,
-    emoticons_list: List,
+    pronounce_dict: dict,
+    syllable_dict: dict,
+    emoticons_list: list,
     guess_syl_method: str,
 ) -> str:
     """Attempt to turn a string into a haiku.
@@ -437,7 +437,7 @@ def get_haiku(
         return ""
 
 
-def construct_haiku_to_post(h, this_status) -> Dict:
+def construct_haiku_to_post(h, this_status) -> dict:
     return {
         "user_id_str": h.user_id_str,
         "user_screen_name": h.user_screen_name,
@@ -451,7 +451,7 @@ def construct_haiku_to_post(h, this_status) -> Dict:
     }
 
 
-def get_best_haiku(haikus, twitter, session) -> Dict:
+def get_best_haiku(haikus, twitter, session) -> dict:
     """Attempt to get the haiku by assessing verified user,
     or number of favorites, retweets, or followers.
     High probability that followers will yield a tweet.

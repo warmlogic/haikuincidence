@@ -1,6 +1,5 @@
 import logging
 from datetime import datetime, timedelta
-from typing import List
 
 import pytz
 from sqlalchemy import Boolean, Column, DateTime, Integer, String, create_engine, desc
@@ -66,13 +65,13 @@ class Haiku(Base):
         return tweet_haiku
 
     @classmethod
-    def get_haikus_all(cls, session) -> List:
+    def get_haikus_all(cls, session) -> list:
         """Get all records"""
         q = session.query(cls)
         return q.all()
 
     @classmethod
-    def get_haikus_posted(cls, session) -> List:
+    def get_haikus_posted(cls, session) -> list:
         """Get all posted records"""
         q = (
             session.query(cls)
@@ -82,7 +81,7 @@ class Haiku(Base):
         return q.all()
 
     @classmethod
-    def get_haikus_unposted(cls, session) -> List:
+    def get_haikus_unposted(cls, session) -> list:
         """Get all unposted records"""
         q = (
             session.query(cls)
@@ -92,7 +91,7 @@ class Haiku(Base):
         return q.all()
 
     @classmethod
-    def get_haikus_unposted_timedelta(cls, session, td_seconds: int = None) -> List:
+    def get_haikus_unposted_timedelta(cls, session, td_seconds: int = None) -> list:
         """Get all unposted records from the last N seconds"""
         if td_seconds is None:
             td_seconds = 3600
@@ -156,7 +155,7 @@ class Haiku(Base):
             session.rollback()
 
     @classmethod
-    def delete_haikus_unposted_timedelta(cls, session, days: float = None) -> List:
+    def delete_haikus_unposted_timedelta(cls, session, days: float = None) -> list:
         """Delete all unposted records older than N days"""
         if days is not None:
             ts_end = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(days=days)
@@ -175,7 +174,7 @@ class Haiku(Base):
                 session.rollback()
 
     @classmethod
-    def delete_haikus_posted_timedelta(cls, session, days: float = None) -> List:
+    def delete_haikus_posted_timedelta(cls, session, days: float = None) -> list:
         """Delete all posted records older than N days"""
         if days is not None:
             ts_end = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(days=days)

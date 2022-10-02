@@ -35,7 +35,7 @@ def count_syllables(
     # find whether the token is an exact match to a dictionary entry
     if token in syllable_dict:
         token_syl = syllable_dict[token]["syllables"]
-        source = "dict"
+        source = "Syllable dictionary"
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f"    {source}: {token}: {token_syl}")
         return token_syl
@@ -82,19 +82,19 @@ def count_syllables(
 
         if sub_token in syllable_dict:
             sub_token_syl = syllable_dict[sub_token]["syllables"]
-            source = "dict"
+            source = "Syllable dictionary"
             sub_syllable_count += sub_token_syl
         elif remove_repeat_last_letter(sub_token) in syllable_dict:
             sub_token_syl = syllable_dict[remove_repeat_last_letter(sub_token)][
                 "syllables"
             ]
-            source = "dict (remove repeat)"
+            source = "Syllable dictionary (remove repeat last letter)"
             sub_syllable_count += sub_token_syl
         elif (sub_token_orig.endswith("s") or sub_token_orig.endswith("z")) and (
             sub_token[:-1] in syllable_dict
         ):
             sub_token_syl = syllable_dict[sub_token[:-1]]["syllables"]
-            source = "dict (singular)"
+            source = "Syllable dictionary (singular)"
             sub_syllable_count += sub_token_syl
         elif sub_token in pronounce_dict:
             sub_token_syl = max(
@@ -103,7 +103,7 @@ def count_syllables(
                     for x in pronounce_dict[sub_token]
                 ]
             )
-            source = "CMU"
+            source = "CMU dictionary"
             sub_syllable_count += sub_token_syl
         elif remove_repeat_last_letter(sub_token) in pronounce_dict:
             sub_token_syl = max(
@@ -112,7 +112,7 @@ def count_syllables(
                     for x in pronounce_dict[remove_repeat_last_letter(sub_token)]
                 ]
             )
-            source = "CMU (remove repeat)"
+            source = "CMU dictionary (remove repeat last letter)"
             sub_syllable_count += sub_token_syl
         elif (sub_token_orig.endswith("s") or sub_token_orig.endswith("z")) and (
             sub_token[:-1] in pronounce_dict
@@ -123,7 +123,7 @@ def count_syllables(
                     for x in pronounce_dict[sub_token[:-1]]
                 ]
             )
-            source = "CMU (singular)"
+            source = "CMU dictionary (singular)"
             sub_syllable_count += sub_token_syl
         else:
             # it's not a "real" word
@@ -138,7 +138,7 @@ def count_syllables(
                     emoticons_list,
                     guess_syl_method,
                 )
-                source = "Non-letter chars"
+                source = "Non-letter characters"
                 sub_syllable_count += sub_token_syl
             else:
                 if "'" in sub_token:
@@ -146,7 +146,7 @@ def count_syllables(
                     if sub_token.rsplit("'")[-1] in contraction_ends:
                         # ends with one of the contraction endings; make a guess
                         sub_token_syl = guess_syllables(sub_token, guess_syl_method)
-                        source = "Guess"
+                        source = "Syllable guess"
                         sub_syllable_count += sub_token_syl
                     else:
                         # doesn't end with a contraction ending;
@@ -181,7 +181,7 @@ def count_syllables(
                         sub_token_syl = guess_syllables(
                             remove_repeat_last_letter(sub_token), guess_syl_method
                         )
-                        source = "Guess"
+                        source = "Syllable guess"
                         sub_syllable_count += sub_token_syl
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f"    {source}: {sub_token}: {sub_token_syl}")

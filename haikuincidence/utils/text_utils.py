@@ -2,7 +2,6 @@ import logging
 import re
 import unicodedata
 from datetime import datetime
-from typing import List
 
 import emoji
 import pytz
@@ -104,7 +103,7 @@ def clean_text(text: str) -> str:
 
 def check_profile(
     status,
-    ignore_profile_list: List[str],
+    ignore_profile_list: list[str],
     match_substring: bool = False,
     remove_punct: bool = True,
 ) -> bool:
@@ -127,7 +126,7 @@ def check_profile(
     )
 
 
-def check_text_wrapper(status, ignore_list: List[str]) -> bool:
+def check_text_wrapper(status, ignore_list: list[str]) -> bool:
     tweet_body = get_tweet_body(status)
     text = clean_text(tweet_body)
 
@@ -173,8 +172,8 @@ def get_tweet_body(status):
 def check_tweet(
     status,
     language: str = "en",
-    ignore_user_screen_names: List[str] = [],
-    ignore_user_id_str: List[str] = [],
+    ignore_user_screen_names: list[str] = [],
+    ignore_user_id_str: list[str] = [],
     ignore_possibly_sensitive: bool = False,
     ignore_quote_status: bool = True,
     ignore_reply_status: bool = True,
@@ -298,7 +297,7 @@ def text_contains_url(text: str) -> bool:
 
 
 def text_contains_ignore_list_plural(
-    text: str, ignore_list: List[str], match_substring: bool = False
+    text: str, ignore_list: list[str], match_substring: bool = False
 ) -> bool:
     """Return True if anything from the ignore list is in the text.
 
@@ -341,7 +340,7 @@ def text_contains_ignore_list_plural(
 
 
 def text_contains_ignore_list(
-    text: str, ignore_list: List[str], match_substring: bool = False
+    text: str, ignore_list: list[str], match_substring: bool = False
 ) -> bool:
     """Return True if anything from the ignore list is in the text.
     Each ignore list line is considered separately (OR logic).
@@ -447,7 +446,7 @@ def clean_token(token: str, unicode_normalize_form: str = "NFKC") -> str:
     return token_clean
 
 
-# def split_acronym(token: str) -> List[str]:
+# def split_acronym(token: str) -> list[str]:
 #     """Split short acronyms. One option for all caps, one for lowercase.
 #     Otherwise return the token.
 #     """

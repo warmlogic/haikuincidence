@@ -69,7 +69,7 @@ jobs:
         run: poetry run black --check --diff --color .
 
       - name: Check imports
-        run: poetry run isort --check .
+        run: poetry run ruff check .
 
       - name: Check code style
         run: poetry run flake8 .

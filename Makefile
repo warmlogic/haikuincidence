@@ -11,13 +11,9 @@ list:
 format:
 	black --preview .
 
-.PHONY: sort
-sort:
-	isort --profile black .
-
 .PHONY: stylecheck
 stylecheck:
-	flake8 .
+	ruff check .
 
 .PHONY: typecheck
 typecheck:
@@ -26,7 +22,6 @@ typecheck:
 .PHONY: lint
 lint:
 	make format
-	make sort
 	make stylecheck
 
 .PHONY: test

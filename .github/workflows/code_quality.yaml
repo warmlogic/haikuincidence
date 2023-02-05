@@ -68,11 +68,8 @@ jobs:
       - name: Check formatting
         run: poetry run black --check --diff --color .
 
-      - name: Check imports
-        run: poetry run ruff check .
-
       - name: Check code style
-        run: poetry run flake8 .
+        run: poetry run ruff check .
 
 
   test:

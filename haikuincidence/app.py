@@ -162,10 +162,7 @@ class MyTwitterClient(Twython):
         logger.info(f"Previous post time: {self.last_post_time}")
         logger.info(f"Difference: {current_time - self.last_post_time}")
 
-        if (current_time - self.last_post_time).total_seconds() > EVERY_N_SECONDS:
-            return True
-        else:
-            return False
+        return (current_time - self.last_post_time).total_seconds() > EVERY_N_SECONDS
 
     @retry(wait=wait_fixed(RETRY_WAIT_SECONDS), stop=stop_after_attempt(3))
     def _update_status(self, *args, **kwargs):
@@ -202,16 +199,22 @@ class MyStreamer(TwythonStreamer):
         twitter,
         db_session,
         track_str: str = "",
-        ignore_tweet_list: list = [],
-        ignore_profile_list: list = [],
-        syllable_dict: dict = {},
-        emoticons_list: list = [],
+        ignore_tweet_list: list = None,
+        ignore_profile_list: list = None,
+        syllable_dict: dict = None,
+        emoticons_list: list = None,
         inflect_p=None,
         pronounce_dict: dict = None,
         *args,
         **kwargs,
     ):
         super(MyStreamer, self).__init__(*args, **kwargs)
+
+        ignore_tweet_list = ignore_tweet_list or []
+        ignore_profile_list = ignore_profile_list or []
+        syllable_dict = syllable_dict or {}
+        emoticons_list = emoticons_list or []
+
         self.twitter = twitter
         self.db_session = db_session
         self.track_str = track_str

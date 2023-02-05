@@ -172,8 +172,8 @@ def get_tweet_body(status):
 def check_tweet(
     status,
     language: str = "en",
-    ignore_user_screen_names: list[str] = [],
-    ignore_user_id_str: list[str] = [],
+    ignore_user_screen_names: list[str] = None,
+    ignore_user_id_str: list[str] = None,
     ignore_possibly_sensitive: bool = False,
     ignore_quote_status: bool = True,
     ignore_reply_status: bool = True,
@@ -182,6 +182,8 @@ def check_tweet(
     min_followers_count: int = 100,
 ) -> bool:
     """Return True if tweet satisfies specific criteria"""
+    ignore_user_screen_names = ignore_user_screen_names or []
+    ignore_user_id_str = ignore_user_id_str or []
 
     tweet_body = get_tweet_body(status)
     if not tweet_body:
@@ -313,10 +315,7 @@ def text_contains_ignore_list_plural(
     if text is None:
         return text
 
-    if match_substring:
-        text_compare = text.lower()
-    else:
-        text_compare = text.lower().split()
+    text_compare = text.lower() if match_substring else text.lower().split()
 
     # Create versions of tokens without repeated final letters
     text_compare.extend([remove_repeat_last_letter(t) for t in text_compare])
@@ -350,10 +349,7 @@ def text_contains_ignore_list(
     if text is None:
         return text
 
-    if match_substring:
-        text_compare = text.lower()
-    else:
-        text_compare = text.lower().split()
+    text_compare = text.lower() if match_substring else text.lower().split()
 
     return any(
         [

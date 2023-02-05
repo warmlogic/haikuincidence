@@ -15,7 +15,7 @@ def test_profile_pass():
         profile_pass = fp.read().splitlines()
 
     for profile in profile_pass:
-        status = dict(user=dict(description=profile))
+        status = {"user": {"description": profile}}
         profile_passes = check_profile(
             status,
             ignore_profile_list=ignore_profile_list,
@@ -30,7 +30,7 @@ def test_profile_fail():
         profile_pass = fp.read().splitlines()
 
     for profile in profile_pass:
-        status = dict(user=dict(description=profile))
+        status = {"user": {"description": profile}}
         profile_passes = check_profile(
             status,
             ignore_profile_list=ignore_profile_list,

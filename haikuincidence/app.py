@@ -2,12 +2,11 @@
 
 import logging
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from pprint import pformat
 
 import inflect
-import pytz
 from dotenv import load_dotenv
 from nltk.corpus import cmudict
 from tenacity import retry, stop_after_attempt, wait_fixed
@@ -123,7 +122,7 @@ class MyTwitterClient(Twython):
     Limits status update rate.
     """
 
-    DEFAULT_LAST_POST_TIME = datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)
+    DEFAULT_LAST_POST_TIME = datetime(1970, 1, 1, tzinfo=timezone.utc)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -145,7 +144,7 @@ class MyTwitterClient(Twython):
                 )
             else:
                 # Wait half the rate limit time before making first post
-                last_post_time = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(
+                last_post_time = datetime.now(tz=timezone.utc) - timedelta(
                     seconds=EVERY_N_SECONDS // 2
                 )
         except TwythonRateLimitError as e:
@@ -166,7 +165,7 @@ class MyTwitterClient(Twython):
 
     @retry(wait=wait_fixed(RETRY_WAIT_SECONDS), stop=stop_after_attempt(3))
     def _update_status(self, *args, **kwargs):
-        current_time = datetime.utcnow().replace(tzinfo=pytz.UTC)
+        current_time = datetime.now(tz=timezone.utc)
 
         if not self.can_post(current_time):
             logger.info(

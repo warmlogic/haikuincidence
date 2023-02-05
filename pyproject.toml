@@ -15,7 +15,6 @@ inflect = "^6.0.2"
 nltk = "^3.8.1"
 psycopg2-binary = "^2.9.5"
 python-dotenv = "^0.21.1"
-pytz = "^2022.7.1"
 python = ">=3.10,<3.11"
 sqlalchemy = "^1.4.46"
 tenacity = "^8.1.0"
@@ -65,21 +64,21 @@ select = [
     "UP",
     # Ruff-specific rules
     "RUF",
+    # flake8-datetimez
+    "DTZ",
     # # flake8-builtins
     # "A",
     # # pydocstyle
     # "D",
     # # flake8-logging-format
     # "G",
-    # # flake8-datetimez
-    # "DTZ",
     # # flake8-use-pathlib
     # "PTH",
 ]
 ignore = []
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
-fixable = ["F", "E", "W", "B", "C4", "I", "PD", "N", "Q", "SIM", "UP", "RUF"]
+fixable = ["F", "E", "W", "B", "C4", "I", "PD", "N", "Q", "SIM", "UP", "RUF", "DTZ"]
 unfixable = []
 
 # Same as Black.

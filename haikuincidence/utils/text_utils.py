@@ -1,10 +1,9 @@
 import logging
 import re
 import unicodedata
-from datetime import datetime
+from datetime import datetime, timezone
 
 import emoji
-import pytz
 from ftfy import fix_text
 from unidecode import unidecode
 
@@ -255,9 +254,9 @@ def check_tweet(
 def date_string_to_datetime(
     date_string: str,
     fmt: str = "%a %b %d %H:%M:%S +0000 %Y",
-    tzinfo=pytz.UTC,
+    tzinfo=timezone.utc,
 ) -> datetime:
-    return datetime.strptime(date_string, fmt).replace(tzinfo=tzinfo)
+    return datetime.strptime(date_string, fmt).replace(tzinfo=timezone.utc)
 
 
 def remove_repeat_last_letter(text: str) -> str:

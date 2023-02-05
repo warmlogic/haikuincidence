@@ -2,7 +2,7 @@ from haikuincidence.utils.text_utils import clean_text
 
 
 def test_text_process():
-    with open("tests/data_process.txt", "r") as fp:
+    with open("tests/data_process.txt") as fp:
         inputs = fp.read().splitlines()
 
     for text in inputs:

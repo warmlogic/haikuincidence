@@ -11,7 +11,7 @@ remove_punct = True
 
 
 def test_profile_pass():
-    with open("tests/data_profile_pass.txt", "r") as fp:
+    with open("tests/data_profile_pass.txt") as fp:
         profile_pass = fp.read().splitlines()
 
     for profile in profile_pass:
@@ -26,7 +26,7 @@ def test_profile_pass():
 
 
 def test_profile_fail():
-    with open("tests/data_profile_fail.txt", "r") as fp:
+    with open("tests/data_profile_fail.txt") as fp:
         profile_pass = fp.read().splitlines()
 
     for profile in profile_pass:

@@ -57,7 +57,7 @@ if ENVIRONMENT == "development":
     # Read .env file for local development
     dotenv_file = root_dir / ".env"
     try:
-        with open(dotenv_file, "r") as fp:
+        with open(dotenv_file) as fp:
             _ = load_dotenv(stream=fp)
     except FileNotFoundError:
         logger.info(f"{dotenv_file} file not found. Did you set it up?")
@@ -126,7 +126,7 @@ class MyTwitterClient(Twython):
     DEFAULT_LAST_POST_TIME = datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)
 
     def __init__(self, *args, **kwargs):
-        super(MyTwitterClient, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.last_post_time = self.get_last_post_time()
 
     @retry(wait=wait_fixed(RETRY_WAIT_SECONDS))
@@ -208,7 +208,7 @@ class MyStreamer(TwythonStreamer):
         *args,
         **kwargs,
     ):
-        super(MyStreamer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         ignore_tweet_list = ignore_tweet_list or []
         ignore_profile_list = ignore_profile_list or []

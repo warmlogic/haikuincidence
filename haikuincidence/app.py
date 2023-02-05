@@ -2,12 +2,11 @@
 
 import logging
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from pprint import pformat
 
 import inflect
-import pytz
 from dotenv import load_dotenv
 from nltk.corpus import cmudict
 from tenacity import retry, stop_after_attempt, wait_fixed
@@ -57,7 +56,7 @@ if ENVIRONMENT == "development":
     # Read .env file for local development
     dotenv_file = root_dir / ".env"
     try:
-        with open(dotenv_file, "r") as fp:
+        with open(dotenv_file) as fp:
             _ = load_dotenv(stream=fp)
     except FileNotFoundError:
         logger.info(f"{dotenv_file} file not found. Did you set it up?")
@@ -123,10 +122,10 @@ class MyTwitterClient(Twython):
     Limits status update rate.
     """
 
-    DEFAULT_LAST_POST_TIME = datetime(1970, 1, 1).replace(tzinfo=pytz.UTC)
+    DEFAULT_LAST_POST_TIME = datetime(1970, 1, 1, tzinfo=timezone.utc)
 
     def __init__(self, *args, **kwargs):
-        super(MyTwitterClient, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.last_post_time = self.get_last_post_time()
 
     @retry(wait=wait_fixed(RETRY_WAIT_SECONDS))
@@ -145,7 +144,7 @@ class MyTwitterClient(Twython):
                 )
             else:
                 # Wait half the rate limit time before making first post
-                last_post_time = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(
+                last_post_time = datetime.now(tz=timezone.utc) - timedelta(
                     seconds=EVERY_N_SECONDS // 2
                 )
         except TwythonRateLimitError as e:
@@ -162,14 +161,11 @@ class MyTwitterClient(Twython):
         logger.info(f"Previous post time: {self.last_post_time}")
         logger.info(f"Difference: {current_time - self.last_post_time}")
 
-        if (current_time - self.last_post_time).total_seconds() > EVERY_N_SECONDS:
-            return True
-        else:
-            return False
+        return (current_time - self.last_post_time).total_seconds() > EVERY_N_SECONDS
 
     @retry(wait=wait_fixed(RETRY_WAIT_SECONDS), stop=stop_after_attempt(3))
     def _update_status(self, *args, **kwargs):
-        current_time = datetime.utcnow().replace(tzinfo=pytz.UTC)
+        current_time = datetime.now(tz=timezone.utc)
 
         if not self.can_post(current_time):
             logger.info(
@@ -202,16 +198,22 @@ class MyStreamer(TwythonStreamer):
         twitter,
         db_session,
         track_str: str = "",
-        ignore_tweet_list: list = [],
-        ignore_profile_list: list = [],
-        syllable_dict: dict = {},
-        emoticons_list: list = [],
+        ignore_tweet_list: list = None,
+        ignore_profile_list: list = None,
+        syllable_dict: dict = None,
+        emoticons_list: list = None,
         inflect_p=None,
         pronounce_dict: dict = None,
         *args,
         **kwargs,
     ):
-        super(MyStreamer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+
+        ignore_tweet_list = ignore_tweet_list or []
+        ignore_profile_list = ignore_profile_list or []
+        syllable_dict = syllable_dict or {}
+        emoticons_list = emoticons_list or []
+
         self.twitter = twitter
         self.db_session = db_session
         self.track_str = track_str

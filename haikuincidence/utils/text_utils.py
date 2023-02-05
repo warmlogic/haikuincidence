@@ -1,10 +1,9 @@
 import logging
 import re
 import unicodedata
-from datetime import datetime
+from datetime import datetime, timezone
 
 import emoji
-import pytz
 from ftfy import fix_text
 from unidecode import unidecode
 
@@ -17,7 +16,7 @@ logger = logging.getLogger("haiku_logger")
 url_all_re = (
     r"\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)"
     + r"(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|"
-    + r"(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+    + r"(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"  # noqa: RUF001
 )
 url_all_re_cmp = re.compile(url_all_re, flags=re.IGNORECASE)
 
@@ -172,8 +171,8 @@ def get_tweet_body(status):
 def check_tweet(
     status,
     language: str = "en",
-    ignore_user_screen_names: list[str] = [],
-    ignore_user_id_str: list[str] = [],
+    ignore_user_screen_names: list[str] = None,
+    ignore_user_id_str: list[str] = None,
     ignore_possibly_sensitive: bool = False,
     ignore_quote_status: bool = True,
     ignore_reply_status: bool = True,
@@ -182,6 +181,8 @@ def check_tweet(
     min_followers_count: int = 100,
 ) -> bool:
     """Return True if tweet satisfies specific criteria"""
+    ignore_user_screen_names = ignore_user_screen_names or []
+    ignore_user_id_str = ignore_user_id_str or []
 
     tweet_body = get_tweet_body(status)
     if not tweet_body:
@@ -253,9 +254,9 @@ def check_tweet(
 def date_string_to_datetime(
     date_string: str,
     fmt: str = "%a %b %d %H:%M:%S +0000 %Y",
-    tzinfo=pytz.UTC,
+    tzinfo=timezone.utc,
 ) -> datetime:
-    return datetime.strptime(date_string, fmt).replace(tzinfo=tzinfo)
+    return datetime.strptime(date_string, fmt).replace(tzinfo=timezone.utc)
 
 
 def remove_repeat_last_letter(text: str) -> str:
@@ -313,10 +314,7 @@ def text_contains_ignore_list_plural(
     if text is None:
         return text
 
-    if match_substring:
-        text_compare = text.lower()
-    else:
-        text_compare = text.lower().split()
+    text_compare = text.lower() if match_substring else text.lower().split()
 
     # Create versions of tokens without repeated final letters
     text_compare.extend([remove_repeat_last_letter(t) for t in text_compare])
@@ -350,10 +348,7 @@ def text_contains_ignore_list(
     if text is None:
         return text
 
-    if match_substring:
-        text_compare = text.lower()
-    else:
-        text_compare = text.lower().split()
+    text_compare = text.lower() if match_substring else text.lower().split()
 
     return any(
         [
@@ -410,16 +405,16 @@ def clean_token(token: str, unicode_normalize_form: str = "NFKC") -> str:
     token = re.sub(r"(\w)\s(['])[?=\s\w]", r"\1\2", token)
 
     # add space around some punctuation if letters on both sides
-    token = re.sub(r"([\w])([#@&%=+/×\-](?=[\w]))", r"\1 \2 ", token)
+    token = re.sub(r"([\w])([#@&%=+/×\-](?=[\w]))", r"\1 \2 ", token)  # noqa: RUF001
 
     # try to replace an asterisk (representing a missing vowel) with "u"
     token = re.sub(r"([\w])[\*]((?=[\w]))", r"\1u\2", token)
 
     # put a space after some punctuation that precedes a letter
-    token = re.sub(r"([#@&=+/×])((?=[\w]))", r"\1 \2", token)
+    token = re.sub(r"([#@&=+/×])((?=[\w]))", r"\1 \2", token)  # noqa: RUF001
 
     # put a space before some punctuation that follows a letter
-    token = re.sub(r"([\w])([#@&%=+/×])", r"\1 \2", token)
+    token = re.sub(r"([\w])([#@&%=+/×])", r"\1 \2", token)  # noqa: RUF001
 
     # special cases
     token = re.sub(r"\bb / c\b", "because", token, flags=re.IGNORECASE)
@@ -435,7 +430,7 @@ def clean_token(token: str, unicode_normalize_form: str = "NFKC") -> str:
     token = token.replace("&", "and")
     token = token.replace("%", "percent")
     token = token.replace("=", "equals")
-    token = token.replace("×", "times")
+    token = token.replace("×", "times")  # noqa: RUF001
     token = token.replace("+", "plus")
     # token = token.replace('*', 'star')
     # token = token.replace('/', 'slash')

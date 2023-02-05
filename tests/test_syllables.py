@@ -48,7 +48,7 @@ def get_syllable_count_and_haiku(text):
 
 
 def test_haikus():
-    with open("tests/data_haiku.txt", "r") as fp:
+    with open("tests/data_haiku.txt") as fp:
         inputs = fp.read().splitlines()
 
     for text in inputs:
@@ -60,7 +60,7 @@ def test_haikus():
 
 
 def test_not_haikus():
-    with open("tests/data_not_haiku.txt", "r") as fp:
+    with open("tests/data_not_haiku.txt") as fp:
         inputs = fp.read().splitlines()
 
     for text in inputs:

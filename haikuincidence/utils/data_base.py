@@ -1,7 +1,6 @@
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
-import pytz
 from sqlalchemy import Boolean, Column, DateTime, Integer, String, create_engine, desc
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -14,11 +13,11 @@ logger = logging.getLogger("haiku_logger")
 Base = declarative_base()
 
 
-def session_factory(DATABASE_URL: str, echo: bool = False):
-    engine = create_engine(DATABASE_URL, poolclass=NullPool, echo=echo)
+def session_factory(database_url: str, echo: bool = False):
+    engine = create_engine(database_url, poolclass=NullPool, echo=echo)
     Base.metadata.create_all(engine)
-    _SessionFactory = sessionmaker(bind=engine)
-    return _SessionFactory()
+    session_factory = sessionmaker(bind=engine)
+    return session_factory()
 
 
 class Haiku(Base):
@@ -95,9 +94,7 @@ class Haiku(Base):
         """Get all unposted records from the last N seconds"""
         if td_seconds is None:
             td_seconds = 3600
-        filter_td = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(
-            seconds=td_seconds
-        )
+        filter_td = datetime.now(tz=timezone.utc) - timedelta(seconds=td_seconds)
         q = (
             db_session.query(cls)
             .filter(cls.created_at > filter_td)
@@ -111,7 +108,7 @@ class Haiku(Base):
         """Mark haiku as posted"""
         try:
             db_session.query(cls).filter(cls.status_id_str == status_id_str).update(
-                {"date_posted": datetime.utcnow().replace(tzinfo=pytz.UTC)}
+                {"date_posted": datetime.now(tz=timezone.utc)}
             )
             db_session.commit()
         except Exception as e:
@@ -135,7 +132,7 @@ class Haiku(Base):
         """Mark haiku as deleted"""
         try:
             db_session.query(cls).filter(cls.status_id_str == status_id_str).update(
-                {"date_deleted": datetime.utcnow().replace(tzinfo=pytz.UTC)}
+                {"date_deleted": datetime.now(tz=timezone.utc)}
             )
             db_session.commit()
         except Exception as e:
@@ -158,7 +155,7 @@ class Haiku(Base):
     def delete_haikus_unposted_timedelta(cls, db_session, days: float = None) -> list:
         """Delete all unposted records older than N days"""
         if days is not None:
-            ts_end = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(days=days)
+            ts_end = datetime.now(tz=timezone.utc) - timedelta(days=days)
             try:
                 logger.info(f"Deleting unposted haikus older than {days} days")
                 delete_q = (
@@ -177,7 +174,7 @@ class Haiku(Base):
     def delete_haikus_posted_timedelta(cls, db_session, days: float = None) -> list:
         """Delete all posted records older than N days"""
         if days is not None:
-            ts_end = datetime.utcnow().replace(tzinfo=pytz.UTC) - timedelta(days=days)
+            ts_end = datetime.now(tz=timezone.utc) - timedelta(days=days)
             try:
                 logger.info(f"Deleting posted haikus older than {days} days")
                 delete_q = (

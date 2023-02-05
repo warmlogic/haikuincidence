@@ -47,8 +47,6 @@ select = [
     "E", "W",
     # flake8-bugbear
     "B",
-    # # flake8-commas
-    # "COM",
     # flake8-comprehensions
     "C4",
     # McCabe complexity
@@ -61,6 +59,11 @@ select = [
     "N",
     # flake8-quotes
     "Q",
+    # flake8-simplify
+    "SIM",
+    # pyupgrade
+    "UP",
+    # Ruff-specific rules
     "RUF",
     # # flake8-builtins
     # "A",
@@ -72,13 +75,11 @@ select = [
     # "DTZ",
     # # flake8-use-pathlib
     # "PTH",
-    # # pyupgrade
-    # "UP",
 ]
 ignore = []
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
-fixable = ["A", "B", "C90", "D", "E", "F", "G", "I", "N", "SIM", "W"]
+fixable = ["F", "E", "W", "B", "C4", "I", "PD", "N", "Q", "SIM", "UP", "RUF"]
 unfixable = []
 
 # Same as Black.

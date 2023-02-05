@@ -14,11 +14,11 @@ logger = logging.getLogger("haiku_logger")
 Base = declarative_base()
 
 
-def session_factory(DATABASE_URL: str, echo: bool = False):
-    engine = create_engine(DATABASE_URL, poolclass=NullPool, echo=echo)
+def session_factory(database_url: str, echo: bool = False):
+    engine = create_engine(database_url, poolclass=NullPool, echo=echo)
     Base.metadata.create_all(engine)
-    _SessionFactory = sessionmaker(bind=engine)
-    return _SessionFactory()
+    session_factory = sessionmaker(bind=engine)
+    return session_factory()
 
 
 class Haiku(Base):

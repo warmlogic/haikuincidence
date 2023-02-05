@@ -67,7 +67,7 @@ while True:
     logger.info(f"Sleeping for {sleep_seconds} seconds")
     sleep(sleep_seconds)
 
-i_follow = list(set([sn for sn in i_follow if sn]))
+i_follow = list({[sn for sn in i_follow if sn]})
 logger.info(f"Found {len(i_follow)} users who I follow")
 
 
@@ -96,7 +96,7 @@ while True:
     logger.info(f"Sleeping for {sleep_seconds} seconds")
     sleep(sleep_seconds)
 
-follows_me = list(set([sn for sn in follows_me if sn]))
+follows_me = list({[sn for sn in follows_me if sn]})
 logger.info(f"Found {len(follows_me)} users who follow me")
 
 
@@ -105,7 +105,7 @@ logger.info(f"Found {len(follows_me)} users who follow me")
 # https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/post-friendships-destroy
 unfollowed = []
 does_not_follow_me = set(i_follow) - set(follows_me)
-to_unfollow = list(set([sn for sn in does_not_follow_me if (sn not in unfollowed)]))
+to_unfollow = list({[sn for sn in does_not_follow_me if (sn not in unfollowed)]})
 sleep_seconds = 0.1
 for sn in to_unfollow:
     if sn:
@@ -159,7 +159,7 @@ while True:
     logger.info(f"Sleeping for {sleep_seconds} seconds")
     sleep(sleep_seconds)
 
-poets = list(set([sn for sn in poets if sn]))
+poets = list({[sn for sn in poets if sn]})
 logger.info(f"Found {len(poets)} poets who I have replied to")
 
 
@@ -180,7 +180,7 @@ exclude_reasons = [
 ]
 sleep_seconds = 5
 to_follow = list(
-    set(
+    {
         [
             sn
             for sn in poets
@@ -189,7 +189,7 @@ to_follow = list(
             and (sn not in followed)
             and (sn not in do_not_follow)
         ]
-    )
+    }
 )
 logger.info(f"Will attempt to follow {len(to_follow)} poets")
 counter = 0

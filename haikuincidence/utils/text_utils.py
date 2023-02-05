@@ -17,7 +17,7 @@ logger = logging.getLogger("haiku_logger")
 url_all_re = (
     r"\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)"
     + r"(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|"
-    + r"(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+    + r"(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"  # noqa: RUF001
 )
 url_all_re_cmp = re.compile(url_all_re, flags=re.IGNORECASE)
 
@@ -410,16 +410,16 @@ def clean_token(token: str, unicode_normalize_form: str = "NFKC") -> str:
     token = re.sub(r"(\w)\s(['])[?=\s\w]", r"\1\2", token)
 
     # add space around some punctuation if letters on both sides
-    token = re.sub(r"([\w])([#@&%=+/×\-](?=[\w]))", r"\1 \2 ", token)
+    token = re.sub(r"([\w])([#@&%=+/×\-](?=[\w]))", r"\1 \2 ", token)  # noqa: RUF001
 
     # try to replace an asterisk (representing a missing vowel) with "u"
     token = re.sub(r"([\w])[\*]((?=[\w]))", r"\1u\2", token)
 
     # put a space after some punctuation that precedes a letter
-    token = re.sub(r"([#@&=+/×])((?=[\w]))", r"\1 \2", token)
+    token = re.sub(r"([#@&=+/×])((?=[\w]))", r"\1 \2", token)  # noqa: RUF001
 
     # put a space before some punctuation that follows a letter
-    token = re.sub(r"([\w])([#@&%=+/×])", r"\1 \2", token)
+    token = re.sub(r"([\w])([#@&%=+/×])", r"\1 \2", token)  # noqa: RUF001
 
     # special cases
     token = re.sub(r"\bb / c\b", "because", token, flags=re.IGNORECASE)
@@ -435,7 +435,7 @@ def clean_token(token: str, unicode_normalize_form: str = "NFKC") -> str:
     token = token.replace("&", "and")
     token = token.replace("%", "percent")
     token = token.replace("=", "equals")
-    token = token.replace("×", "times")
+    token = token.replace("×", "times")  # noqa: RUF001
     token = token.replace("+", "plus")
     # token = token.replace('*', 'star')
     # token = token.replace('/', 'slash')

@@ -24,7 +24,7 @@ def get_ignore_tweet_list(filepath) -> list:
         with open(filepath, "r") as fp:
             ignore_tweet_list = fp.read().splitlines()
         # ensure lowercase
-        ignore_tweet_list = list(set(x.lower() for x in ignore_tweet_list))
+        ignore_tweet_list = list({x.lower() for x in ignore_tweet_list})
     except Exception:
         logger.info(f"No ignore list found at: {filepath}")
         ignore_tweet_list = []
@@ -39,7 +39,7 @@ def get_ignore_profile_list(filepath) -> list:
         with open(filepath, "r") as fp:
             ignore_profile_list = fp.read().splitlines()
         # ensure lowercase
-        ignore_profile_list = list(set(x.lower() for x in ignore_profile_list))
+        ignore_profile_list = list({x.lower() for x in ignore_profile_list})
     except Exception:
         logger.info(f"No ignore list found at: {filepath}")
         ignore_profile_list = []

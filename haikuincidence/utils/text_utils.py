@@ -272,7 +272,7 @@ def date_string_to_datetime(
     fmt: str = "%a %b %d %H:%M:%S +0000 %Y",
     tzinfo=timezone.utc,
 ) -> datetime:
-    return datetime.strptime(date_string, fmt).replace(tzinfo=timezone.utc)
+    return datetime.strptime(date_string, fmt).replace(tzinfo=tzinfo)
 
 
 def remove_repeat_last_letter(text: str) -> str:

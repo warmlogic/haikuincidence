@@ -3,6 +3,8 @@ name = "haikuincidence"
 version = "0.1.0"
 description = "Find tweets that contain coincidental haikus and tweet these poems"
 authors = ["Matt Mollison <matt.mollison@gmail.com>"]
+readme = "README.md"
+packages = [{include = "haikuincidence"}]
 
 [tool.poetry.dependencies]
 emoji = "^2.2.0"

@@ -13,7 +13,8 @@ logger = logging.getLogger("haiku_logger")
 Base = declarative_base()
 
 
-def session_factory(database_url: str, echo: bool = False):
+def session_factory(database_url: str, echo: bool = None):
+    echo = echo if echo is not None else False
     engine = create_engine(database_url, poolclass=NullPool, echo=echo)
     Base.metadata.create_all(engine)
     session_factory = sessionmaker(bind=engine)
@@ -38,8 +39,10 @@ class Haiku(Base):
     date_deleted = Column(DateTime, nullable=True)
 
     @classmethod
-    def add_haiku(cls, db_session, status, text, haiku, log_haiku: bool = True):
+    def add_haiku(cls, db_session, status, text, haiku, log_haiku: bool = None):
         """Add haiku record to the database"""
+        log_haiku = log_haiku if log_haiku is not None else True
+
         tweet_haiku = cls(
             status_id_str=status["id_str"],
             user_screen_name=status["user"]["screen_name"],

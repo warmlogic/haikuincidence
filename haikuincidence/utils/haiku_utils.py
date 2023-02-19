@@ -478,19 +478,14 @@ def get_best_haiku(haikus, twitter, db_session) -> dict:
             this_status = {}
             # soft delete
             Haiku.update_haiku_deleted(db_session, h.status_id_str)
-        if this_status:
-            if this_status["user"]["verified"]:
-                haiku_to_post = construct_haiku_to_post(h, this_status)
-            else:
-                if this_status["favorite_count"] > haiku_to_post["favorite_count"]:
-                    haiku_to_post = construct_haiku_to_post(h, this_status)
-                elif this_status["retweet_count"] > haiku_to_post["retweet_count"]:
-                    haiku_to_post = construct_haiku_to_post(h, this_status)
-                elif (
-                    this_status["user"]["followers_count"]
-                    > haiku_to_post["followers_count"]
-                ):
-                    haiku_to_post = construct_haiku_to_post(h, this_status)
+
+        if this_status and (
+            this_status["user"]["verified"]
+            or this_status["favorite_count"] > haiku_to_post["favorite_count"]
+            or this_status["retweet_count"] > haiku_to_post["retweet_count"]
+            or this_status["user"]["followers_count"] > haiku_to_post["followers_count"]
+        ):
+            haiku_to_post = construct_haiku_to_post(h, this_status)
 
     if haiku_to_post["status_id_str"] == "":
         # # if no tweet was better than another, pick a random one

@@ -103,9 +103,12 @@ def clean_text(text: str) -> str:
 def check_profile(
     status,
     ignore_profile_list: list[str],
-    match_substring: bool = False,
-    remove_punct: bool = True,
+    match_substring: bool = None,
+    remove_punct: bool = None,
 ) -> bool:
+    match_substring = match_substring if match_substring is not None else False
+    remove_punct = remove_punct if remove_punct is not None else True
+
     profile = status["user"]["description"] or ""
 
     if remove_punct:
@@ -173,16 +176,29 @@ def check_tweet(
     language: str = "en",
     ignore_user_screen_names: list[str] = None,
     ignore_user_id_str: list[str] = None,
-    ignore_possibly_sensitive: bool = False,
-    ignore_quote_status: bool = True,
-    ignore_reply_status: bool = True,
-    ignore_retweet_status: bool = True,
+    ignore_possibly_sensitive: bool = None,
+    ignore_quote_status: bool = None,
+    ignore_reply_status: bool = None,
+    ignore_retweet_status: bool = None,
     min_friends_count: int = 10,
     min_followers_count: int = 100,
 ) -> bool:
     """Return True if tweet satisfies specific criteria"""
     ignore_user_screen_names = ignore_user_screen_names or []
     ignore_user_id_str = ignore_user_id_str or []
+
+    ignore_possibly_sensitive = (
+        ignore_possibly_sensitive if ignore_possibly_sensitive is not None else False
+    )
+    ignore_quote_status = (
+        ignore_quote_status if ignore_quote_status is not None else True
+    )
+    ignore_reply_status = (
+        ignore_reply_status if ignore_reply_status is not None else True
+    )
+    ignore_retweet_status = (
+        ignore_retweet_status if ignore_retweet_status is not None else True
+    )
 
     tweet_body = get_tweet_body(status)
     if not tweet_body:
@@ -256,7 +272,7 @@ def date_string_to_datetime(
     fmt: str = "%a %b %d %H:%M:%S +0000 %Y",
     tzinfo=timezone.utc,
 ) -> datetime:
-    return datetime.strptime(date_string, fmt).replace(tzinfo=timezone.utc)
+    return datetime.strptime(date_string, fmt).replace(tzinfo=tzinfo)
 
 
 def remove_repeat_last_letter(text: str) -> str:
@@ -298,7 +314,7 @@ def text_contains_url(text: str) -> bool:
 
 
 def text_contains_ignore_list_plural(
-    text: str, ignore_list: list[str], match_substring: bool = False
+    text: str, ignore_list: list[str], match_substring: bool = None
 ) -> bool:
     """Return True if anything from the ignore list is in the text.
 
@@ -313,6 +329,8 @@ def text_contains_ignore_list_plural(
     # found all of the subtokens from one ignore line in the text
     if text is None:
         return text
+
+    match_substring = match_substring if match_substring is not None else False
 
     text_compare = text.lower() if match_substring else text.lower().split()
 
@@ -338,7 +356,7 @@ def text_contains_ignore_list_plural(
 
 
 def text_contains_ignore_list(
-    text: str, ignore_list: list[str], match_substring: bool = False
+    text: str, ignore_list: list[str], match_substring: bool = None
 ) -> bool:
     """Return True if anything from the ignore list is in the text.
     Each ignore list line is considered separately (OR logic).
@@ -347,6 +365,8 @@ def text_contains_ignore_list(
     # found all of the subtokens from one ignore line in the text
     if text is None:
         return text
+
+    match_substring = match_substring if match_substring is not None else False
 
     text_compare = text.lower() if match_substring else text.lower().split()
 
